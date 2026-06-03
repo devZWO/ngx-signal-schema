@@ -27,4 +27,5 @@ jobs:
 
       - run: npm run build ngx-signal-schema
 
-      - run: npm publish dist/ngx-signal-schema --access public --provenance
+      - run: npm publish --access public --provenance
+        working-directory: dist/ngx-signal-schema

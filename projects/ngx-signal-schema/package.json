@@ -1,7 +1,11 @@
 {
   "name": "@devzwo/ngx-signal-schema",
   "license": "MIT",
-  "version": "1.0.4",
+  "version": "1.0.5",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devZWO/ngx-signal-schema.git"
+  },
   "peerDependencies": {
     "@angular/common": "^21.2.0",
     "@angular/core": "^21.2.0"

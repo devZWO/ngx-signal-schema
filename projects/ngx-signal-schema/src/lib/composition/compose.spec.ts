@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { disabled, form, required, schema } from '@angular/forms/signals';
 import { signal } from '@angular/core';
-import { append } from './append';
+import { compose } from './compose';
 
-describe('append helper', () => {
+describe('compose helper', () => {
 
   interface MyModel {
     firstName: string | null;
@@ -20,7 +20,7 @@ describe('append helper', () => {
       required(path.lastName);
     });
 
-    const combined = append(firstNameRequired, lastNameRequired);
+    const combined = compose(firstNameRequired, lastNameRequired);
 
     const data = signal<MyModel>({ firstName: null, lastName: null });
     const f = TestBed.runInInjectionContext(() => form(data, combined));
@@ -33,14 +33,14 @@ describe('append helper', () => {
       required(path.firstName);
     });
 
-    const combined = append(baseSchema, (path) => {
+    const combined = compose(baseSchema, (path) => {
       disabled(path.lastName);
     });
 
     const data = signal<MyModel>({ firstName: 'John', lastName: 'Doe' });
     const f = TestBed.runInInjectionContext(() => form(data, combined));
 
-    // lastName should be disabled, so John is the only valid field? 
+    // lastName should be disabled, so John is the only valid field?
     // Actually, John is valid anyway.
     expect(f().errorSummary().length).toBe(0);
     // Instead of checking f().fields.lastName.disabled(), let's check the root if possible or just skip field check for now

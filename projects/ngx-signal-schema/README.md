@@ -23,13 +23,13 @@ npm install @devzwo/ngx-signal-schema
 
 ## Usage & Examples
 
-### Simple Composition with `append`
-With `append`, existing schemas can be easily extended.
+### Simple Composition with `compose`
+With `compose`, existing schemas can be easily extended.
 
 ```typescript
-import { append, requiredTrimmed } from '@devzwo/ngx-signal-schema';
+import { compose, requiredTrimmed } from '@devzwo/ngx-signal-schema';
 
-const MySchema = append(BaseSchema, required(path.name));
+const MySchema = compose(BaseSchema, required(path.name));
 ```
 
 **Standard Signal Forms equivalent:**
@@ -128,9 +128,9 @@ mimeType(path.avatar, () => this.allowedAvatarTypes());
 The composition operators are highly flexible. Wherever a `Schema` is expected, you can also provide a **Schema Function** — a function that receives the current `path` and applies rules or validators directly. This allows you to mix reusable schemas with custom inline logic.
 
 ```typescript
-import { append, disabledHidden, valueEquals } from '@devzwo/ngx-signal-schema';
+import { compose, disabledHidden, valueEquals } from '@devzwo/ngx-signal-schema';
 
-const MySchema = append(
+const MySchema = compose(
   //full schema
   BaseSchema,
   // Reusable schema
@@ -168,7 +168,7 @@ The package is divided into four logical areas:
 
 ### 1. Composition
 Utilities for structuring and combining schemas.
-- `append(base, ...extensions)`: Extends a base schema with additional rules or schemas. Supports both `Schema` objects and inline functions (`(path) => void`).
+- `compose(base, ...extensions)`: Extends a base schema with additional rules or schemas. Supports both `Schema` objects and inline functions (`(path) => void`).
 - `applyIf(path, condition, thenSchema, elseSchema)`: Conditionally applies one of two schemas or inline functions (branching logic).
 
 ### 2. Conditions

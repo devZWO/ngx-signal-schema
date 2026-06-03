@@ -4,7 +4,7 @@ import {apply, Schema, schema, type SchemaOrSchemaFn, SchemaPath} from '@angular
 /**
  * Combines multiple schemas into a single schema.
  *
- * The `append` function allows extending a base schema with additional schemas or conditions.
+ * The `compose` function allows extending a base schema with additional schemas or conditions.
  * This is particularly useful for reusing existing validation logic and augmenting it with
  * context-specific conditions (e.g., disabling fields).
  *
@@ -14,20 +14,20 @@ import {apply, Schema, schema, type SchemaOrSchemaFn, SchemaPath} from '@angular
  *
  * @example
  * // Combining multiple schemas
- * const combinedSchema = append(MyDefaultSchema, RequiredFieldsSchema, ExtendedSchema);
+ * const combinedSchema = compose(MyDefaultSchema, RequiredFieldsSchema, ExtendedSchema);
  *
  * @example
  * // Extending a schema with a disable rule
- * const combinedSchema = append(MyDefaultSchema, disabled);
+ * const combinedSchema = compose(MyDefaultSchema, disabled);
  *
  * @example
  * // Extending a schema with complex conditions
- * const combinedSchema = append(MyDefaultSchema, (fieldPath) => {
+ * const combinedSchema = compose(MyDefaultSchema, (fieldPath) => {
  *   disabled(fieldPath.firstname);
  *   hidden(fieldPath.lastname);
  * });
  */
-export function append<T>(
+export function compose<T>(
   base: SchemaOrSchemaFn<T>,
   ...extension: SchemaOrSchemaFn<T>[]
 ): Schema<T> {

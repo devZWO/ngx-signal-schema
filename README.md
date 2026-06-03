@@ -1,4 +1,4 @@
-# NgFormSchema
+# NgxSignalSchema
 
 Composable schema operators for Angular Signal Forms.
 

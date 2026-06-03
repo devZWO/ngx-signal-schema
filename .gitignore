@@ -19,7 +19,7 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
-.juni/memory
+.junie/memory
 
 # Visual Studio Code
 .vscode/*

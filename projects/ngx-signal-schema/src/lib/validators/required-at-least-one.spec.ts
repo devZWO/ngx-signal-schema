@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { form, schema } from '@angular/forms/signals';
 import { signal } from '@angular/core';
-import { atLeastOneRequired } from './at-least-one-required.validator';
+import { requiredAtLeastOne } from './at-least-one-required.validator';
 
-describe('atLeastOneRequired validator', () => {
+describe('requiredAtLeastOne validator', () => {
 
   interface MyModel {
     field1: string | null;
@@ -15,7 +15,7 @@ describe('atLeastOneRequired validator', () => {
   function createForm(initialValue: MyModel) {
     const valueSignal = signal(initialValue);
     const mySchema = schema<MyModel>((path) => {
-      atLeastOneRequired(path, [
+      requiredAtLeastOne(path, [
         p => p.field1,
         p => p.field2,
         p => p.field3
@@ -43,14 +43,14 @@ describe('atLeastOneRequired validator', () => {
     const f = createForm({ field1: null, field2: null, field3: null });
     const errors = f().errorSummary();
     expect(errors.length).toBe(3); // Error attached to all 3 fields by default
-    expect(errors[0].kind).toBe('group.atLeastOneRequired');
+    expect(errors[0].kind).toBe('group.requiredAtLeastOne');
     expect(errors[0].message).toBe('At least one required');
   });
 
   it('should attach error to specific field if attachTo is provided', () => {
     const valueSignal = signal<MyModel>({ field1: null, field2: null, field3: null });
     const mySchema = schema<MyModel>((path) => {
-      atLeastOneRequired(path, [
+      requiredAtLeastOne(path, [
         p => p.field1,
         p => p.field2
       ], {

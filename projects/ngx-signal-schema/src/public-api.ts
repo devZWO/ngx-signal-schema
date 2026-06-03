@@ -14,13 +14,13 @@ export * from './lib/conditions/value-in';
 export * from './lib/conditions/not';
 
 // Validators
-export * from './lib/validators/year-text.validator';
-export * from './lib/validators/at-least-one-required.validator';
+export * from './lib/validators/year-text';
+export * from './lib/validators/required-at-least-one';
 export * from './lib/validators/integer';
 export * from './lib/validators/decimal';
-export * from './lib/validators/mime-type.validator';
+export * from './lib/validators/mime-type';
 export * from './lib/validators/one-of-pattern';
-export * from './lib/validators/required-if-other-filled.validator';
-export * from './lib/validators/required-defined.validator';
-export * from './lib/validators/required-trimmed.validator';
+export * from './lib/validators/required-if-other-filled';
+export * from './lib/validators/required-defined';
+export * from './lib/validators/required-trimmed';
 

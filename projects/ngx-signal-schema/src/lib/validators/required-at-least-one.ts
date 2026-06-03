@@ -12,7 +12,7 @@ import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
  * - either email or phone number must be provided
  *
  * The Validator returns an error if none of the selected fields is filled.
- * The Error kind is `atLeastOneRequired`.
+ * The Error kind is `requiredAtLeastOne`.
  *
  * @typeParam T
  * The object type represented by the schema path on which the validator is registered.
@@ -49,7 +49,7 @@ import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
  *
  * @example
  * ```ts
- * atLeastOneRequired(
+ * requiredAtLeastOne(
  *   path,
  *   [
  *     p => p.email,
@@ -70,7 +70,7 @@ import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
  * expressing the same behavior through multiple mirrored `required(..., { when })`
  * conditions, especially when more than two fields are involved.
  */
-export function atLeastOneRequired<
+export function requiredAtLeastOne<
   T extends object
 >(
   path: SchemaPath<T>,
@@ -124,7 +124,7 @@ export function atLeastOneRequired<
     // If a specific target field is configured, attach the error only there
     if (options?.attachTo) {
       return {
-        kind: 'group.atLeastOneRequired',
+        kind: 'group.requiredAtLeastOne',
         message: message,
         // Resolve the target field path and attach the error to its FieldTree
         fieldTree: ctx.fieldTreeOf(options.attachTo(pathTree)),
@@ -134,7 +134,7 @@ export function atLeastOneRequired<
     // Otherwise attach the same validation error to ALL selected fields.
     // This ensures each field shows the error in the UI.
     return selectedPaths.map((selectedPath) => ({
-      kind: 'group.atLeastOneRequired',
+      kind: 'group.requiredAtLeastOne',
       message: message,
       // Convert SchemaPath -> FieldTree so Angular knows where to display the error
       fieldTree: ctx.fieldTreeOf(selectedPath),

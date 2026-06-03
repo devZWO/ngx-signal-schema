@@ -127,7 +127,7 @@ export function parseLocalizedInteger(
 
   const parsed = result.value;
 
-  // Zahl, aber keine Ganzzahl
+  // Number, but not an integer
   if (!Number.isInteger(parsed)) {
     return {
       kind: 'not-an-integer',
@@ -136,7 +136,7 @@ export function parseLocalizedInteger(
     };
   }
 
-  // Für Strings prüfen wir zusätzlich, ob sie wie ein Integer formatiert sind
+  // For strings, we additionally check if they are formatted like an integer
   if (typeof value === 'string') {
     const trimmed = value.trim();
     const parts = new Intl.NumberFormat(locale).formatToParts(12345.6);

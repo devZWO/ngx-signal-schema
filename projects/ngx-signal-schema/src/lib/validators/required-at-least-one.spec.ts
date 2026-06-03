@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { form, schema } from '@angular/forms/signals';
 import { signal } from '@angular/core';
-import { requiredAtLeastOne } from './at-least-one-required.validator';
+import { requiredAtLeastOne } from './required-at-least-one';
 
 describe('requiredAtLeastOne validator', () => {
 
@@ -16,9 +16,9 @@ describe('requiredAtLeastOne validator', () => {
     const valueSignal = signal(initialValue);
     const mySchema = schema<MyModel>((path) => {
       requiredAtLeastOne(path, [
-        p => p.field1,
-        p => p.field2,
-        p => p.field3
+        (p) => p.field1,
+        (p) => p.field2,
+        (p) => p.field3
       ], {
         message: 'At least one required'
       });

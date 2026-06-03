@@ -203,7 +203,7 @@ export function parseLocalizedFloat(
     return { kind: 'empty' };
   }
 
-  // number direkt akzeptieren
+  // accept number directly
   if (typeof value === 'number') {
     if (!Number.isFinite(value)) {
       return {
@@ -237,7 +237,7 @@ export function parseLocalizedFloat(
     .replaceAll(group, '')
     .replace(decimal, '.');
 
-  // überhaupt keine gültige Zahl
+  // not a valid number at all
   if (!/^[+-]?(\d+|\d+\.\d+|\.\d+)$/.test(normalized)) {
     return {
       kind: 'not-a-number',

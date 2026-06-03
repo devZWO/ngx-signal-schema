@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { form, schema } from '@angular/forms/signals';
 import { signal } from '@angular/core';
-import { requiredIfOtherFilled } from './required-if-other-filled.validator';
+import { requiredIfOtherFilled } from './required-if-other-filled';
 
 describe('requiredIfOtherFilled validator', () => {
 

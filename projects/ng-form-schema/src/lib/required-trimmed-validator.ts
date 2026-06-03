@@ -6,7 +6,7 @@ import {SchemaPath, validate} from "@angular/forms/signals";
  *
  * @param path - The schema path to the string field to be validated.
  */
-export function requiredTrimmed(path: SchemaPath<string | null | undefined>): void {
+export function requiredTrimmedValidator(path: SchemaPath<string | null | undefined>): void {
  validate(path, (ctx) => {
    const trimmed = ctx.value()?.trim();
 

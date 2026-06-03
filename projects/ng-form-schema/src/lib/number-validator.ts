@@ -136,11 +136,11 @@ function toPlainDecimalString(value: number | string, fractionSeparator: string)
 
   if (newDecimalIndex <= 0) {
     result = '0' + fractionSeparator + '0'.repeat(-newDecimalIndex) + digits;
-  } else if (newDecimalIndex >= digits.length) {
-    result = digits + '0'.repeat(newDecimalIndex - digits.length);
   } else {
-    result =
-      digits.slice(0, newDecimalIndex) + fractionSeparator + digits.slice(newDecimalIndex);
+    // For JS numbers, scientific notation only occurs when the decimal point
+    // moves outside the significant digits (exponent >= 21 or exponent <= -7).
+    // Thus, newDecimalIndex is always either <= 0 or >= digits.length.
+    result = digits + '0'.repeat(newDecimalIndex - digits.length);
   }
 
   return negative ? `-${result}` : result;

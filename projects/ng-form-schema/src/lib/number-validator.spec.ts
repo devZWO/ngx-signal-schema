@@ -136,6 +136,50 @@ describe('decimal and integer validators', () => {
 
       expect(f().errorSummary().map(e => ({ kind: e.kind, message: e.message }))).toEqual([{ kind: 'decimal.intCount', message: customMsg }]);
     });
+
+    it('should be valid for empty strings', () => {
+      const f = createDecimalForm("  ", { maxIntegerDigits: 3, maxFractionDigits: 2 });
+      expect(f().errorSummary()).toEqual([]);
+    });
+
+    it('should be invalid for extremely large numbers resulting in Infinity', () => {
+      // Number("9" * 1000) is Infinity
+      const f = createDecimalForm("9".repeat(1000), { maxIntegerDigits: 3, maxFractionDigits: 2 });
+      expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.isNumber' }]);
+    });
+
+    it('should handle negative scientific notation', () => {
+      const f = createDecimalForm(-1e-7, { maxIntegerDigits: 1, maxFractionDigits: 7 });
+      expect(f().errorSummary()).toEqual([]);
+    });
+
+    it('should handle very large scientific notation', () => {
+      // 1e21 stringifies to "1e+21"
+      const f = createDecimalForm(1e21, { maxIntegerDigits: 22, maxFractionDigits: 0 });
+      expect(f().errorSummary()).toEqual([]);
+
+      const fInvalid = createDecimalForm(1e21, { maxIntegerDigits: 21, maxFractionDigits: 0 });
+      expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.intCount' }]);
+    });
+
+    it('should support different locales', () => {
+      const f = createDecimalForm("1,234.56", { maxIntegerDigits: 4, maxFractionDigits: 2, locale: 'en-US' });
+      expect(f().errorSummary()).toEqual([]);
+    });
+
+    it('should handle leading zeros correctly', () => {
+      const f = createDecimalForm("000123,45", { maxIntegerDigits: 3, maxFractionDigits: 2 });
+      expect(f().errorSummary()).toEqual([]);
+
+      const fZero = createDecimalForm("000,45", { maxIntegerDigits: 1, maxFractionDigits: 2 });
+      expect(fZero().errorSummary()).toEqual([]);
+    });
+
+    it('should be valid for undefined values', () => {
+      // @ts-ignore
+      const f = createDecimalForm(undefined, { maxIntegerDigits: 3, maxFractionDigits: 2 });
+      expect(f().errorSummary()).toEqual([]);
+    });
   });
 
   describe('integer validator', () => {
@@ -221,6 +265,22 @@ describe('decimal and integer validators', () => {
       const f = createIntegerForm(1234, { maxDigits: 3, message: customMsg });
 
       expect(f().errorSummary().map(e => ({ kind: e.kind, message: e.message }))).toEqual([{ kind: 'integer.digitCount', message: customMsg }]);
+    });
+
+    it('should be valid for empty strings', () => {
+      const f = createIntegerForm("  ", { maxDigits: 3 });
+      expect(f().errorSummary()).toEqual([]);
+    });
+
+    it('should be invalid for strings that look like decimals but are integers', () => {
+      // "12,0" parses to 12, but has a decimal separator in de-DE
+      const f = createIntegerForm("12,0", { maxDigits: 3 });
+      expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'integer.isInteger' }]);
+    });
+
+    it('should handle leading zeros correctly', () => {
+      const f = createIntegerForm("000123", { maxDigits: 3 });
+      expect(f().errorSummary()).toEqual([]);
     });
   });
 });

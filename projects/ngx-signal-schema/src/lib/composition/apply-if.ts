@@ -13,7 +13,7 @@ import {applyWhen, LogicFn, SchemaOrSchemaFn, type SchemaPath} from '@angular/fo
  * @example
  * applyIf(
  *   path,
- *   (ctx) => ctx.valueOf(path.isCompany),
+ *   valueEquals(path.isCompany, true),
  *   CompanySchema,
  *   PersonSchema
  * );

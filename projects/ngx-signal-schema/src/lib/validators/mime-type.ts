@@ -31,7 +31,12 @@ export function mimeType<T extends string>(
     ? () => mimeTypePattern(mimeType())
     : mimeTypePattern(mimeType);
 
-  pattern(fieldPath as any, patternArg, config)
+  pattern(fieldPath as any, patternArg, {
+    error: {
+      kind: 'mimeType',
+      message: config?.message
+    }
+  })
 }
 
 

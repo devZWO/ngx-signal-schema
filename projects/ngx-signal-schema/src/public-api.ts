@@ -14,7 +14,7 @@ export * from './lib/conditions/value-in';
 export * from './lib/conditions/not';
 
 // Validators
-export * from './lib/validators/year-text';
+export * from './lib/validators/year';
 export * from './lib/validators/required-at-least-one';
 export * from './lib/validators/integer';
 export * from './lib/validators/decimal';

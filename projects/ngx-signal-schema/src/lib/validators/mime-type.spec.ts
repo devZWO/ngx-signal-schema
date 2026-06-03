@@ -30,7 +30,7 @@ describe('mimeType validator', () => {
   it('should be invalid for non-matching mime type', () => {
     const f = createForm('text/plain', ['image/png', 'application/pdf']);
     expect(f().errorSummary().length).toBe(1);
-    expect(f().errorSummary()[0].kind).toBe('pattern');
+    expect(f().errorSummary()[0].kind).toBe('mimeType');
   });
 
   it('should support wildcards', () => {

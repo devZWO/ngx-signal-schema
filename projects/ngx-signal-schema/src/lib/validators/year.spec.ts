@@ -2,14 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { form, schema } from '@angular/forms/signals';
 import { signal } from '@angular/core';
-import { yearText } from './year-text';
+import { year } from './year';
 
-describe('yearText validator', () => {
+describe('year validator', () => {
 
   function createForm(initialValue: string) {
     const valueSignal = signal(initialValue);
     const mySchema = schema<string>((path) => {
-      yearText(path);
+      year(path);
     });
 
     return TestBed.runInInjectionContext(() => {
@@ -44,6 +44,6 @@ describe('yearText validator', () => {
     const f = createForm('ABCD');
     const errors = f().errorSummary();
     // In year-text-validator.ts: pattern(fieldPath, isIntegerTextRegex, {error: {kind: 'pattern.integerText'}})
-    expect(errors.some(e => e.kind === 'pattern.isInteger')).toBe(true);
+    expect(errors.some(e => e.kind === 'year')).toBe(true);
   });
 });

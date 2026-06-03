@@ -13,10 +13,10 @@ const isIntegerTextRegex = /^\d*$/
  * @param fieldPath - The schema path to the year field to validate.
  *
  * @example
- * yearText(path.birthYear);
+ * year(path.birthYear);
  */
-export function yearText<T extends string>(fieldPath: SchemaPath<T>): void {
+export function year<T extends string>(fieldPath: SchemaPath<T>): void {
   maxLength(fieldPath, 4)
   minLength(fieldPath, 4)
-  pattern(fieldPath, isIntegerTextRegex, {error: {kind: 'pattern.isInteger'}})
+  pattern(fieldPath, isIntegerTextRegex, {error: {kind: 'year'}})
 }

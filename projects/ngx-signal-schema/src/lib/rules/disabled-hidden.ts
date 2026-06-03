@@ -18,7 +18,7 @@ type LogicOptions = Parameters<typeof disabled>[1] & Parameters<typeof hidden>[1
  * @param options - Configuration for the disabled/hidden states. Can be a boolean, a function returning boolean, or an Observable/Signal.
  *
  * @example
- * disabledHidden(path.secretCode, (ctx) => !ctx.valueOf(path.isAdmin));
+ * disabledHidden(path.secretCode, not(valueEquals(path.isAdmin, true)));
  */
 export function disabledHidden<T>(fieldPath: SchemaPath<T>, options?: LogicOptions): void {
   disabled(fieldPath, options);

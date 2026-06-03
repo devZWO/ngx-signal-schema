@@ -6,20 +6,20 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "ng-form-schema": {
+    "ngx-signal-schema": {
       "projectType": "library",
-      "root": "projects/ng-form-schema",
-      "sourceRoot": "projects/ng-form-schema/src",
+      "root": "projects/ngx-signal-schema",
+      "sourceRoot": "projects/ngx-signal-schema/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/ng-form-schema/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngx-signal-schema/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/ng-form-schema/tsconfig.lib.json"
+              "tsConfig": "projects/ngx-signal-schema/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -27,7 +27,7 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/ng-form-schema/tsconfig.spec.json"
+            "tsConfig": "projects/ngx-signal-schema/tsconfig.spec.json"
           }
         }
       }

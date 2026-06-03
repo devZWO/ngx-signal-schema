@@ -8,7 +8,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "paths": {
-      "ng-form-schema": ["./dist/ng-form-schema"]
+      "ngx-signal-schema": ["./dist/ngx-signal-schema"]
     },
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
@@ -27,10 +27,10 @@
   "files": [],
   "references": [
     {
-      "path": "./projects/ng-form-schema/tsconfig.lib.json"
+      "path": "./projects/ngx-signal-schema/tsconfig.lib.json"
     },
     {
-      "path": "./projects/ng-form-schema/tsconfig.spec.json"
+      "path": "./projects/ngx-signal-schema/tsconfig.spec.json"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "ng-form-schema",
+  "name": "ngx-signal-schema",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

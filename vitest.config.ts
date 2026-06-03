@@ -4,7 +4,7 @@ import angular from '@analogjs/vite-plugin-angular';
 export default defineConfig({
     plugins: [
         angular({
-            tsconfig: './projects/ng-form-schema/tsconfig.spec.json'
+            tsconfig: './projects/ngx-signal-schema/tsconfig.spec.json'
         }),
     ],
 
@@ -12,7 +12,7 @@ export default defineConfig({
         globals: false,
         environment: 'jsdom',
         setupFiles: ['./test-setup.ts'],
-        include: ['projects/ng-form-schema/src/**/*.spec.ts'],
+        include: ['projects/ngx-signal-schema/src/**/*.spec.ts'],
 
         restoreMocks: true,
         mockReset: true,
@@ -21,7 +21,7 @@ export default defineConfig({
         coverage: {
             provider: 'v8',
             reporter: ['text', 'json', 'lcov'],
-            reportsDirectory: './coverage/ng-form-schema'
+            reportsDirectory: './coverage/ngx-signal-schema'
         },
     },
 });

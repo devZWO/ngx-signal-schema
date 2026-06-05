@@ -208,5 +208,4 @@ The library is fully optimized for tree shaking. Thanks to the functional archit
 ## Peer Dependencies
 Ensure that the following packages are installed in your project:
 - `@angular/core`: ^21.2.0
-- `@angular/common`: ^21.2.0
 - `@angular/forms`: ^21.2.0

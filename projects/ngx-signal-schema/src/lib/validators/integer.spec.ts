@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { form, schema } from '@angular/forms/signals';
 import { signal } from '@angular/core';
@@ -115,5 +115,19 @@ describe('integer validator', () => {
   it('should handle leading zeros correctly', () => {
     const f = createIntegerForm("000123", { maxDigits: 3 });
     expect(f().errorSummary()).toEqual([]);
+  });
+
+  it('should use fallback decimal separator if Intl fails', () => {
+    const spy = vi.spyOn(Intl, 'NumberFormat').mockImplementation(function() {
+      return {
+        formatToParts: () => []
+      } as any;
+    });
+
+    // Fallback decimal is ','
+    const f = createIntegerForm("12,0", { maxDigits: 3 });
+    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'integer.isInteger' }]);
+
+    spy.mockRestore();
   });
 });

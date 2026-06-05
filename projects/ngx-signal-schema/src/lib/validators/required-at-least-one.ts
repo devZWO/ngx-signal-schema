@@ -77,7 +77,7 @@ export function requiredAtLeastOne<
   selectors: readonly [
     (p: SchemaPathTree<T>) => SchemaPathTree<unknown>,
     (p: SchemaPathTree<T>) => SchemaPathTree<unknown>,
-    ...Array<(p: SchemaPathTree<T>) => SchemaPathTree<unknown>>
+    ...((p: SchemaPathTree<T>) => SchemaPathTree<unknown>)[]
   ],
   options?: {
     /**

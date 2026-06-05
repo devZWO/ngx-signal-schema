@@ -5,14 +5,14 @@ import {parseLocalizedFloat, stripLeadingZeros, toPlainDecimalString} from './de
  * This type is used to add the options to the error,
  * so you can use the option configuration in the error message.
  */
-export type ValidationErrorWithIntegerOptions = ValidationError & {
-  options: IntegerOptions
+export interface ValidationErrorWithIntegerOptions extends ValidationError {
+  options: IntegerOptions;
 }
 
 /**
  * Configuration options for the integer validator.
  */
-export type IntegerOptions = {
+export interface IntegerOptions {
   /**
    * Maximum number of digits allowed in the integer part.
    */

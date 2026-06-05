@@ -22,10 +22,15 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - run: npm ci
+      - run: npm run lint
 
-      - run: npm test -- --watch=false
+      - run: npm run test:ci
 
-      - run: npm run build ngx-signal-schema
+      - uses: codecov/codecov-action@v6
+        with:
+          directory: ./coverage/ngx-signal-schema
+
+      - run: npm run build:lib
 
       - run: npm publish --access public --provenance
         working-directory: dist/ngx-signal-schema

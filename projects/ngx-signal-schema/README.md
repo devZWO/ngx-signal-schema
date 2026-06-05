@@ -1,30 +1,56 @@
 # @devzwo/ngx-signal-schema
+[![Angular](https://img.shields.io/badge/Angular-21+-DD0031?style=flat-square&logo=angular)](https://angular.dev)
+[![CI](https://img.shields.io/github/actions/workflow/status/devZWO/ngx-signal-schema/main.yml?style=flat-square)](https://github.com/devZWO/ngx-signal-schema/actions/workflows/main.yml)
+[![codecov](https://img.shields.io/codecov/c/github/devzwo/ngx-signal-schema?style=flat-square)](https://codecov.io/github/devZWO/ngx-signal-schema)
+[![NPM Version](https://img.shields.io/npm/v/@devzwo/ngx-signal-schema?style=flat-square)](https://npmjs.org/package/@devzwo/ngx-signal-schema)
+[![License](https://img.shields.io/npm/l/%40devzwo%2Fngx-signal-schema?style=flat-square)](https://github.com/devZWO/ngx-signal-schema/blob/main/LICENSE)
 
-Composable schema validation operators for
+
+
+> Composable schema validation operators for
 [Angular Signal Forms](https://angular.dev/essentials/signal-forms).
+> 
+> Built for Angular v21+.
 
-Built for Angular v21+.
+---
 
 ## Motivation
-Angular Signal Forms introduce a powerful, signal-based schema system. As form complexity grows, so does the need for reusable and modular validation logic. `@devzwo/ngx-signal-schema` provides a collection of helper functions to design complex schemas declaratively and maintainably.
 
-## Problem Statement
-Defining schemas with complex dependencies (e.g., "Field A is only required if Field B has a certain value") often leads to cluttered boilerplate code. Existing validators are often difficult to combine or extend without redefining the entire schema.
+Angular Signal Forms introduce a powerful, signal-based schema system. Defining schemas with complex dependencies (e.g., "Field A is only required if Field B has a certain value") often leads to cluttered boilerplate code. Existing validators are often challenging to combine or extend without redefining the entire schema.
 
-## Features
+> As form complexity grows, so does the need for reusable and modular validation logic. `@devzwo/ngx-signal-schema` provides a collection of helper functions to design complex schemas declaratively and maintainably.
+
+---
+
+## ✨ Features
 - **Composable**: Schemata can be easily combined and extended.
 - **Declarative**: Clear structure through `composition`, `conditions`, `rules`, and `validators`.
 - **Type-safe**: Full support for TypeScript typing of Angular Signal Forms.
 - **Tree-shakeable**: Functional API ensures minimal bundle size impact.
 - **Future-proof**: Built directly on top of `@angular/forms/signals`.
 
-## Installation
+---
+
+## 📦 Installation
 
 ```bash
 npm install @devzwo/ngx-signal-schema
 ```
 
-## Usage & Examples
+or
+
+```bash
+pnpm install @devzwo/ngx-signal-schema
+```
+
+### Peer Dependencies
+Ensure that the following packages are installed in your project:
+- `@angular/core`: ^21.2.0
+- `@angular/forms`: ^21.2.0
+
+---
+
+## 🚀 Usage & Examples
 
 ### Simple Composition with `compose`
 With `compose`, existing schemas can be easily extended.
@@ -163,9 +189,9 @@ validate(path.agreedToTerms, (ctx) => {
     : { kind: 'required' };
 });
 ```
+---
 
-
-## API
+## 📚 API
 
 The package is divided into four logical areas:
 
@@ -196,16 +222,3 @@ Specialized validators for Signal Forms.
 - `oneOfPattern(values, options)`: Helper that generates a `RegExp` matching any of the provided values. Useful with the built-in `pattern` validator.
 - `year(path)`: Specialized validator for years (`YYYY`) in text form. **Error key:** `year`
 
-## Angular Compatibility
-This package requires **Angular 21.2.0** or higher. It utilizes the latest features of signal-based forms.
-
-## Signal Forms Compatibility
-The library is specifically designed for use with `@angular/forms/signals` (Angular Signal Forms) and integrates seamlessly into its schema system.
-
-## Tree Shaking
-The library is fully optimized for tree shaking. Thanks to the functional architecture and the `sideEffects: false` marking, only the operators you actually import end up in your bundle.
-
-## Peer Dependencies
-Ensure that the following packages are installed in your project:
-- `@angular/core`: ^21.2.0
-- `@angular/forms`: ^21.2.0

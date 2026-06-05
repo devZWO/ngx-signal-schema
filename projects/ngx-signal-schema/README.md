@@ -1,6 +1,9 @@
 # @devzwo/ngx-signal-schema
 
-Composable schema operators for Angular Signal Forms.
+Composable schema validation operators for
+[Angular Signal Forms](https://angular.dev/essentials/signal-forms).
+
+Built for Angular v21+.
 
 ## Motivation
 Angular Signal Forms introduce a powerful, signal-based schema system. As form complexity grows, so does the need for reusable and modular validation logic. `@devzwo/ngx-signal-schema` provides a collection of helper functions to design complex schemas declaratively and maintainably.

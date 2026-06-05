@@ -1,8 +1,9 @@
 # NgxSignalSchema
 
-Composable schema operators for Angular Signal Forms.
+Composable schema validation operators for
+[Angular Signal Forms](https://angular.dev/essentials/signal-forms).
 
-Designed for Angular Signal Forms / Angular v21+
+Built for Angular v21+.
 
 # ngx-signal-schema Workspace
 

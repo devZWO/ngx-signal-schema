@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { form, schema } from '@angular/forms/signals';
 import { signal } from '@angular/core';
-import { decimal, DecimalOptions } from './decimal';
+import { decimal, DecimalOptions, stripLeadingZeros } from './decimal';
 
 describe('decimal validator', () => {
 
@@ -164,8 +164,28 @@ describe('decimal validator', () => {
   });
 
   it('should be valid for undefined values', () => {
-    // @ts-ignore
+    // @ts-expect-error - testing invalid input type for robustness
     const f = createDecimalForm(undefined, { maxIntegerDigits: 3, maxFractionDigits: 2 });
     expect(f().errorSummary()).toEqual([]);
+  });
+
+  it('stripLeadingZeros should return "0" for empty string', () => {
+    expect(stripLeadingZeros("")).toBe("0");
+  });
+
+  it('should use fallback separators if Intl fails', () => {
+    const spy = vi.spyOn(Intl, 'NumberFormat').mockImplementation(function() {
+      return {
+        formatToParts: () => []
+      } as unknown as Intl.NumberFormat;
+    });
+
+    const f = createDecimalForm("123,45", { maxIntegerDigits: 3, maxFractionDigits: 2 });
+    expect(f().errorSummary()).toEqual([]);
+
+    const f2 = createDecimalForm("1.234,56", { maxIntegerDigits: 4, maxFractionDigits: 2 });
+    expect(f2().errorSummary()).toEqual([]);
+
+    spy.mockRestore();
   });
 });

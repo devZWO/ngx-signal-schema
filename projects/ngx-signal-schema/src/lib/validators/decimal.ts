@@ -4,14 +4,14 @@ import {SchemaPath, validate, ValidationError} from '@angular/forms/signals';
  * This type is used to add the options to the error,
  * so you can use the option configuration in the error message.
  */
-export type ValidationErrorWithDecimalOptions = ValidationError & {
-  options: DecimalOptions
+export interface ValidationErrorWithDecimalOptions extends ValidationError {
+  options: DecimalOptions;
 }
 
 /**
  * Configuration options for the decimal validator.
  */
-export type DecimalOptions = {
+export interface DecimalOptions {
   /**
    * Maximum number of digits before the decimal separator.
    * Example: maxIntegerDigits = 3 allows 999.99 but rejects 1000.00

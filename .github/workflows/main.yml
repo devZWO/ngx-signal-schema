@@ -17,10 +17,15 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - run: npm run lint
 
-      - run: npm test -- --watch=false
+      - run: npm run test:ci
 
-      - run: npm run build ngx-signal-schema
+      - uses: codecov/codecov-action@v6
+        with:
+          directory: ./coverage/ngx-signal-schema
+
+      - run: npm run build:lib
 
       - run: npm pack --dry-run
         working-directory: dist/ngx-signal-schema

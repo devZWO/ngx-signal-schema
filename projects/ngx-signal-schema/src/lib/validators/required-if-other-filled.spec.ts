@@ -45,4 +45,19 @@ describe('requiredIfOtherFilled validator', () => {
     const f = createForm({ source: 'filled', target: '' });
     expect(f().errorSummary().length).toBe(1);
   });
+
+  it('should work without options and default message to undefined', () => {
+    const valueSignal = signal<MyModel>({ source: 'filled', target: null });
+    const mySchema = schema<MyModel>((path) => {
+      requiredIfOtherFilled(path, p => p.source, p => p.target);
+    });
+
+    const f = TestBed.runInInjectionContext(() => {
+      return form(valueSignal, mySchema);
+    });
+
+    const errors = f().errorSummary();
+    expect(errors.length).toBe(1);
+    expect(errors[0].message).toBeUndefined();
+  });
 });

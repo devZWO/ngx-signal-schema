@@ -6,7 +6,7 @@ import {SchemaPath} from "@angular/forms/signals";
  * @example
  * const value = ctx.valueOf(path.myField);
  */
-export type SchemaRuleContext = {
+export interface SchemaRuleContext {
   /**
    * Retrieves the current value of a field at the specified path.
    *

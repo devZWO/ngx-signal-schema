@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "schematicCollections": ["angular-eslint"]
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -28,6 +29,16 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/ngx-signal-schema/tsconfig.spec.json"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/ngx-signal-schema/**/*.ts",
+              "projects/ngx-signal-schema/**/*.html"
+            ],
+            "eslintConfig": "projects/ngx-signal-schema/eslint.config.js"
           }
         }
       }

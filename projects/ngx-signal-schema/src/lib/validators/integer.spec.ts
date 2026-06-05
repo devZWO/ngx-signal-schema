@@ -121,7 +121,7 @@ describe('integer validator', () => {
     const spy = vi.spyOn(Intl, 'NumberFormat').mockImplementation(function() {
       return {
         formatToParts: () => []
-      } as any;
+      } as unknown as Intl.NumberFormat;
     });
 
     // Fallback decimal is ','

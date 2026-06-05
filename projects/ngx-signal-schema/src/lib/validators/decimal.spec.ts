@@ -177,7 +177,7 @@ describe('decimal validator', () => {
     const spy = vi.spyOn(Intl, 'NumberFormat').mockImplementation(function() {
       return {
         formatToParts: () => []
-      } as any;
+      } as unknown as Intl.NumberFormat;
     });
 
     const f = createDecimalForm("123,45", { maxIntegerDigits: 3, maxFractionDigits: 2 });

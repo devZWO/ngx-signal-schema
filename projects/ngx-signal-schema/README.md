@@ -212,8 +212,9 @@ Structural field configurations.
 
 ### 4. Validators
 Specialized validators for Signal Forms.
-- `requiredTrimmed(path)`: Checks for content while removing leading/trailing whitespace. **Error key:** `required`
-- `requiredDefined(path)`: Ensures that a value is neither `null` nor `undefined`. Essential for mandatory booleans where `false` is a valid value. **Error key:** `required`
+
+- `requiredTrimmed(path)`: **Standard text required.** Checks for content while removing leading/trailing whitespace. Recommended for all string inputs. **Error key:** `required`
+- `requiredDefined(path)`: **Mandatory selection.** Ensures that a value is neither `null` nor `undefined`. Essential for booleans (toggles, checkboxes) where `false` is a valid selection but a choice is required. **Not recommended for strings.** **Error key:** `required`
 - `requiredAtLeastOne(path, fields)`: Validates that at least one of the specified fields is filled. **Error key:** `group.requiredAtLeastOne`
 - `requiredIfOtherFilled(path, otherPath)`: Makes a field required as soon as another field contains a value. **Error key:** `required` (default, configurable)
 - `decimal(path, options)`: Validates that a value matches a decimal format. **Error keys:** `decimal.isNumber`, `decimal.intCount`, `decimal.fractCount`

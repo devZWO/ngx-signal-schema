@@ -8,4 +8,6 @@
  * This type is intended for scenarios where detailed error reporting
  * and categorization are required.
  */
-export type ErrorOption = { error?: { kind?: string; message?: string; } };
+export interface ErrorOption {
+    error?: { kind?: string; message?: string; }
+}

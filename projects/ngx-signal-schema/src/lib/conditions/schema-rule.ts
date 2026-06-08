@@ -14,7 +14,7 @@ export interface SchemaRuleContext {
    * @returns The value of the field.
    */
   valueOf<T>(path: SchemaPath<T>): T;
-};
+}
 
 /**
  * A rule that evaluates a condition based on the schema context.

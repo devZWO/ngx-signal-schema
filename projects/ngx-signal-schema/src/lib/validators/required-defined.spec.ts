@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { TestBed } from '@angular/core/testing';
-import { form, schema } from '@angular/forms/signals';
-import { signal } from '@angular/core';
-import { requiredDefined } from './required-defined';
+import {describe, expect, it} from 'vitest';
+import {TestBed} from '@angular/core/testing';
+import {form, schema} from '@angular/forms/signals';
+import {signal} from '@angular/core';
+import {requiredDefined} from './required-defined';
 
 describe('requiredDefined validator', () => {
 
@@ -40,4 +40,18 @@ describe('requiredDefined validator', () => {
     expect(errors.length).toBe(1);
     expect(errors[0].kind).toBe('required');
   });
+
+    it('should use custom error kind and message from ErrorOption', () => {
+        const valueSignal = signal<boolean | null>(null);
+        const mySchema = schema<boolean | null>((path) => {
+            requiredDefined(path, {error: {kind: 'custom.required', message: 'Custom message'}});
+        });
+
+        const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));
+        const errors = f().errorSummary();
+
+        expect(errors.length).toBe(1);
+        expect(errors[0].kind).toBe('custom.required');
+        expect(errors[0].message).toBe('Custom message');
+    });
 });

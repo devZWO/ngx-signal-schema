@@ -47,6 +47,6 @@ jobs:
           registry-url: https://registry.npmjs.org
           cache: npm
       - run: npm ci
-      - run: npm run build:lib
+      -   run: npm run lib:build
       - run: npm publish --access public --provenance
         working-directory: dist/ngx-signal-schema

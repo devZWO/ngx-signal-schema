@@ -31,6 +31,12 @@
     },
     {
       "path": "./projects/ngx-signal-schema/tsconfig.spec.json"
+    },
+      {
+          "path": "./projects/demo-form/tsconfig.app.json"
+      },
+      {
+          "path": "./projects/demo-form/tsconfig.spec.json"
     }
   ]
 }

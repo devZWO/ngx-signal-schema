@@ -6,7 +6,7 @@ import {AppFormModel, contactDataSchema, legalPersonHiddenSchema, legalPersonSch
 import {InputFormField} from '../shared/components/input-form-field';
 import {SelectFormField, SelectOption} from '../shared/components/select-form-field';
 import {ButtonToggleFormField, ButtonToggleOption} from '../shared/components/button-toggle-form-field';
-import {applyIf, compose, requiredDefined, valueEquals} from 'ngx-signal-schema';
+import {applyIf, compose, requiredDefined, valueEquals} from '@devzwo/ngx-signal-schema';
 
 
 @Component({
@@ -165,7 +165,7 @@ export class App {
 
     private readonly appSchema = schema<AppFormModel>((path) => {
         // Base type must be defined
-        requiredDefined(path.type);
+        requiredDefined(path.type, {error: {message: 'Person type is required'}});
 
         // Include contact data (including address)
         apply(path.contact, contactDataSchema);

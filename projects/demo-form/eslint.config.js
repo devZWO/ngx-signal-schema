@@ -7,6 +7,7 @@ module.exports = defineConfig([
     {
         files: ['**/*.ts'],
         rules: {
+            '@typescript-eslint/no-explicit-any': 'error',
             '@angular-eslint/directive-selector': [
                 'error',
                 {
@@ -17,11 +18,18 @@ module.exports = defineConfig([
             ],
             '@angular-eslint/component-selector': [
                 'error',
-                {
-                    type: 'element',
-                    prefix: 'app',
-                    style: 'kebab-case',
-                },
+                [
+                    {
+                        type: 'element',
+                        prefix: 'app',
+                        style: 'kebab-case',
+                    },
+                    {
+                        type: 'attribute',
+                        prefix: 'app',
+                        style: 'camelCase',
+                    },
+                ],
             ],
         },
     },

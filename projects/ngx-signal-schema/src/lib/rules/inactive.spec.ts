@@ -2,14 +2,14 @@ import {describe, expect, it} from 'vitest';
 import {TestBed} from '@angular/core/testing';
 import {form, minLength, schema} from '@angular/forms/signals';
 import {signal} from '@angular/core';
-import {disabledHidden} from './disabled-hidden';
+import {inactive} from './inactive';
 
-describe('disabledHidden rule', () => {
+describe('inactive rule', () => {
 
   function createForm(initialValue: string) {
     const valueSignal = signal(initialValue);
     const mySchema = schema<string>((path) => {
-      disabledHidden(path);
+      inactive(path);
     });
 
     return TestBed.runInInjectionContext(() => {
@@ -28,7 +28,7 @@ describe('disabledHidden rule', () => {
     const condition = signal(false);
 
     const mySchema = schema<string>((path) => {
-      disabledHidden(path, () => condition());
+      inactive(path, () => condition());
     });
 
     const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));
@@ -47,7 +47,7 @@ describe('disabledHidden rule', () => {
 
     const mySchema = schema<string>((path) => {
       minLength(path, 3);
-      disabledHidden(path, () => isHidden());
+      inactive(path, () => isHidden());
     });
 
     const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));

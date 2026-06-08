@@ -1,5 +1,6 @@
 import {SchemaPath, validate, ValidationError} from '@angular/forms/signals';
 import {parseLocalizedFloat, stripLeadingZeros, toPlainDecimalString} from './decimal';
+import {ErrorOption} from './options';
 
 /**
  * This type is used to add the options to the error,
@@ -12,20 +13,21 @@ export interface ValidationErrorWithIntegerOptions extends ValidationError {
 /**
  * Configuration options for the integer validator.
  */
-export interface IntegerOptions {
+export interface IntegerOptions extends ErrorOption {
   /**
    * Maximum number of digits allowed in the integer part.
    */
   maxDigits: number;
   /**
    * Optional custom error message.
+   * @deprecated Use `error.message` from `ErrorOption` instead.
    */
   message?: string;
   /**
    * Optional locale for parsing localized strings (defaults to 'de-DE').
    */
   locale?: string;
-};
+}
 
 /**
  * Schema helper for integer numbers stored as number | null.
@@ -70,8 +72,8 @@ export function integer(
       case 'not-a-number':
       case 'not-an-integer':
         return {
-          kind: 'integer.isInteger',
-          message,
+            kind: options.error?.kind ?? 'integer.isInteger',
+            message: options.error?.message ?? message,
           options,
         };
 
@@ -87,8 +89,8 @@ export function integer(
 
         if (integerPart.length > maxDigits) {
           return {
-            kind: 'integer.digitCount',
-            message,
+              kind: options.error?.kind ?? 'integer.digitCount',
+              message: options.error?.message ?? message,
             options,
           };
         }

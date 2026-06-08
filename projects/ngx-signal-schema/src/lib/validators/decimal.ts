@@ -1,4 +1,5 @@
 import {SchemaPath, validate, ValidationError} from '@angular/forms/signals';
+import {ErrorOption} from './options';
 
 /**
  * This type is used to add the options to the error,
@@ -11,7 +12,7 @@ export interface ValidationErrorWithDecimalOptions extends ValidationError {
 /**
  * Configuration options for the decimal validator.
  */
-export interface DecimalOptions {
+export interface DecimalOptions extends ErrorOption {
   /**
    * Maximum number of digits before the decimal separator.
    * Example: maxIntegerDigits = 3 allows 999.99 but rejects 1000.00
@@ -26,6 +27,7 @@ export interface DecimalOptions {
 
   /**
    * Optional custom error message. or message key
+   * @deprecated Use `error.message` from `ErrorOption` instead.
    */
   message?: string;
 
@@ -34,7 +36,7 @@ export interface DecimalOptions {
    * Default is 'de-DE'
    */
   locale?: string;
-};
+}
 
 /**
  * Schema helper for decimal numbers stored as number | null.
@@ -78,8 +80,8 @@ export function decimal(
 
       case 'not-a-number':
         return {
-          kind: 'decimal.isNumber',
-          message: message,
+            kind: options.error?.kind ?? 'decimal.isNumber',
+            message: options.error?.message ?? message,
           options: options
         };
 
@@ -96,16 +98,16 @@ export function decimal(
 
         if (integerDigits > maxIntegerDigits) {
           return {
-            kind: 'decimal.intCount',
-            message: message,
+              kind: options.error?.kind ?? 'decimal.intCount',
+              message: options.error?.message ?? message,
             options: options
           };
         }
 
         if (fractionDigits > maxFractionDigits) {
           return {
-            kind: 'decimal.fractCount',
-            message: message,
+              kind: options.error?.kind ?? 'decimal.fractCount',
+              message: options.error?.message ?? message,
             options: options
           };
         }

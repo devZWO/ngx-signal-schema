@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import { TestBed } from '@angular/core/testing';
-import { form, schema } from '@angular/forms/signals';
-import { signal } from '@angular/core';
-import { integer, IntegerOptions } from './integer';
+import {describe, expect, it, vi} from 'vitest';
+import {TestBed} from '@angular/core/testing';
+import {form, schema} from '@angular/forms/signals';
+import {signal} from '@angular/core';
+import {integer, IntegerOptions} from './integer';
 
 describe('integer validator', () => {
 
@@ -130,4 +130,17 @@ describe('integer validator', () => {
 
     spy.mockRestore();
   });
+
+    it('should use custom error kind and message from ErrorOption', () => {
+        const customOptions: IntegerOptions = {
+            maxDigits: 3,
+            error: {kind: 'custom.integer', message: 'Custom message'}
+        };
+        const f = createIntegerForm(1234, customOptions);
+        const errors = f().errorSummary();
+
+        expect(errors.length).toBe(1);
+        expect(errors[0].kind).toBe('custom.integer');
+        expect(errors[0].message).toBe('Custom message');
+    });
 });

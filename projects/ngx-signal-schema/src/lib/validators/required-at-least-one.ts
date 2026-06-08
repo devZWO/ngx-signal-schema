@@ -1,4 +1,5 @@
 import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
+import {ErrorOption} from "./options";
 
 /**
  * Adds a cross-field validation rule to the given schema path that requires
@@ -91,16 +92,18 @@ export function requiredAtLeastOne<
     isFilled?: (value: unknown) => boolean;
     /**
      * Optional custom validation error message.
+     * @deprecated Use `error.message` from `ErrorOption` instead.
      */
     message?: string,
-  }
+  } & ErrorOption
 ): void {
   // Use custom "isFilled" logic if provided, otherwise fall back to a simple default
   // (non-null and non-empty string counts as filled)
   const isFilled = options?.isFilled ?? ((value: unknown) => value != null && value !== '');
 
   // Use provided message or fall back to a generic default
-  const message = options?.message ?? undefined;
+    const message = options?.error?.message ?? options?.message ?? undefined;
+    const kind = options?.error?.kind ?? 'group.requiredAtLeastOne';
 
   validateTree(path, (ctx) => {
     const pathTree = path as SchemaPathTree<T>;
@@ -124,7 +127,7 @@ export function requiredAtLeastOne<
     // If a specific target field is configured, attach the error only there
     if (options?.attachTo) {
       return {
-        kind: 'group.requiredAtLeastOne',
+          kind: kind,
         message: message,
         // Resolve the target field path and attach the error to its FieldTree
         fieldTree: ctx.fieldTreeOf(options.attachTo(pathTree)),
@@ -134,7 +137,7 @@ export function requiredAtLeastOne<
     // Otherwise attach the same validation error to ALL selected fields.
     // This ensures each field shows the error in the UI.
     return selectedPaths.map((selectedPath) => ({
-      kind: 'group.requiredAtLeastOne',
+        kind: kind,
       message: message,
       // Convert SchemaPath -> FieldTree so Angular knows where to display the error
       fieldTree: ctx.fieldTreeOf(selectedPath),

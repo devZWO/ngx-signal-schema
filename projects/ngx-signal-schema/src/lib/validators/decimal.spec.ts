@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from 'vitest';
-import { TestBed } from '@angular/core/testing';
-import { form, schema } from '@angular/forms/signals';
-import { signal } from '@angular/core';
-import { decimal, DecimalOptions, stripLeadingZeros } from './decimal';
+import {describe, expect, it, vi} from 'vitest';
+import {TestBed} from '@angular/core/testing';
+import {form, schema} from '@angular/forms/signals';
+import {signal} from '@angular/core';
+import {decimal, DecimalOptions, stripLeadingZeros} from './decimal';
 
 describe('decimal validator', () => {
 
@@ -188,4 +188,18 @@ describe('decimal validator', () => {
 
     spy.mockRestore();
   });
+
+    it('should use custom error kind and message from ErrorOption', () => {
+        const customOptions: DecimalOptions = {
+            maxIntegerDigits: 3,
+            maxFractionDigits: 2,
+            error: {kind: 'custom.decimal', message: 'Custom message'}
+        };
+        const f = createDecimalForm(1234.56, customOptions);
+        const errors = f().errorSummary();
+
+        expect(errors.length).toBe(1);
+        expect(errors[0].kind).toBe('custom.decimal');
+        expect(errors[0].message).toBe('Custom message');
+    });
 });

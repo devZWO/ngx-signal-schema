@@ -1,5 +1,6 @@
 import {pattern, SchemaPath} from "@angular/forms/signals";
 import {oneOfPattern} from "./one-of-pattern";
+import {ErrorOption} from './options';
 
 /**
  * Validator that checks if the field value matches one of the allowed MIME types.
@@ -23,9 +24,10 @@ export function mimeType<T extends string>(
   config?: {
     /**
      * Optional custom validation error message.
+     * @deprecated Use `error.message` from `ErrorOption` instead.
      */
-    message: string
-  }
+    message?: string
+  } & ErrorOption
 ): void {
   const patternArg = typeof mimeType === 'function'
     ? () => mimeTypePattern(mimeType())
@@ -33,8 +35,8 @@ export function mimeType<T extends string>(
 
   pattern(fieldPath as SchemaPath<string>, patternArg, {
     error: {
-      kind: 'mimeType',
-      message: config?.message
+        kind: config?.error?.kind ?? 'mimeType',
+        message: config?.error?.message ?? config?.message
     }
   })
 }

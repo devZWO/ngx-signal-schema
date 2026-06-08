@@ -1,4 +1,5 @@
 import {maxLength, minLength, pattern, SchemaPath} from "@angular/forms/signals";
+import {ErrorOption} from './options';
 
 const isIntegerTextRegex = /^\d*$/
 
@@ -12,11 +13,26 @@ const isIntegerTextRegex = /^\d*$/
  *
  * @param fieldPath - The schema path to the year field to validate.
  *
+ * @param config - Provides custom error options for validation errors.
+ *
+ * @important
+ * **Unexpectedly the custom error kind will NOT override the default error kind for minLength and maxLength, only the error kind for the pattern.**
+ *
+ *
  * @example
  * year(path.birthYear);
  */
-export function year<T extends string>(fieldPath: SchemaPath<T>): void {
-  maxLength(fieldPath, 4)
-  minLength(fieldPath, 4)
-  pattern(fieldPath, isIntegerTextRegex, {error: {kind: 'year'}})
+export function year<T extends string>(fieldPath: SchemaPath<T>, config?: ErrorOption): void {
+    if (config?.error?.kind) {
+        maxLength(fieldPath, 4, {error: {kind: config.error.kind, message: config?.error?.message}})
+        minLength(fieldPath, 4, {error: {kind: config.error.kind, message: config?.error?.message}})
+    } else {
+        maxLength(fieldPath, 4, {message: config?.error?.message})
+        minLength(fieldPath, 4, {message: config?.error?.message})
+    }
+    pattern(
+        fieldPath,
+        isIntegerTextRegex,
+        {error: {kind: config?.error?.kind ?? 'year', message: config?.error?.message}}
+    )
 }

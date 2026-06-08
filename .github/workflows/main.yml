@@ -40,6 +40,6 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build:lib
+      -   run: npm run lib:build
       - run: npm pack --dry-run
         working-directory: dist/ngx-signal-schema

@@ -1,0 +1,3 @@
+/* when tailwind is imported to Scss its not going to be recognized somewhat, so we do import into css and import this css into angular.json */
+@import "tailwindcss";
+@import 'tailwindcss/utilities';

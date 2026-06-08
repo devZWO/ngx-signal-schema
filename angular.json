@@ -42,6 +42,87 @@
           }
         }
       }
+    },
+      "demo-form": {
+          "projectType": "application",
+          "schematics": {
+              "@schematics/angular:component": {
+                  "style": "scss",
+                  "inlineTemplate": true,
+                  "inlineStyle": true
+              }
+          },
+          "root": "projects/demo-form",
+          "sourceRoot": "projects/demo-form/src",
+          "prefix": "app",
+          "architect": {
+              "build": {
+                  "builder": "@angular/build:application",
+                  "options": {
+                      "browser": "projects/demo-form/src/main.ts",
+                      "tsConfig": "projects/demo-form/tsconfig.app.json",
+                      "assets": [
+                          {
+                              "glob": "**/*",
+                              "input": "projects/demo-form/public"
+                          }
+                      ],
+                      "styles": [
+                          "@angular/material/prebuilt-themes/cyan-orange.css",
+                          "projects/demo-form/src/tailwind.css",
+                          "projects/demo-form/src/styles.scss"
+                      ]
+                  },
+                  "configurations": {
+                      "production": {
+                          "budgets": [
+                              {
+                                  "type": "initial",
+                                  "maximumWarning": "500kB",
+                                  "maximumError": "1MB"
+                              },
+                              {
+                                  "type": "anyComponentStyle",
+                                  "maximumWarning": "4kB",
+                                  "maximumError": "8kB"
+                              }
+                          ],
+                          "outputHashing": "all"
+                      },
+                      "development": {
+                          "optimization": false,
+                          "extractLicenses": false,
+                          "sourceMap": true
+                      }
+                  },
+                  "defaultConfiguration": "production"
+              },
+              "serve": {
+                  "builder": "@angular/build:dev-server",
+                  "configurations": {
+                      "production": {
+                          "buildTarget": "demo-form:build:production"
+                      },
+                      "development": {
+                          "buildTarget": "demo-form:build:development"
+                      }
+                  },
+                  "defaultConfiguration": "development"
+              },
+              "test": {
+                  "builder": "@angular/build:unit-test"
+              },
+              "lint": {
+                  "builder": "@angular-eslint/builder:lint",
+                  "options": {
+                      "lintFilePatterns": [
+                          "projects/demo-form/**/*.ts",
+                          "projects/demo-form/**/*.html"
+                      ],
+                      "eslintConfig": "projects/demo-form/eslint.config.js"
+                  }
+              }
+          }
     }
   }
 }

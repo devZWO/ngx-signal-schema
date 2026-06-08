@@ -1,4 +1,5 @@
 import {disabled, hidden, SchemaPath} from "@angular/forms/signals";
+import {inactive} from './inactive';
 
 /**
  * Options for configuring the disabled and hidden states.
@@ -6,11 +7,12 @@ import {disabled, hidden, SchemaPath} from "@angular/forms/signals";
 type LogicOptions = Parameters<typeof disabled>[1] & Parameters<typeof hidden>[1];
 
 /**
- * Applies a generic "inactive UI" state by both disabling and hiding a field.
+ * Applies a combined "inactive UI" state by both disabling and hiding a field.
  *
- * This is a structural helper that simplifies common UI requirements where
- * a field that is not relevant should be both non-editable and invisible.
- * This is useful because disabled fields are not validated and not respected when submitting forms.
+ * Use this when a field should not be visible and should also be non-interactive
+ * at the control level while hidden. Note that `hidden()` alone already excludes
+ * the field from validation / parent form state; this helper additionally applies
+ * the disabled state so bound controls reflect disabled semantics as well.
  *
  * This is fully type-agnostic and can be used for any field shape.
  *
@@ -19,8 +21,11 @@ type LogicOptions = Parameters<typeof disabled>[1] & Parameters<typeof hidden>[1
  *
  * @example
  * disabledHidden(path.secretCode, not(valueEquals(path.isAdmin, true)));
+ *
+ * @deprecated
+ * The name disabledHidden was technically correct, but it does not show its purpose. so it was renamed to `inactive`.
+ * Use `inactive` instead.
  */
 export function disabledHidden<T>(fieldPath: SchemaPath<T>, options?: LogicOptions): void {
-  disabled(fieldPath, options);
-  hidden(fieldPath, options ?? (() => true));
+  inactive(fieldPath, options);
 }

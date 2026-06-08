@@ -2,7 +2,7 @@
   "name": "@devzwo/ngx-signal-schema",
   "description": "Composable schema validation operators for Angular Signal Forms.",
   "license": "MIT",
-  "version": "1.0.6",
+  "version": "1.1.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/devZWO/ngx-signal-schema.git"

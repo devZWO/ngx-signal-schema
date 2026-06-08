@@ -1,5 +1,4 @@
 import {metadata, REQUIRED, SchemaPath, validate} from "@angular/forms/signals";
-import {ErrorOption} from './options';
 
 /**
  * A validator for signal-based forms that checks if a string value is present after trimming whitespace.
@@ -10,23 +9,22 @@ import {ErrorOption} from './options';
  * @param path
  * The schema path to the string field to be validated.
  *
- * @param option
- * Optional configuration for the validator.
- *
  * @example
  * requiredTrimmed(path.username);
+ *
+ * @see requiredDefined - Use this for non-string fields like booleans or numbers.
  */
-export function requiredTrimmed(path: SchemaPath<string | null | undefined>, option?: ErrorOption): void {
+export function requiredTrimmed(path: SchemaPath<string | null | undefined>): void {
     metadata(path, REQUIRED, () => true);
     validate(path, (ctx) => {
         const trimmed = ctx.value()?.trim();
 
-   if(!trimmed) {
-     return {
-       kind: 'required'
-     }
-   }
+        if (!trimmed) {
+            return {
+                kind: 'required'
+            }
+        }
 
-   return null;
- })
+        return null;
+    })
 }

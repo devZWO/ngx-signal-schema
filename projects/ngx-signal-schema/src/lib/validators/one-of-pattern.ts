@@ -3,6 +3,9 @@
  *
  * @param value - The raw string to be escaped.
  * @returns The escaped string.
+ * @internal should not be used outside f this module. public export will be removed in future versions.
+ * @deprecated This function was exported by mistake and will become internal in the next major release (v2).
+ * Do not use it directly.
  */
 function escapeRegExp(value: string): string {
   return value.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');

@@ -15,11 +15,5 @@
         "**/*.spec.ts"
     ],
     "angularCompilerOptions": {
-        "extendedDiagnostics": {
-            "checks": {
-                "nullishCoalescingNotNullable": "warning",
-                "optionalChainNotNullable": "suppress"
-            }
-        }
     }
 }

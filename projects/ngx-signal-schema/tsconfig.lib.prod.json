@@ -6,12 +6,6 @@
         "declarationMap": false
     },
     "angularCompilerOptions": {
-        "compilationMode": "partial",
-        "extendedDiagnostics": {
-            "checks": {
-                "nullishCoalescingNotNullable": "warning",
-                "optionalChainNotNullable": "suppress"
-            }
-        }
+        "compilationMode": "partial"
     }
 }

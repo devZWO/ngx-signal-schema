@@ -11,5 +11,7 @@
     ],
     "exclude": [
         "src/**/*.spec.ts"
-    ]
+    ],
+    "angularCompilerOptions": {
+    }
 }

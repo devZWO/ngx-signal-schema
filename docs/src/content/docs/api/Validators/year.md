@@ -12,7 +12,6 @@ Defined in: projects/ngx-signal-schema/src/lib/validators/year.ts:27
 Validates a year text field (exactly 4 digits, e.g., "2023").
 
 It ensures the value:
-
 1. Has a maximum length of 4 characters.
 2. Has a minimum length of 4 characters.
 3. Consists only of digits.

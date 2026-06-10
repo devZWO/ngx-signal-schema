@@ -12,12 +12,10 @@ Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:52
 Schema helper for integer numbers stored as number | null.
 
 This validator checks the *shape* of the integer value:
-
 - whether it is a finite number and an integer (no fractional part)
 - whether the number of digits fits into the allowed range
 
 It intentionally does NOT check:
-
 - required / missing values
 - min / max
 - whether negative numbers are allowed
@@ -25,7 +23,6 @@ It intentionally does NOT check:
 Those concerns should be handled by separate validators.
 
 The validator returns two separated error-kinds:
-
 - integer.isInteger: if the value is not a (finite) integer
 - integer.digitCount: if the number of digits is not within the allowed range
 

@@ -16,7 +16,6 @@ This helper is useful for cases where several alternative inputs are allowed,
 but at least one of them must contain a value.
 
 Typical examples:
-
 - at least one of several contact channels must be filled
 - either email or phone number must be provided
 

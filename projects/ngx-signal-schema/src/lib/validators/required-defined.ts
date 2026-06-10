@@ -1,5 +1,5 @@
 import {metadata, REQUIRED, SchemaPath, validate, ValidationError} from "@angular/forms/signals";
-import {ErrorOption} from './options';
+import {ErrorOption} from './error-options';
 
 /**
  * Validator that ensures a value is defined (not null or undefined).
@@ -20,6 +20,8 @@ import {ErrorOption} from './options';
  * requiredDefined(path.agreedToTerms);
  *
  * @see requiredTrimmed - Use this for string/text fields.
+ *
+ * @category Validators
  */
 export function requiredDefined<T>(path: SchemaPath<T>, option?: ErrorOption) {
     metadata(path, REQUIRED, () => true);

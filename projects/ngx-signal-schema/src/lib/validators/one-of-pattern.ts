@@ -3,9 +3,9 @@
  *
  * @param value - The raw string to be escaped.
  * @returns The escaped string.
- * @internal should not be used outside f this module. public export will be removed in future versions.
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2).
- * Do not use it directly.
+ *
+ * @deprecated This function was exported by mistake and will become internal in the next major release (v2). Do not use it directly.
+ * @category deprecated
  */
 function escapeRegExp(value: string): string {
   return value.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -23,6 +23,10 @@ function escapeRegExp(value: string): string {
  * @param options.caseInsensitive - If true (default), the pattern will ignore case.
  * @param options.wildcard - If true, '*' in values will be treated as '.*' (e.g., 'image/*' becomes 'image/.*').
  * @returns A RegExp object representing the combined pattern.
+ *
+ * @internal
+ * @deprecated This function was exported by mistake and will become internal in the next major release (v2). Do not use it directly.
+ * @category deprecated
  */
 export function oneOfPattern(
   values: string | readonly string[],

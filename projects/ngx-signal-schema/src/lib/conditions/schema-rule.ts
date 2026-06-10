@@ -5,6 +5,8 @@ import {SchemaPath} from "@angular/forms/signals";
  *
  * @example
  * const value = ctx.valueOf(path.myField);
+ *
+ * @internal should not be used outside this module
  */
 export interface SchemaRuleContext {
   /**
@@ -25,5 +27,6 @@ export interface SchemaRuleContext {
  *
  * @param ctx - The context providing access to the schema state.
  * @returns True if the condition is met, false otherwise.
+ *
  */
 export type SchemaRule = (ctx: SchemaRuleContext) => boolean;

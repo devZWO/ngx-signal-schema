@@ -1,5 +1,5 @@
 import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
-import {ErrorOption} from "./options";
+import {ErrorOption} from "./error-options";
 
 /**
  * Adds a cross-field validation rule to the given schema path that requires
@@ -70,6 +70,8 @@ import {ErrorOption} from "./options";
  * This helper models a real cross-field rule. That makes it preferable to
  * expressing the same behavior through multiple mirrored `required(..., { when })`
  * conditions, especially when more than two fields are involved.
+ *
+ * @category Validators
  */
 export function requiredAtLeastOne<
   T extends object

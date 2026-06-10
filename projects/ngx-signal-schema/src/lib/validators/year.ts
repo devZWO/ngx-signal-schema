@@ -1,5 +1,5 @@
 import {maxLength, minLength, pattern, SchemaPath} from "@angular/forms/signals";
-import {ErrorOption} from './options';
+import {ErrorOption} from './error-options';
 
 const isIntegerTextRegex = /^\d*$/
 
@@ -21,6 +21,8 @@ const isIntegerTextRegex = /^\d*$/
  *
  * @example
  * year(path.birthYear);
+ *
+ * @category Validators
  */
 export function year<T extends string>(fieldPath: SchemaPath<T>, config?: ErrorOption): void {
     if (config?.error?.kind) {

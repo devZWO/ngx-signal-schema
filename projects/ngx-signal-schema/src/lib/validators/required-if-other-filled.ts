@@ -1,5 +1,5 @@
 import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
-import {ErrorOption} from "./options";
+import {ErrorOption} from "./error-options";
 
 /**
  * Cross-field validator:
@@ -19,6 +19,8 @@ import {ErrorOption} from "./options";
  * @param sourceSelector - Function to select the "driving" field from the schema path tree.
  * @param targetSelector - Function to select the field that becomes required from the schema path tree.
  * @param options - Optional configuration for the validator.
+ *
+ * @category Validators
  */
 export function requiredIfOtherFilled<T>(
   path: SchemaPath<T>,

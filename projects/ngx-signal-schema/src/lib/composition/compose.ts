@@ -26,16 +26,18 @@ import {apply, Schema, schema, type SchemaOrSchemaFn, SchemaPath} from '@angular
  *   disabled(fieldPath.firstname);
  *   hidden(fieldPath.lastname);
  * });
+ *
+ * @category Composition
  */
 export function compose<T>(
-  base: SchemaOrSchemaFn<T>,
-  ...extension: SchemaOrSchemaFn<T>[]
+    base: SchemaOrSchemaFn<T>,
+    ...extension: SchemaOrSchemaFn<T>[]
 ): Schema<T> {
-  return schema<T>((fieldPath) => {
-    apply(fieldPath as SchemaPath<T>, base)
+    return schema<T>((fieldPath) => {
+        apply(fieldPath as SchemaPath<T>, base)
 
-    extension.forEach(extension =>
-      apply(fieldPath as SchemaPath<T>, extension)
-    )
-  });
+        extension.forEach(extension =>
+            apply(fieldPath as SchemaPath<T>, extension)
+        )
+    });
 }

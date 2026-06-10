@@ -11,19 +11,16 @@ import {applyWhen, LogicFn, SchemaOrSchemaFn, type SchemaPath} from '@angular/fo
  * @param elseSchema - The schema or conditions to apply if the predicate is false.
  *
  * @example
- * applyIf(
- *   path,
- *   valueEquals(path.isCompany, true),
- *   CompanySchema,
- *   PersonSchema
- * );
+ * applyIf(path, valueEquals(path.isCompany, true), CompanySchema, PersonSchema);
+ *
+ * @category Composition
  */
 export function applyIf<T>(
-  path: SchemaPath<T>,
-  when: LogicFn<T, boolean>,
-  thenSchema: SchemaOrSchemaFn<T>,
-  elseSchema: SchemaOrSchemaFn<T>,
+    path: SchemaPath<T>,
+    when: LogicFn<T, boolean>,
+    thenSchema: SchemaOrSchemaFn<T>,
+    elseSchema: SchemaOrSchemaFn<T>,
 ): void {
-  applyWhen(path, when, thenSchema);
-  applyWhen(path, (ctx) => !when(ctx), elseSchema);
+    applyWhen(path, when, thenSchema);
+    applyWhen(path, (ctx) => !when(ctx), elseSchema);
 }

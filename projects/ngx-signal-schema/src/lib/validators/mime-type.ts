@@ -1,6 +1,6 @@
 import {pattern, SchemaPath} from "@angular/forms/signals";
 import {oneOfPattern} from "./one-of-pattern";
-import {ErrorOption} from './options';
+import {ErrorOption} from './error-options';
 
 /**
  * Validator that checks if the field value matches one of the allowed MIME types.
@@ -17,6 +17,8 @@ import {ErrorOption} from './options';
  * @param fieldPath - The path to the field in the form schema.
  * @param mimeType - The allowed MIME type(s). Can be a string, an array, or a function returning either.
  * @param config - Optional configuration for the validator, such as a custom error message.
+ *
+ * @category Validators
  */
 export function mimeType<T extends string>(
   fieldPath: SchemaPath<T>,
@@ -52,6 +54,9 @@ export function mimeType<T extends string>(
  *
  * @param mimeTypes - The allowed MIME type(s) or wildcard patterns.
  * @returns A RegExp object for validating MIME types.
+ *
+ * @deprecated will be become internal in a future version. Use `mimeTypePattern` directly.
+ * @category deprecated
  */
 export function mimeTypePattern(
   mimeTypes: string | readonly string[],

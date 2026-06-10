@@ -22,6 +22,8 @@ type LogicOptions = Parameters<typeof disabled>[1] & Parameters<typeof hidden>[1
  *
  * @example
  * inactive(path.secretCode, not(valueEquals(path.isAdmin, true)));
+ *
+ * @category Rules
  */
 export function inactive<T>(fieldPath: SchemaPath<T>, options?: LogicOptions): void {
   disabled(fieldPath, options);

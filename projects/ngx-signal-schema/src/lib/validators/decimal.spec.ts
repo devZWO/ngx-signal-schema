@@ -2,7 +2,8 @@ import {describe, expect, it, vi} from 'vitest';
 import {TestBed} from '@angular/core/testing';
 import {form, schema} from '@angular/forms/signals';
 import {signal} from '@angular/core';
-import {decimal, DecimalOptions, stripLeadingZeros} from './decimal';
+import {decimal, DecimalOptions} from './decimal';
+import {stripLeadingZeros} from './decimal-parser';
 
 describe('decimal validator', () => {
 

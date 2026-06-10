@@ -1,0 +1,85 @@
+---
+title: "ngx-signal-schema"
+description: "Composable schema validation operators for Angular Signal Forms."
+#template: splash
+hero:
+tagline: "Composable schema validation operators for Angular Signal Forms."
+actions:
+- text: "Get Started"
+link: "/gettingstarted"
+icon: "right-arrow"
+- text: "API Reference"
+link: "/api/Composition/"
+icon: "open-book"
+---
+
+
+
+import {Card, CardGrid} from '@astrojs/starlight/components';
+
+## Why ngx-signal-schema?
+
+Angular Signal Forms provide a powerful schema system, but complex forms quickly become difficult to structure.
+
+`ngx-signal-schema` adds reusable composition operators, conditional schema utilities and specialized validators for building maintainable large-scale forms.
+
+```ts
+const ContactSchema = append(
+  BaseSchema,
+
+  (path) => {
+    disabledHidden(
+      path.companyName,
+      valueEquals(path.personType, 'private')
+    );
+  }
+);
+```
+
+## Core Concepts
+
+<CardGrid stagger>
+    <Card title="Composable Schemas" icon="puzzle">
+        <a href="concepts/schemacomposition">
+            Split large form schemas into reusable schema fragments and compose them declaratively.
+        </a>
+    </Card>
+
+    <Card title="Conditional Logic" icon="branch">
+        <a href="concepts/conditionalschemas">
+            Apply schemas dynamically without deeply nested branching logic.
+        </a>
+    </Card>
+
+    <Card title="Unified UI State" icon="setting">
+        Treat validation and UI state as one coherent system using utilities like `disabledHidden`.
+    </Card>
+
+    <Card title="Type-safe Validators" icon="document">
+        Strongly typed validators designed specifically for Angular Signal Forms.
+    </Card>
+</CardGrid>
+
+## Documentation
+
+<CardGrid>
+    <Card title="Getting Started" icon="open-book">
+        <a href="gettingstarted">
+            Install the library and create your first schema.
+        </a>
+    </Card>
+
+    <Card title="Concepts" icon="pencil">
+        <a href="concepts/schemacomposition">
+            Learn the architectural ideas behind schema composition.
+        </a>
+    </Card>
+
+    <Card title="Recipes" icon="add-document" href="/recipes/company-vs-person/">
+        Explore realistic production-style examples.
+    </Card>
+
+    <Card title="API Reference" icon="setting" href="/api/Composition/">
+        Browse the generated API documentation.
+    </Card>
+</CardGrid>

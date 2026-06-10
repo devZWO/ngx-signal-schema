@@ -1,0 +1,147 @@
+---
+title: "Schema Composition"
+description: "Build modular and reusable Angular Signal Form schemas."
+---
+
+As forms grow, schema definitions tend to become large and difficult to maintain.
+
+A single form often contains validation rules, conditional logic, readonly states, feature-specific requirements and UI state rules.
+
+Keeping all of this inside one schema function quickly leads to tightly coupled form logic.
+
+## The problem with monolithic schemas
+
+```ts
+export const ContactSchema = schema<ContactForm>((path) => {
+  requiredTrimmed(path.name);
+  requiredTrimmed(path.email);
+  requiredTrimmed(path.companyName);
+
+  disabledHidden(
+    path.companyName,
+    valueEquals(path.personType, 'private')
+  );
+
+  readonly(path.email, () => isReadonly());
+});
+```
+
+This works, but it does not scale well.
+
+Common problems are duplicated logic, unclear ownership, difficult testing and poor reuse.
+
+## Composing schemas
+
+Instead of defining all rules in one place, schemas can be split into focused fragments.
+
+```ts
+const BaseContactSchema = schema<ContactForm>((path) => {
+  requiredTrimmed(path.name);
+  requiredTrimmed(path.email);
+});
+```
+
+```ts
+const CompanyContactSchema = schema<ContactForm>((path) => {
+  requiredTrimmed(path.companyName);
+});
+```
+
+```ts
+export const ContactSchema = append(
+  BaseContactSchema,
+  CompanyContactSchema
+);
+```
+
+## Why composition matters
+
+Composition keeps different concerns separate.
+
+A base schema can define the rules that are always valid.
+
+A feature schema can add rules for a specific use case.
+
+A workflow schema can add readonly or disabled states.
+
+```ts
+export const EnterpriseContactSchema = append(
+  BaseContactSchema,
+  CompanyContactSchema,
+  EnterpriseRules
+);
+```
+
+## Inline composition
+
+You do not always need to create a separate schema file.
+
+`append` also accepts inline schema functions.
+
+```ts
+export const ContactSchema = append(
+  BaseContactSchema,
+  (path) => {
+    disabledHidden(
+      path.companyName,
+      valueEquals(path.personType, 'private')
+    );
+  }
+);
+```
+
+This is useful for small local extensions.
+
+## Composition instead of inheritance
+
+Schema composition avoids deep inheritance-like structures.
+
+Instead of thinking in terms of this model:
+
+```text
+EnterpriseForm extends BaseForm
+```
+
+think in terms of this model:
+
+```text
+EnterpriseForm =
+  BaseSchema
+  + CompanyRules
+  + WorkflowRules
+```
+
+The final schema is assembled from small, explicit building blocks.
+
+## Typical use cases
+
+Schema composition is useful for large enterprise forms, multi-step workflows, feature-dependent forms, white-label applications, readonly modes and dynamic onboarding flows.
+
+## Recommended approach
+
+A good rule of thumb is:
+
+```text
+One schema fragment should own one concern.
+```
+
+For example:
+
+```text
+BaseContactSchema
+CompanyContactSchema
+ReadonlySchema
+CountrySpecificSchema
+```
+
+These fragments can then be combined as needed.
+
+```ts
+export const FinalContactSchema = append(
+  BaseContactSchema,
+  CompanyContactSchema,
+  CountrySpecificSchema
+);
+```
+
+This keeps validation logic modular, maintainable and easier to change over time.

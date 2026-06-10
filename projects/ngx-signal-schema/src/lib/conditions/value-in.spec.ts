@@ -12,13 +12,13 @@ describe('valueIn', () => {
     });
 
     it('should return false if value is not in list', () => {
-        let allowed = ['a', 'b', 'c'];
+        const allowed = ['a', 'b', 'c'];
         const rule = valueIn(null as never, allowed);
         expect(rule(mockCtx('d') as never)).toBe(false);
     });
 
     it('should respect array mutations', () => {
-        let allowed = ['a', 'c'];
+        const allowed = ['a', 'c'];
         const rule = valueIn(null as never, allowed);
 
         expect(rule(mockCtx('d') as never)).toBe(false);

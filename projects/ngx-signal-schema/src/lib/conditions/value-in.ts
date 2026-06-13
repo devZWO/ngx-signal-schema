@@ -3,7 +3,7 @@ import {SchemaRule} from "./schema-rule";
 
 /**
  * Checks if a field's value is contained within a list of expected values.
- * Useful for conditional conditions (e.g., in `when` conditions).
+ * If you need the other way round, use {@link includes}
  *
  * __`valueIn`__ _is a semantic shortcut for:_
  *

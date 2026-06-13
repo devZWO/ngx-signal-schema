@@ -24,10 +24,10 @@ type LogicOptions = Parameters<typeof disabled>[1] & Parameters<typeof hidden>[1
  *
  * @deprecated
  * The name disabledHidden was technically correct, but it does not show its purpose. so it was renamed to `inactive`.
- * Use `inactive` instead.
+ * Use {@link inactive} instead.
  *
  * @category Rules
  */
 export function disabledHidden<T>(fieldPath: SchemaPath<T>, options?: LogicOptions): void {
-  inactive(fieldPath, options);
+    inactive(fieldPath, options);
 }

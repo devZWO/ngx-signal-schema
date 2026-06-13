@@ -1,4 +1,5 @@
 # @devzwo/ngx-signal-schema
+
 [![Angular](https://img.shields.io/badge/Angular-21+-DD0031?style=flat-square&logo=angular)](https://angular.dev)
 [![CI](https://img.shields.io/github/actions/workflow/status/devZWO/ngx-signal-schema/main.yml?style=flat-square)](https://github.com/devZWO/ngx-signal-schema/actions/workflows/main.yml)
 [![codecov](https://img.shields.io/codecov/c/github/devzwo/ngx-signal-schema?style=flat-square)](https://codecov.io/github/devZWO/ngx-signal-schema)
@@ -9,7 +10,7 @@
 
 > Composable schema validation operators for
 [Angular Signal Forms](https://angular.dev/essentials/signal-forms).
-> 
+>
 > Built for Angular v21+.
 
 ---
@@ -23,6 +24,7 @@ Angular Signal Forms introduce a powerful, signal-based schema system. Defining 
 ---
 
 ## ✨ Features
+
 - **Composable**: Schemata can be easily combined and extended.
 - **Declarative**: Clear structure through `composition`, `conditions`, `rules`, and `validators`.
 - **Type-safe**: Full support for TypeScript typing of Angular Signal Forms.
@@ -44,7 +46,9 @@ pnpm install @devzwo/ngx-signal-schema
 ```
 
 ### Peer Dependencies
+
 Ensure that the following packages are installed in your project:
+
 - `@angular/core`: ^21.2.0
 - `@angular/forms`: ^21.2.0
 
@@ -53,73 +57,79 @@ Ensure that the following packages are installed in your project:
 ## 🚀 Usage & Examples
 
 ### Simple Composition with `compose`
+
 With `compose`, existing schemas can be easily extended.
 
 ```typescript
-import { compose, requiredTrimmed } from '@devzwo/ngx-signal-schema';
+import {compose, requiredTrimmed} from '@devzwo/ngx-signal-schema';
 
 const MySchema = compose(BaseSchema, required(path.name));
 ```
 
 **Standard Signal Forms equivalent:**
+
 ```typescript
-import { schema, apply } from '@angular/forms/signals';
+import {schema, apply} from '@angular/forms/signals';
 
 const MySchema = schema((path) => {
-  apply(path, BaseSchema)
-  required(path.name)
+    apply(path, BaseSchema)
+    required(path.name)
 });
 ```
 
 ### Conditional Validation with `applyIf`
+
 Conditional logic can be mapped without deeply nested structures.
 
 ```typescript
-import { applyIf, valueEquals } from '@devzwo/ngx-signal-schema';
+import {applyIf, valueEquals} from '@devzwo/ngx-signal-schema';
 
 applyIf(
-  path.billingAddress,
-  valueEquals(path.useDifferentBillingAddress, true),
-  AddressSchema,
-  EmptySchema
+    path.billingAddress,
+    valueEquals(path.useDifferentBillingAddress, true),
+    AddressSchema,
+    EmptySchema
 );
 ```
 
 **Standard Signal Forms equivalent:**
+
 ```typescript
-import { applyWhen } from '@angular/forms/signals';
+import {applyWhen} from '@angular/forms/signals';
 
 // "Then" case
 applyWhen(
-  path.billingAddress,
-  (ctx) => ctx.valueOf(path.useDifferentBillingAddress),
-  AddressSchema
+    path.billingAddress,
+    (ctx) => ctx.valueOf(path.useDifferentBillingAddress),
+    AddressSchema
 );
 
 // "Else" case (requires manual negation)
 applyWhen(
-  path.billingAddress,
-  (ctx) => !ctx.valueOf(path.useDifferentBillingAddress),
-  EmptySchema
+    path.billingAddress,
+    (ctx) => !ctx.valueOf(path.useDifferentBillingAddress),
+    EmptySchema
 );
 ```
 
 ### Combined Rules with `disabledHidden`
+
 Simplify UI logic by combining state rules with declarative conditions. This is particularly useful because **disabled fields are automatically excluded from validation and submission**, and hiding them ensures the UI stays clean and relevant.
 
 ```typescript
-import { disabledHidden, valueIn, not } from '@devzwo/ngx-signal-schema';
+import {disabledHidden, valueIn, not} from '@devzwo/ngx-signal-schema';
 
 // Field is only relevant for DACH region
 disabledHidden(
-  path.taxNumber,
-  not(valueIn(path.country, ['DE', 'AT', 'CH']))
+    path.taxNumber,
+    not(valueIn(path.country, ['DE', 'AT', 'CH']))
 );
 ```
 
 **Standard Signal Forms equivalent:**
+
 ```typescript
-import { disabled, hidden } from '@angular/forms/signals';
+import {disabled, hidden} from '@angular/forms/signals';
 
 const isForeign = (ctx) => !['DE', 'AT', 'CH'].includes(ctx.valueOf(path.country));
 
@@ -128,23 +138,25 @@ hidden(path.taxNumber, isForeign);
 ```
 
 ### Numeric Validation with `decimal` and `integer`
+
 These validators check the **structural shape** of numeric values (integer digits and fractional digits) rather than just their range. They also support localized string parsing (defaulting to `de-DE`).
 
 ```typescript
-import { decimal, integer } from '@devzwo/ngx-signal-schema';
+import {decimal, integer} from '@devzwo/ngx-signal-schema';
 
 // Allows up to 5 digits before and 2 digits after the decimal separator
-decimal(path.price, { maxIntegerDigits: 5, maxFractionDigits: 2 });
+decimal(path.price, {maxIntegerDigits: 5, maxFractionDigits: 2});
 
 // Allows up to 3 digits, strictly as an integer
-integer(path.count, { maxDigits: 3 });
+integer(path.count, {maxDigits: 3});
 ```
 
 ### File Type Validation with `mimeType`
+
 Ensure that uploaded files match specific formats. Supports exact types, wildcards (e.g., `image/*`), and reactive updates via signal-based functions.
 
 ```typescript
-import { mimeType } from '@devzwo/ngx-signal-schema';
+import {mimeType} from '@devzwo/ngx-signal-schema';
 
 // Static array of allowed types with wildcard support
 mimeType(path.attachment, ['image/*', 'application/pdf']);
@@ -154,41 +166,45 @@ mimeType(path.avatar, () => this.allowedAvatarTypes());
 ```
 
 ### Flexible Schema Definitions
+
 The composition operators are highly flexible. Wherever a `Schema` is expected, you can also provide a **Schema Function** — a function that receives the current `path` and applies rules or validators directly. This allows you to mix reusable schemas with custom inline logic.
 
 ```typescript
-import { compose, disabledHidden, valueEquals } from '@devzwo/ngx-signal-schema';
+import {compose, inactive, valueEquals} from '@devzwo/ngx-signal-schema';
 
 const MySchema = compose(
-  //full schema
-  BaseSchema,
-  // Reusable schema
-  disabledHidden(path.status, isForeign),
-  // Inline rule instead of a full schema object
-  (path) => disabledHidden(path.subfield, valueEquals(path.status, 'inactive'))
+    //full schema
+    BaseSchema,
+    // Reusable schema
+    inactive(path.status, isForeign),
+    // Inline rule instead of a full schema object
+    (path) => disabledHidden(path.subfield, valueEquals(path.status, 'inactive'))
 );
 ```
 
 ### Explicit Presence with `requiredDefined`
+
 Standard `required` validators often treat `false` as an invalid value because it is falsy. `requiredDefined` is necessary when `false` is a valid input (e.g., in checkboxes or toggles) but a selection is strictly mandatory.
 
 ```typescript
-import { requiredDefined } from '@devzwo/ngx-signal-schema';
+import {requiredDefined} from '@devzwo/ngx-signal-schema';
 
 // Rejects null/undefined, but accepts both true and false
 requiredDefined(path.agreedToTerms);
 ```
 
 **Standard Signal Forms equivalent:**
+
 ```typescript
-import { validate } from '@angular/forms/signals';
+import {validate} from '@angular/forms/signals';
 
 validate(path.agreedToTerms, (ctx) => {
-  return ctx.value() !== null && ctx.value() !== undefined 
-    ? null 
-    : { kind: 'required' };
+    return ctx.value() !== null && ctx.value() !== undefined
+        ? null
+        : {kind: 'required'};
 });
 ```
+
 ---
 
 ## 📚 API
@@ -196,21 +212,31 @@ validate(path.agreedToTerms, (ctx) => {
 The package is divided into four logical areas:
 
 ### 1. Composition
+
 Utilities for structuring and combining schemas.
+
 - `compose(base, ...extensions)`: Extends a base schema with additional rules or schemas. Supports both `Schema` objects and inline functions (`(path) => void`).
 - `applyIf(path, condition, thenSchema, elseSchema)`: Conditionally applies one of two schemas or inline functions (branching logic).
 
 ### 2. Conditions
+
 Predicates that can be used in rules or conditional schemas.
+
 - `valueEquals(path, expected)`: Checks for exact equality of a field value.
 - `valueIn(path, values)`: Checks if a field value is contained in a list.
+- `includes(path, value)`: Checks if an array field contains a specific value.
 - `not(rule)`: Negates an existing `SchemaRule`.
+- `and(...rules)`: Combines multiple rules with logical AND.
+- `or(...rules)`: Combines multiple rules with logical OR.
 
 ### 3. Rules
+
 Structural field configurations.
-- `disabledHidden(path, options)`: Applies both `disabled` and `hidden` to a field simultaneously. Prevents both user interaction and validation for irrelevant fields.
+
+- `inactive(path, options)`: Applies both `disabled` and `hidden` to a field simultaneously. Prevents both user interaction and validation for irrelevant fields.
 
 ### 4. Validators
+
 Specialized validators for Signal Forms.
 
 - `requiredTrimmed(path)`: **Standard text required.** Checks for content while removing leading/trailing whitespace. Recommended for all string inputs. **Error key:** `required`

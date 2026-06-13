@@ -34,8 +34,9 @@ export default defineConfig({
                     items: [
                         // Each item here is one entry in the navigation menu.
                         {label: 'Schema Composition', slug: 'concepts/schemacomposition'},
-                        {label: 'Conditional Schemas', slug: 'concepts/schemacomposition'},
-                        {label: 'Reusable Validators', slug: 'guides/example'},
+                        {label: 'Conditional Schemas', slug: 'concepts/conditionalschemas'},
+                        {label: 'Reusable Validators', slug: 'concepts/reusablevalidators'},
+                        {label: 'Stable Form Structures', slug: 'concepts/stableformstructures'},
                     ],
                 },
                 {
@@ -53,6 +54,7 @@ export default defineConfig({
                         {label: 'Validators', items: [{autogenerate: {directory: 'api/Validators'}}]},
                         {label: 'Conditions', items: [{autogenerate: {directory: 'api/Conditions'}}]},
                         {label: 'Rules', items: [{autogenerate: {directory: 'api/Rules'}}]},
+                        {label: 'Structure', items: [{autogenerate: {directory: 'api/Structure'}}]},
                         {label: 'Other', items: [{autogenerate: {directory: 'api/Other'}}]},
                         {label: 'deprecated', items: [{autogenerate: {directory: 'api/deprecated'}}]},
                     ],

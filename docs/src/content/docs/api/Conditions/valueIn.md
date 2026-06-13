@@ -10,7 +10,7 @@ title: "valueIn"
 Defined in: projects/ngx-signal-schema/src/lib/conditions/value-in.ts:23
 
 Checks if a field's value is contained within a list of expected values.
-Useful for conditional conditions (e.g., in `when` conditions).
+If you need the other way round, use includes
 
 __`valueIn`__ _is a semantic shortcut for:_
 

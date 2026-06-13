@@ -29,6 +29,19 @@ title: "@devzwo/ngx-signal-schema"
 - [~~disabledHidden~~](/ngx-signal-schema/api/rules/disabledhidden/)
 - [inactive](/ngx-signal-schema/api/rules/inactive/)
 
+## Structure
+
+- [ApplyOptionalOptions](/ngx-signal-schema/api/structure/applyoptionaloptions/)
+- [ArrayBlock](/ngx-signal-schema/api/structure/arrayblock/)
+- [OptionalBlock](/ngx-signal-schema/api/structure/optionalblock/)
+- [applyOptional](/ngx-signal-schema/api/structure/applyoptional/)
+- [fromArrayBlock](/ngx-signal-schema/api/structure/fromarrayblock/)
+- [isOptionalBlock](/ngx-signal-schema/api/structure/isoptionalblock/)
+- [mapFromOptionalBlock](/ngx-signal-schema/api/structure/mapfromoptionalblock/)
+- [mapToOptionalBlock](/ngx-signal-schema/api/structure/maptooptionalblock/)
+- [optionalBlock](/ngx-signal-schema/api/structure/optionalblock-1/)
+- [toArrayBlock](/ngx-signal-schema/api/structure/toarrayblock/)
+
 ## Validators
 
 - [decimal](/ngx-signal-schema/api/validators/decimal/)

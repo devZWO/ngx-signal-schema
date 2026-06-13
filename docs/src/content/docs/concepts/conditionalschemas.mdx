@@ -3,209 +3,57 @@ title: "Conditional Schemas"
 description: "Build dynamic Angular Signal Form schemas with declarative conditional logic."
 ---
 
-Real-world forms are rarely static.
-
-Fields often depend on:
-
-- user selections
-- workflow states
-- feature flags
-- permissions
-- country-specific rules
-- onboarding steps
-- business logic
-
-A field may only be relevant when another field has a specific value.
-
-Traditional form implementations often express this with deeply nested branching logic.
-
-## The problem with branching schemas
-
-A typical schema often starts to grow like this:
+Angular Signal Forms already provide a declarative way to apply schemas conditionally with `applyWhen`.
 
 ```ts
-export const ContactSchema = schema<ContactForm>((path) => {
-  requiredTrimmed(path.name);
-
-  if (isCompany()) {
-    requiredTrimmed(path.companyName);
-
-    if (isEnterprise()) {
-      requiredTrimmed(path.taxNumber);
-    }
-  }
-
-  if (isReadonly()) {
-    readonly(path.email);
-  }
-});
-```
-
-As more conditions are added, the schema becomes harder to understand and maintain.
-
-Common problems are:
-
-- deeply nested conditions
-- duplicated validation logic
-- inconsistent UI state
-- difficult reuse
-- hard-to-test branching behavior
-
-## Declarative conditional schemas
-
-`ngx-signal-schema` treats conditions as reusable building blocks.
-
-Instead of embedding conditions directly into branching code, schemas can be applied declaratively.
-
-```ts
-applyIf(
-  path.companyName,
-  valueEquals(path.personType, 'company'),
-
-  (path) => {
-    requiredTrimmed(path.companyName);
-  }
+applyWhen(
+  path.billingAddress,
+  (ctx) => ctx.valueOf(path.useDifferentBillingAddress),
+  AddressSchema
 );
 ```
 
-The condition becomes explicit and isolated from unrelated schema logic.
+This works well for simple "apply this schema when..." cases.
 
-## Conditional schema application
+However, many forms also need an explicit fallback state.
 
-Entire schema fragments can be applied dynamically.
+For example, when a billing address is not used, the section should not only stop applying `AddressSchema`. It may also need to become disabled, hidden, reset, or replaced by another schema.
+
+With Angular Signal Forms this usually requires a second condition with manual negation:
+
+```ts
+applyWhen(
+  path.billingAddress,
+  (ctx) => ctx.valueOf(path.useDifferentBillingAddress),
+  AddressSchema
+);
+
+applyWhen(
+  path.billingAddress,
+  (ctx) => !ctx.valueOf(path.useDifferentBillingAddress),
+  InactiveBillingAddressSchema
+);
+```
+
+`applyIf` makes this branching explicit:
 
 ```ts
 applyIf(
   path.billingAddress,
   valueEquals(path.useDifferentBillingAddress, true),
-  AddressSchema
+  AddressSchema,
+  InactiveBillingAddressSchema
 );
 ```
 
-This allows reusable schemas to be activated only when needed.
-
-## Explicit "else" behavior
-
-Conditional schemas often need explicit fallback behavior.
-
-```ts
-applyIf(
-  path.companyName,
-  valueEquals(path.personType, 'company'),
-
-  CompanySchema,
-
-  (path) => {
-    disabledHidden(path.companyName);
-  }
-);
-```
-
-This keeps both states visible and predictable.
-
-Instead of only defining when a field is active, the inactive state is also modeled explicitly.
-
-## UI state and validation state
-
-Angular Signal Forms automatically exclude disabled fields from validation and submission.
-
-Conditional schemas work especially well together with structural rules like `disabledHidden`.
-
-```ts
-disabledHidden(
-  path.taxNumber,
-  not(valueIn(path.country, ['DE', 'AT', 'CH']))
-);
-```
-
-This creates forms where:
-
-- irrelevant fields disappear
-- inactive fields stop validating
-- submitted form data stays clean
-
-UI state and validation state remain synchronized.
-
-## Reusable conditions
-
-Conditions are designed to be composable.
-
-```ts
-const isCompany = valueEquals(
-  path.personType,
-  'company'
-);
-
-const isDachCountry = valueIn(
-  path.country,
-  ['DE', 'AT', 'CH']
-);
-```
-
-These conditions can then be reused across:
-
-- validators
-- schema branches
-- UI rules
-- workflow states
-
-## Conditional schemas vs imperative logic
-
-Instead of this:
-
-```ts
-if (ctx.valueOf(path.personType) === 'company') {
-  requiredTrimmed(path.companyName);
-}
-```
-
-conditional schemas encourage this:
-
-```ts
-applyIf(
-  path.companyName,
-  valueEquals(path.personType, 'company'),
-  CompanySchema
-);
-```
-
-This keeps schema logic:
-
-- declarative
-- reusable
-- composable
-- easier to reason about
-
-## Typical use cases
-
-Conditional schemas are especially useful for:
-
-- company vs private person forms
-- optional billing addresses
-- feature-dependent form sections
-- enterprise-only workflows
-- readonly/review states
-- multi-step forms
-- region-specific validation
-
-## Recommended approach
-
-A good rule of thumb is:
+This is the main difference:
 
 ```text
-Conditions should describe intent, not implementation details.
+applyWhen = apply schema when a condition is true
+
+applyIf = apply one schema when true, another schema when false
 ```
 
-Prefer:
+So `applyIf` is not a replacement for `applyWhen`.
 
-```ts
-valueEquals(path.personType, 'company')
-```
-
-over:
-
-```ts
-(ctx) => ctx.valueOf(path.personType) === 'company'
-```
-
-This makes schema logic easier to read, reuse and compose over time.
+It is useful when a conditional form section has two meaningful states.

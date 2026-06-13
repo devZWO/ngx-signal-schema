@@ -20,7 +20,7 @@ This is fully type-agnostic and can be used for any field shape.
 
 :::caution[Deprecated]
 The name disabledHidden was technically correct, but it does not show its purpose. so it was renamed to `inactive`.
-Use `inactive` instead.
+Use [inactive](/ngx-signal-schema/api/rules/inactive/) instead.
 :::
 
 ## Type Parameters

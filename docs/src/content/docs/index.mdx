@@ -3,15 +3,20 @@ title: "ngx-signal-schema"
 description: "Composable schema validation operators for Angular Signal Forms."
 #template: splash
 hero:
-tagline: "Composable schema validation operators for Angular Signal Forms."
-actions:
-- text: "Get Started"
-link: "/gettingstarted"
-icon: "right-arrow"
-- text: "API Reference"
-link: "/api/Composition/"
-icon: "open-book"
+    tagline: "Composable schema validation operators for Angular Signal Forms."
+    actions:
+    - text: "Get Started"
+      link: "/gettingstarted"
+      icon: "right-arrow"
+    - text: "API Reference"
+      link: "/api/Composition/"
+      icon: "open-book"
 ---
+
+
+
+
+
 
 
 
@@ -21,7 +26,9 @@ import {Card, CardGrid} from '@astrojs/starlight/components';
 
 Angular Signal Forms provide a powerful schema system, but complex forms quickly become difficult to structure.
 
-`ngx-signal-schema` adds reusable composition operators, conditional schema utilities and specialized validators for building maintainable large-scale forms.
+As forms grow, validation logic often spreads across large schema functions, repeated conditions, duplicated validators and dynamic form sections.
+
+`ngx-signal-schema` adds composable building blocks for structuring form logic in a reusable and maintainable way.
 
 ```ts
 const ContactSchema = append(
@@ -36,27 +43,57 @@ const ContactSchema = append(
 );
 ```
 
+The library does not replace Angular Signal Forms. It builds on top of them and focuses on the parts that become repetitive in larger forms.
+
 ## Core Concepts
 
 <CardGrid stagger>
-    <Card title="Composable Schemas" icon="puzzle">
-        <a href="concepts/schemacomposition">
-            Split large form schemas into reusable schema fragments and compose them declaratively.
+    <Card title="Schema Composition" icon="puzzle">
+        <a href="/concepts/schemacomposition">
+            Split large form schemas into smaller schema fragments and combine them where needed.
+            This keeps validation logic reusable, testable and easier to evolve.
         </a>
     </Card>
 
-    <Card title="Conditional Logic" icon="branch">
-        <a href="concepts/conditionalschemas">
-            Apply schemas dynamically without deeply nested branching logic.
+    <Card title="Conditional Schemas" icon="branch">
+        <a href="/concepts/conditionalschemas">
+            Apply schemas based on declarative conditions.
+            Use `applyIf` when a form section has both an active and an inactive state.
         </a>
     </Card>
 
-    <Card title="Unified UI State" icon="setting">
-        Treat validation and UI state as one coherent system using utilities like `disabledHidden`.
+    <Card title="Reusable Validators" icon="document">
+        <a href="/concepts/reusablevalidators">
+            Move repeated validation logic into reusable functions such as `requiredTrimmed`,
+            `decimal`, `integer`, `mimeType` or `requiredDefined`.
+        </a>
     </Card>
 
-    <Card title="Type-safe Validators" icon="document">
-        Strongly typed validators designed specifically for Angular Signal Forms.
+    <Card title="Stable Form Structures" icon="setting">
+        <a href="/concepts/structurewrappers">
+            Model optional objects and collections with predictable form trees using structure
+            wrappers such as `OptionalBlock` and `ArrayBlock`.
+        </a>
+    </Card>
+</CardGrid>
+
+## What the library helps with
+
+<CardGrid>
+    <Card title="Compose schemas instead of nesting logic" icon="puzzle">
+        Build final schemas from small focused fragments instead of putting every rule into one large schema function.
+    </Card>
+
+    <Card title="Make branching explicit" icon="branch">
+        Angular Signal Forms provide `applyWhen`. `ngx-signal-schema` adds `applyIf` for cases where both the true and false branch matter.
+    </Card>
+
+    <Card title="Keep UI state and validation aligned" icon="setting">
+        Utilities like `disabledHidden` help ensure irrelevant fields are hidden, disabled and excluded from validation.
+    </Card>
+
+    <Card title="Keep the form tree stable" icon="document">
+        Structure wrappers help represent optional nested objects and collections without constantly removing and recreating form subtrees.
     </Card>
 </CardGrid>
 
@@ -64,22 +101,37 @@ const ContactSchema = append(
 
 <CardGrid>
     <Card title="Getting Started" icon="open-book">
-        <a href="gettingstarted">
+        <a href="/gettingstarted">
             Install the library and create your first schema.
         </a>
     </Card>
 
     <Card title="Concepts" icon="pencil">
-        <a href="concepts/schemacomposition">
-            Learn the architectural ideas behind schema composition.
+        <a href="/concepts/schemacomposition">
+            Learn the architectural ideas behind schema composition, conditional schemas,
+            reusable validators and stable form structures.
         </a>
     </Card>
 
-    <Card title="Recipes" icon="add-document" href="/recipes/company-vs-person/">
-        Explore realistic production-style examples.
+    <Card title="Recipes" icon="add-document">
+        <a href="/recipes/company-vs-person/">
+            Explore production-style examples and common form patterns.
+        </a>
     </Card>
 
-    <Card title="API Reference" icon="setting" href="/api/Composition/">
-        Browse the generated API documentation.
+    <Card title="API Reference" icon="setting">
+        <a href="/api/Composition/">
+            Browse the generated API documentation.
+        </a>
     </Card>
 </CardGrid>
+
+## Design Goals
+
+`ngx-signal-schema` is built around a few simple principles:
+
+- Prefer composition over large monolithic schemas.
+- Keep conditional logic explicit and reusable.
+- Treat UI state and validation state as one coherent system.
+- Keep form trees stable, even for optional or dynamic structures.
+- Stay aligned with Angular Signal Forms instead of replacing them.

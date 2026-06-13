@@ -14,3 +14,6 @@ export * from './lib/conditions';
 // Validators
 export * from './lib/validators';
 
+// Structures
+export * from './lib/structure';
+

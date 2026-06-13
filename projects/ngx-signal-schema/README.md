@@ -184,7 +184,7 @@ const MySchema = compose(
 
 ### Explicit Presence with `requiredDefined`
 
-Standard `required` validators often treat `false` as an invalid value because it is falsy. `requiredDefined` is necessary when `false` is a valid input (e.g., in checkboxes or toggles) but a selection is strictly mandatory.
+The standard `required` validator treat `false` as an invalid value because it is falsy. `requiredDefined` is necessary when `false` is a valid input (e.g., in checkboxes or toggles) but a selection is strictly mandatory.
 
 ```typescript
 import {requiredDefined} from '@devzwo/ngx-signal-schema';
@@ -203,6 +203,49 @@ validate(path.agreedToTerms, (ctx) => {
         ? null
         : {kind: 'required'};
 });
+```
+
+### Stable Form Structures with `OptionalBlock` & `ArrayBlock`
+
+Angular Signal Forms require a **stable object structure** to correctly track signals. You cannot use subtrees that are `null` or `undefined` if you want to apply rules or validation to their nested fields.
+
+`OptionalBlock` and `ArrayBlock` provide stable containers for optional data and collections, ensuring the signal tree remains intact even when parts of the form are logically absent or empty.
+
+**Note on Array Validation:** Angular Signal Forms ignore validations applied directly to raw arrays (`T[]`). `ArrayBlock` encapsulates the array, making it an addressable node where validators and rules (like `readonly` or `disabled`) can be applied reliably.
+
+```typescript
+import {OptionalBlock, ArrayBlock, toArrayBlock, mapToOptionalBlock} from '@devzwo/ngx-signal-schema';
+
+interface UserProfile {
+    // ❌ BAD: Signal Form cannot track fields inside null/undefined
+    // address?: { street: string }; 
+
+    // ✅ GOOD: Stable structure even if "disabled"
+    address: OptionalBlock<{ street: string; city: string }>;
+    hobbies: ArrayBlock<string>;
+}
+
+// Initializing the form
+const initialValue: UserProfile = {
+    address: mapToOptionalBlock({street: '', city: ''}, false), // disabled by default
+    hobbies: toArrayBlock(['coding', 'climbing'])
+};
+```
+
+In your schema, use `applyOptional` to apply rules to the inner data of an `OptionalBlock`:
+
+```typescript
+import {compose, applyOptional, requiredTrimmed} from '@devzwo/ngx-signal-schema';
+
+const UserSchema = compose(
+    (path) => {
+        // Validation is only active when address.meta.enabled is true
+        applyOptional(path.address, (data) => {
+            requiredTrimmed(data.street);
+            requiredTrimmed(data.city);
+        });
+    }
+);
 ```
 
 ---
@@ -248,4 +291,16 @@ Specialized validators for Signal Forms.
 - `mimeType(path, allowedTypes)`: Validation of file types. Supports wildcards (`image/*`) and reactive arrays. **Error key:** `mimeType`
 - `oneOfPattern(values, options)`: Helper that generates a `RegExp` matching any of the provided values. Useful with the built-in `pattern` validator.
 - `year(path)`: Specialized validator for years (`YYYY`) in text form. **Error key:** `year`
+
+### 5. Structures
+
+Utilities for modeling complex data structures and managing array-level or optional state.
+
+- `optionalBlock(options)`: Creates a reusable schema for `OptionalBlock<T>`, allowing rules to be applied conditionally based on the block's enabled state.
+- `applyOptional(path, options)`: Applies rules or schemas directly to the `data` node of an `OptionalBlock` field.
+- `mapToOptionalBlock(data, enabled)`: Utility to wrap domain data into an `OptionalBlock` structure.
+- `mapFromOptionalBlock(block)`: Utility to extract data from an `OptionalBlock` if it is enabled.
+- `isOptionalBlock(obj)`: Type guard for `OptionalBlock`.
+- `toArrayBlock(items)`: Wraps a plain array into an `ArrayBlock`. This turns the array into a first-class form node, enabling array-level state (like `readonly`, `disabled`, or **validation**).
+- `fromArrayBlock(block)`: Unwraps an `ArrayBlock` back into a plain array.
 

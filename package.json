@@ -2,6 +2,14 @@
     "name": "@devzwo/ngx-signal-schema-workspace",
     "license": "MIT",
     "version": "1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/devZWO/ngx-signal-schema.git"
+    },
+    "homepage": "https://devzwo.github.io/ngx-signal-schema/",
+    "bugs": {
+        "url": "https://github.com/devZWO/ngx-signal-schema/issues"
+    },
     "scripts": {
         "ng": "ng",
         "start": "ng serve demo-form",

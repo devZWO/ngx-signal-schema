@@ -6,18 +6,12 @@ hero:
     tagline: "Composable schema validation operators for Angular Signal Forms."
     actions:
     - text: "Get Started"
-      link: "/gettingstarted"
+      link: "./gettingstarted"
       icon: "right-arrow"
     - text: "API Reference"
-      link: "/api/Composition/"
+      link: "./api/readme/"
       icon: "open-book"
 ---
-
-
-
-
-
-
 
 
 import {Card, CardGrid} from '@astrojs/starlight/components';
@@ -49,28 +43,28 @@ The library does not replace Angular Signal Forms. It builds on top of them and 
 
 <CardGrid stagger>
     <Card title="Schema Composition" icon="puzzle">
-        <a href="/concepts/schemacomposition">
+        <a href="./concepts/schemacomposition">
             Split large form schemas into smaller schema fragments and combine them where needed.
             This keeps validation logic reusable, testable and easier to evolve.
         </a>
     </Card>
 
     <Card title="Conditional Schemas" icon="branch">
-        <a href="/concepts/conditionalschemas">
+        <a href="./concepts/conditionalschemas">
             Apply schemas based on declarative conditions.
             Use `applyIf` when a form section has both an active and an inactive state.
         </a>
     </Card>
 
     <Card title="Reusable Validators" icon="document">
-        <a href="/concepts/reusablevalidators">
+        <a href="./concepts/reusablevalidators">
             Move repeated validation logic into reusable functions such as `requiredTrimmed`,
             `decimal`, `integer`, `mimeType` or `requiredDefined`.
         </a>
     </Card>
 
     <Card title="Stable Form Structures" icon="setting">
-        <a href="/concepts/structurewrappers">
+        <a href="./concepts/structurewrappers">
             Model optional objects and collections with predictable form trees using structure
             wrappers such as `OptionalBlock` and `ArrayBlock`.
         </a>
@@ -101,26 +95,26 @@ The library does not replace Angular Signal Forms. It builds on top of them and 
 
 <CardGrid>
     <Card title="Getting Started" icon="open-book">
-        <a href="/gettingstarted">
+        <a href="./gettingstarted">
             Install the library and create your first schema.
         </a>
     </Card>
 
     <Card title="Concepts" icon="pencil">
-        <a href="/concepts/schemacomposition">
+        <a href="./concepts">
             Learn the architectural ideas behind schema composition, conditional schemas,
             reusable validators and stable form structures.
         </a>
     </Card>
 
     <Card title="Recipes" icon="add-document">
-        <a href="/recipes/company-vs-person/">
+        <a href="./recipes/company-vs-person/">
             Explore production-style examples and common form patterns.
         </a>
     </Card>
 
     <Card title="API Reference" icon="setting">
-        <a href="/api/Composition/">
+        <a href="./api/Composition/">
             Browse the generated API documentation.
         </a>
     </Card>
@@ -135,3 +129,9 @@ The library does not replace Angular Signal Forms. It builds on top of them and 
 - Treat UI state and validation state as one coherent system.
 - Keep form trees stable, even for optional or dynamic structures.
 - Stay aligned with Angular Signal Forms instead of replacing them.
+
+## Maintained by devZWO
+
+`ngx-signal-schema` is developed and maintained by the devZWO GmbH.
+
+See the [Maintainers](./maintainers) page for project background and contribution information.

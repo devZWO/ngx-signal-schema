@@ -1,0 +1,184 @@
+---
+
+title: "Core Concepts"
+description: "Understand how the core concepts of ngx-signal-schema work together."
+---
+
+import { Card, CardGrid, Code } from '@astrojs/starlight/components';
+
+export const bigPicture = `Stable Form Structures
+        ↓
+Reusable Validators
+        ↓
+Conditional Schemas
+        ↓
+Schema Composition`;
+
+export const structureFlow = `Domain Model
+        ↓
+Structure Wrapper
+        ↓
+Stable Form Tree`;
+
+export const validationFlow = `Field
+  ↓
+Validator
+  ↓
+Validation Result`;
+
+export const conditionalFlow = `Condition
+    ↓
+true  → Schema A
+false → Schema B`;
+
+export const compositionFlow = `Base Schema     +
+Validators     +
+Conditions     +
+Structure Wrappers
+    ↓
+Final Schema`;
+
+# Core Concepts
+
+`ngx-signal-schema` is built around four complementary concepts.
+
+Each concept solves a different problem. Together, they provide a toolkit for building maintainable Angular Signal Form schemas.
+
+## The Big Picture
+
+A useful way to think about the library is that form architecture starts with a stable structure and grows into composed schemas.
+
+<Code code={bigPicture} lang="text" title="How the concepts build on each other" />
+
+The concepts are not isolated features. They describe different layers of the same form architecture.
+
+## Which Concept Should I Start With?
+
+<CardGrid stagger>
+    <Card title="I have large schemas" icon="puzzle">
+        Large schema functions become difficult to maintain when validation, UI state and business rules live in the same place.
+
+
+        <a href="/concepts/schemacomposition">Start with Schema Composition</a>
+
+
+    </Card>
+
+    <Card title="I need dynamic forms" icon="branch">
+        Some form sections only apply when another field has a certain value or when a workflow state changes.
+
+
+        <a href="/concepts/conditionalschemas">Start with Conditional Schemas</a>
+
+
+    </Card>
+
+    <Card title="I repeat validation logic" icon="document">
+        Validation logic should not be copied across schemas when it represents a reusable rule or domain concept.
+
+
+        <a href="/concepts/reusablevalidators">Start with Reusable Validators</a>
+
+
+    </Card>
+
+    <Card title="My form tree is unstable" icon="setting">
+        Optional objects and collections can make form structures harder to address, validate and compose.
+
+
+        <a href="/concepts/structurewrappers">Start with Stable Form Structures</a>
+
+
+    </Card>
+</CardGrid>
+
+## Stable Form Structures
+
+Stable form structures define the shape of the form tree.
+
+They help Angular Signal Forms work with data that does not naturally map to predictable form nodes, such as optional nested objects or collections with metadata.
+
+Typical building blocks:
+
+* `OptionalBlock<T>`
+* `ArrayBlock<T>`
+
+<Code code={structureFlow} lang="text" title="From domain model to stable form tree" />
+
+Use this concept when your form contains optional object trees, dynamic sections or collections that need their own state.
+
+Read more: [Stable Form Structures](/concepts/structurewrappers)
+
+## Reusable Validators
+
+Reusable validators define what is considered valid.
+
+Instead of repeating validation logic throughout your application, validators encapsulate common rules into reusable functions.
+
+Typical building blocks:
+
+* `requiredTrimmed`
+* `requiredDefined`
+* `decimal`
+* `integer`
+* `mimeType`
+
+<Code code={validationFlow} lang="text" title="Validation as a reusable building block" />
+
+Use this concept when the same validation rule appears in multiple places or when a rule represents a domain-specific concept.
+
+Read more: [Reusable Validators](/concepts/reusablevalidators)
+
+## Conditional Schemas
+
+Conditional schemas define when something should apply.
+
+Angular Signal Forms already provide `applyWhen()`. `ngx-signal-schema` builds on that idea with reusable conditions and explicit branching through `applyIf()`.
+
+Typical building blocks:
+
+* `valueEquals`
+* `valueIn`
+* `not`
+* `applyIf`
+
+<Code code={conditionalFlow} lang="text" title="Explicit conditional branching" />
+
+Use this concept when a field or section has different active and inactive states.
+
+Read more: [Conditional Schemas](/concepts/conditionalschemas)
+
+## Schema Composition
+
+Schema composition combines smaller building blocks into larger schemas.
+
+A composed schema can reuse validators, apply conditional branches and work with stable form structures while staying modular.
+
+Typical building blocks:
+
+* `append`
+* `compose`
+
+<Code code={compositionFlow} lang="text" title="Composing a final schema" />
+
+Use this concept when a schema becomes too large or when multiple features need to contribute their own rules.
+
+Read more: [Schema Composition](/concepts/schemacomposition)
+
+## How They Work Together
+
+The concepts are designed to be used together.
+Each concept focuses on a single concern.
+
+A real-world form often combines:
+
+- Stable Form Structures for optional sections
+- Reusable Validators for field validation
+- Conditional Schemas for dynamic behavior
+- Schema Composition for assembling the final schema
+
+See the complete example:
+
+👉 [Company vs Private Person Contact Form](/recipes/contactform)
+
+Together they make complex form schemas easier to understand, reuse and evolve.

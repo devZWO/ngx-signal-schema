@@ -11,7 +11,10 @@
         "watch": "ng build --watch --configuration development",
         "lint": "ng lint",
         "test": "ng test",
-        "test:ci": "ng test --watch=false --coverage"
+        "test:ci": "ng test --watch=false --coverage",
+        "docs:dev": "npm --workspace docs run dev",
+        "docs:preview": "npm --workspace docs run preview",
+        "docs:build": "npm --workspace docs run build"
     },
     "private": true,
     "packageManager": "npm@11.6.2",
@@ -47,6 +50,7 @@
     },
     "workspaces": [
         "projects/ngx-signal-schema",
-        "projects/demo-form"
+        "projects/demo-form",
+        "docs"
     ]
 }

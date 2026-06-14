@@ -1,0 +1,204 @@
+---
+title: "Reusable Validators"
+description: "Build reusable and composable validators for Angular Signal Forms."
+---
+
+Validation logic is often repeated across many forms.
+
+Typical examples are:
+
+- required text fields
+- numeric formatting
+- country-specific identifiers
+- file upload restrictions
+- grouped validation rules
+- workflow-dependent requirements
+
+Without reusable validators, the same validation logic is often copied across multiple schemas.
+
+## The problem with inline validation
+
+Small inline validators are convenient at first.
+
+```ts
+validate(path.name, (ctx) => {
+  return ctx.value()?.trim()
+    ? null
+    : { kind: 'required' };
+});
+```
+
+As forms grow, however, inline validation logic tends to spread across the application.
+
+Common problems are:
+
+- duplicated validation logic
+- inconsistent validation behavior
+- repeated error messages
+- difficult testing
+- poor discoverability
+- tightly coupled schemas
+
+## Reusable validator functions
+
+Reusable validators move validation logic into dedicated functions.
+
+```ts
+requiredTrimmed(path.name);
+```
+
+Instead of redefining the validation behavior every time, the validator becomes a reusable building block.
+
+This improves:
+
+- consistency
+- readability
+- reuse
+- maintainability
+
+## Declarative validation
+
+Reusable validators also make schemas easier to read.
+
+Instead of:
+
+```ts
+validate(path.price, (ctx) => {
+  // complex decimal validation
+});
+```
+
+schemas can express intent directly:
+
+```ts
+decimal(path.price, {
+  maxIntegerDigits: 5,
+  maxFractionDigits: 2,
+});
+```
+
+The schema describes what should happen instead of how the validation works internally.
+
+## Validation as a domain concept
+
+Many validations are not generic technical rules.
+
+They often represent domain concepts.
+
+For example:
+
+```ts
+requiredDefined(path.acceptTerms);
+```
+
+This validator exists because standard required validation often treats `false` as invalid.
+
+In many forms, however:
+
+- `false` is a valid value
+- but a selection is still mandatory
+
+The validator captures that specific intent explicitly.
+
+## Specialized validators
+
+Reusable validators can encapsulate complex behavior.
+
+```ts
+mimeType(
+  path.attachment,
+  ['image/*', 'application/pdf']
+);
+```
+
+The consuming schema does not need to know:
+
+- MIME wildcard handling
+- file parsing
+- matching logic
+- reactive updates
+
+The validator owns the implementation details.
+
+## Structural validation
+
+Some validators focus on structural correctness instead of value ranges.
+
+```ts
+decimal(path.price, {
+  maxIntegerDigits: 5,
+  maxFractionDigits: 2,
+});
+```
+
+This validates:
+
+- integer digit count
+- fraction digit count
+- localized decimal parsing
+
+instead of only checking numeric min/max ranges.
+
+## Reusable group validation
+
+Reusable validators are also useful for cross-field validation.
+
+```ts
+requiredAtLeastOne(
+  path,
+  ['email', 'phone']
+);
+```
+
+Instead of manually validating multiple fields repeatedly, the rule becomes reusable and self-documenting.
+
+## Validators and composition
+
+Reusable validators work especially well together with schema composition.
+
+```ts
+const ContactValidationSchema = schema<ContactForm>((path) => {
+  requiredTrimmed(path.name);
+  requiredTrimmed(path.email);
+});
+```
+
+This schema fragment can then be reused across:
+
+- onboarding forms
+- edit forms
+- enterprise workflows
+- multi-step forms
+
+## Recommended approach
+
+A good rule of thumb is:
+
+```text
+Extract validation logic once it represents a reusable concept.
+```
+
+Not every validation needs its own helper.
+
+However, if validation logic:
+
+- appears repeatedly
+- contains domain meaning
+- requires custom error handling
+- contains structural complexity
+- is difficult to read inline
+
+then a reusable validator usually improves maintainability.
+
+## Benefits of reusable validators
+
+Reusable validators help create schemas that are:
+
+- more readable
+- more declarative
+- easier to test
+- easier to compose
+- easier to reuse
+- easier to evolve over time
+
+Instead of embedding validation details directly into schemas, validators become modular building blocks for form architecture.

@@ -1,0 +1,212 @@
+---
+
+title: "Structure Wrappers"
+description: "Model form-friendly data structures for Angular Signal Forms."
+---
+
+Angular Signal Forms work best when every relevant part of the form tree is represented by a stable node.
+
+Most domain models naturally fit this structure:
+
+```ts
+interface Address {
+  street: string;
+  city: string;
+}
+```
+
+However, some common domain concepts do not map naturally to a form tree.
+
+Examples include:
+
+* Optional nested objects
+* Dynamic form sections
+* Collections that require their own metadata
+* Structures that need form-specific state
+
+To address these scenarios, `ngx-signal-schema` provides **Structure Wrappers**.
+
+Structure wrappers transform domain types into form-friendly representations without changing their business meaning.
+
+## The Problem
+
+Consider an optional invoice recipient:
+
+```ts
+interface Order {
+  invoiceRecipient: InvoiceRecipient | null;
+}
+```
+
+From a domain perspective, this is perfectly valid.
+
+However, a form faces a challenge:
+
+```text
+invoiceRecipient
+├── street
+├── city
+└── country
+```
+
+When the value becomes `null`, the entire subtree disappears.
+
+This makes it difficult to:
+
+* apply rules
+* manage visibility
+* enable or disable sections
+* attach metadata
+* build predictable form structures
+
+## Stable Form Trees
+
+A common pattern throughout this library is:
+
+```text
+Domain Model
+        ↓
+Structure Wrapper
+        ↓
+Form Model
+```
+
+Instead of removing parts of the form tree entirely, structure wrappers keep a stable node and move the optionality or collection behavior into the wrapper itself.
+
+This allows Angular Signal Forms to operate on a predictable structure.
+
+## OptionalBlock
+
+`OptionalBlock<T>` represents optional object structures.
+
+Instead of:
+
+```ts
+invoiceRecipient: InvoiceRecipient | null
+```
+
+the form model becomes:
+
+```ts
+invoiceRecipient: OptionalBlock<InvoiceRecipient>
+```
+
+Conceptually:
+
+```ts
+{
+  meta: {
+    enabled: boolean;
+  };
+
+  data: InvoiceRecipient;
+}
+```
+
+The object tree always exists.
+
+Whether the value should be considered present is controlled by the wrapper metadata.
+
+This makes it possible to:
+
+* show and hide sections
+* enable and disable sections
+* apply validators
+* keep a stable form structure
+
+without constantly creating and removing subtrees.
+
+### Example
+
+```ts
+invoiceRecipient.meta.enabled = false;
+```
+
+The form section still exists structurally, but can be treated as absent when mapped back to the domain model.
+
+## ArrayBlock
+
+Collections introduce a similar challenge.
+
+A plain array:
+
+```ts
+attachments: File[];
+```
+
+has no dedicated container node.
+
+Sometimes the collection itself should have rules or metadata.
+
+For example:
+
+* maximum number of items
+* readonly state
+* visibility
+* validation messages
+* collection-level configuration
+
+`ArrayBlock<T>` introduces an explicit container.
+
+Instead of:
+
+```ts
+attachments: File[];
+```
+
+the form model becomes:
+
+```ts
+attachments: ArrayBlock<File>;
+```
+
+This creates a stable node representing the collection itself rather than only its items.
+
+The collection can now participate in form behavior independently of the contained values.
+
+## Domain Model vs Form Model
+
+Structure wrappers intentionally separate two concerns.
+
+The domain model represents business data:
+
+```ts
+Order
+InvoiceRecipient
+Address
+File
+```
+
+The form model represents how that data behaves inside a form:
+
+```ts
+OptionalBlock<T>
+ArrayBlock<T>
+```
+
+The goal is not to replace the domain model.
+
+The goal is to provide Angular Signal Forms with a structure that is easier to manage and reason about.
+
+## When to Use Structure Wrappers
+
+Structure wrappers are useful when:
+
+* object trees are optional
+* form sections appear and disappear dynamically
+* collections need their own state
+* metadata must exist alongside domain data
+* stable form structures are preferred over constantly changing trees
+
+For simple forms and flat data structures, they are usually unnecessary.
+
+## Design Principle
+
+Structure wrappers follow a simple idea:
+
+```text
+Keep the form tree stable.
+Move structural behavior into explicit wrapper types.
+```
+
+This makes complex forms easier to compose, validate and maintain while preserving the intent of the original domain model.

@@ -304,3 +304,8 @@ Utilities for modeling complex data structures and managing array-level or optio
 - `toArrayBlock(items)`: Wraps a plain array into an `ArrayBlock`. This turns the array into a first-class form node, enabling array-level state (like `readonly`, `disabled`, or **validation**).
 - `fromArrayBlock(block)`: Unwraps an `ArrayBlock` back into a plain array.
 
+## Maintainer
+
+This project is developed and maintained by the **devZWO GmbH**.
+
+https://devzwo.com

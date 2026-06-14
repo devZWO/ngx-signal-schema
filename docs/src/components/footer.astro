@@ -1,0 +1,23 @@
+---
+import Default from '@astrojs/starlight/components/Footer.astro';
+---
+
+<Default>
+  <slot />
+</Default>
+
+<div class="legal-links">
+  <a href="https://devzwo.com/impressum/">Impressum</a>
+  <span>·</span>
+  <a href="https://devzwo.com/datenschutzerklaerung/">Datenschutzerklärung</a>
+</div>
+
+<style>
+  .legal-links {
+    margin-top: 1rem;
+    font-size: var(--sl-text-sm);
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+</style>

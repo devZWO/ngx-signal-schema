@@ -1,0 +1,107 @@
+---
+title: "Getting Started"
+description: "Install and use ngx-signal-schema in an Angular Signal Forms project."
+---
+
+This guide shows how to install `@devzwo/ngx-signal-schema` and create your first schema.
+
+## Prerequisites
+
+`ngx-signal-schema` is built for Angular v21 and Angular Signal Forms.
+
+## Installation
+
+```bash
+npm install @devzwo/ngx-signal-schema
+```
+
+```bash
+pnpm add @devzwo/ngx-signal-schema
+```
+
+## Your first schema
+
+```ts
+import { schema } from '@angular/forms/signals';
+import { requiredTrimmed } from '@devzwo/ngx-signal-schema';
+
+interface ContactForm {
+  name: string;
+  email: string;
+}
+
+export const ContactSchema = schema<ContactForm>((path) => {
+  requiredTrimmed(path.name);
+});
+```
+
+## Use the schema
+
+```ts
+import { signal } from '@angular/core';
+import { form } from '@angular/forms/signals';
+
+const initialValue: ContactForm = {
+  name: '',
+  email: '',
+};
+
+protected readonly contactData = signal(initialValue);
+
+protected readonly contactForm = form(
+  this.contactData,
+  ContactSchema
+);
+```
+
+## Compose schemas
+
+```ts
+import { schema } from '@angular/forms/signals';
+import { append, requiredTrimmed } from '@devzwo/ngx-signal-schema';
+
+const BaseSchema = schema<ContactForm>((path) => {
+  requiredTrimmed(path.name);
+});
+
+export const ExtendedSchema = append(
+  BaseSchema,
+  (path) => {
+    requiredTrimmed(path.email);
+  }
+);
+```
+
+## Conditional fields
+
+```ts
+import {
+  disabledHidden,
+  requiredTrimmed,
+  valueEquals,
+} from '@devzwo/ngx-signal-schema';
+
+interface ContactForm {
+  personType: 'private' | 'company';
+  name: string;
+  companyName: string;
+}
+
+export const ContactSchema = schema<ContactForm>((path) => {
+  requiredTrimmed(path.name);
+
+  disabledHidden(
+    path.companyName,
+    valueEquals(path.personType, 'private')
+  );
+});
+```
+
+## Next steps
+
+Continue with:
+
+- Schema Composition
+- Conditional Schemas
+- Recipes
+- API Reference

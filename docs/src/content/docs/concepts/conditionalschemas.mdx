@@ -1,0 +1,59 @@
+---
+title: "Conditional Schemas"
+description: "Build dynamic Angular Signal Form schemas with declarative conditional logic."
+---
+
+Angular Signal Forms already provide a declarative way to apply schemas conditionally with `applyWhen`.
+
+```ts
+applyWhen(
+  path.billingAddress,
+  (ctx) => ctx.valueOf(path.useDifferentBillingAddress),
+  AddressSchema
+);
+```
+
+This works well for simple "apply this schema when..." cases.
+
+However, many forms also need an explicit fallback state.
+
+For example, when a billing address is not used, the section should not only stop applying `AddressSchema`. It may also need to become disabled, hidden, reset, or replaced by another schema.
+
+With Angular Signal Forms this usually requires a second condition with manual negation:
+
+```ts
+applyWhen(
+  path.billingAddress,
+  (ctx) => ctx.valueOf(path.useDifferentBillingAddress),
+  AddressSchema
+);
+
+applyWhen(
+  path.billingAddress,
+  (ctx) => !ctx.valueOf(path.useDifferentBillingAddress),
+  InactiveBillingAddressSchema
+);
+```
+
+`applyIf` makes this branching explicit:
+
+```ts
+applyIf(
+  path.billingAddress,
+  valueEquals(path.useDifferentBillingAddress, true),
+  AddressSchema,
+  InactiveBillingAddressSchema
+);
+```
+
+This is the main difference:
+
+```text
+applyWhen = apply schema when a condition is true
+
+applyIf = apply one schema when true, another schema when false
+```
+
+So `applyIf` is not a replacement for `applyWhen`.
+
+It is useful when a conditional form section has two meaningful states.

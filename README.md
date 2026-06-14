@@ -36,3 +36,9 @@ Contributions are welcome! Please follow the guidelines in the [CONTRIBUTING.md]
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Maintainer
+
+This project is developed and maintained by the **devZWO GmbH**.
+
+https://devzwo.com

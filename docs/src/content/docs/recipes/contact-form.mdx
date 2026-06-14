@@ -1,0 +1,308 @@
+---
+
+title: "Company vs Private Person Contact Form"
+description: "A complete example combining all core concepts of ngx-signal-schema."
+---
+
+This recipe demonstrates how the core concepts of `ngx-signal-schema` work together in a realistic form.
+
+The form supports two customer types:
+
+* Private Person
+* Company
+
+Depending on the selected type, different parts of the form become active.
+
+Along the way we will use:
+
+* Schema Composition
+* Conditional Schemas
+* Reusable Validators
+* Stable Form Structures
+
+## The Requirements
+
+Every contact provides:
+
+* Customer Type
+* Email
+* Country
+
+Private persons additionally provide:
+
+* First Name
+* Last Name
+
+Companies additionally provide:
+
+* Company Name
+* Legal Form
+* VAT Number
+
+Only the fields relevant for the selected customer type should be visible, enabled and validated.
+
+## Step 1: Create Stable Form Structures
+
+Instead of placing all fields directly on the root object, we model the two customer types as separate subtrees.
+
+```ts
+interface ContactForm {
+  customerType: 'private' | 'company';
+
+  email: string;
+  country: string;
+
+  privatePerson: {
+    firstName: string;
+    lastName: string;
+  };
+
+  company: {
+    companyName: string;
+    legalForm: string;
+    vatNumber: string;
+  };
+}
+```
+
+This creates two stable form branches:
+
+```text
+ContactForm
+├── customerType
+├── email
+├── country
+├── privatePerson
+│   ├── firstName
+│   └── lastName
+└── company
+    ├── companyName
+    ├── legalForm
+    └── vatNumber
+```
+
+The form structure never changes.
+
+Only the active branch changes.
+
+This is much easier to reason about than constantly creating and removing fields.
+
+## Step 2: Create Reusable Schema Fragments
+
+Each subtree owns its own validation rules.
+
+```ts
+const PrivatePersonSchema = schema<ContactForm['privatePerson']>((path) => {
+  requiredTrimmed(path.firstName);
+  requiredTrimmed(path.lastName);
+});
+```
+
+```ts
+const CompanySchema = schema<ContactForm['company']>((path) => {
+  requiredTrimmed(path.companyName);
+  requiredDefined(path.legalForm);
+});
+```
+
+The schemas are independent and reusable.
+
+## Step 3: Add Conditional Branching
+
+The selected customer type determines which subtree is active.
+
+Private person:
+
+```ts
+applyIf(
+  path.privatePerson,
+  valueEquals(path.customerType, 'private'),
+
+  PrivatePersonSchema,
+
+  // This is the short version of:
+  // (path) => disabledHidden(path)
+  disabledHidden
+);
+```
+
+Company:
+
+```ts
+applyIf(
+  path.company,
+  valueEquals(path.customerType, 'company'),
+
+  CompanySchema,
+
+  // This is the short version of:
+  // (path) => disabledHidden(path)
+  disabledHidden
+);
+```
+
+This is where `applyIf()` becomes particularly useful.
+
+Angular Signal Forms already provide `applyWhen()`:
+
+```ts
+applyWhen(
+  path.company,
+  valueEquals(path.customerType, 'company'),
+  CompanySchema
+);
+```
+
+However, that only describes the active state.
+
+In many forms the inactive state is equally important.
+
+When a user selects "Private Person", the company section should not only stop validating. It should also become hidden and disabled.
+
+With `applyWhen()` this usually requires a second negated condition.
+
+`applyIf()` keeps both states together in one place.
+
+```ts
+applyIf(
+  path.company,
+  valueEquals(path.customerType, 'company'),
+  CompanySchema,
+  (path) => disabledHidden(path)
+);
+```
+
+The complete behavior can be understood from a single statement.
+
+## Step 4: Add Additional Business Rules
+
+VAT numbers are only relevant for DACH countries.
+
+```ts
+disabledHidden(
+  path.company.vatNumber,
+  not(
+    valueIn(path.country, [
+      'DE',
+      'AT',
+      'CH',
+    ])
+  )
+);
+```
+
+This rule is independent from the customer type logic.
+
+Conditions remain small and composable.
+
+## Step 5: Compose the Final Schema
+
+The final schema is assembled from smaller building blocks.
+
+```ts
+export const ContactSchema = compose(
+  BaseContactSchema,
+
+  (path) => {
+    applyIf(
+      path.privatePerson,
+      valueEquals(path.customerType, 'private'),
+      PrivatePersonSchema,
+      (path) => disabledHidden(path)
+    );
+
+    applyIf(
+      path.company,
+      valueEquals(path.customerType, 'company'),
+      CompanySchema,
+      (path) => disabledHidden(path)
+    );
+
+    disabledHidden(
+      path.company.vatNumber,
+      not(
+        valueIn(path.country, [
+          'DE',
+          'AT',
+          'CH',
+        ])
+      )
+    );
+  }
+);
+```
+
+The final schema remains relatively small because each concern is isolated.
+
+## Why This Scales Well
+
+Imagine new requirements appear:
+
+* Enterprise customers
+* Readonly review mode
+* Country-specific tax rules
+* White-label variants
+
+Instead of modifying one large schema, additional schema fragments can be added.
+
+```ts
+append(
+  ContactSchema,
+  EnterpriseRules,
+  ReviewModeRules,
+  CountrySpecificRules
+);
+```
+
+Each feature contributes its own behavior without modifying unrelated parts of the form.
+
+## Which Concepts Did We Use?
+
+### Stable Form Structures
+
+```ts
+privatePerson: PrivatePersonForm;
+company: CompanyForm;
+```
+
+Separate form branches create a stable and predictable form tree.
+
+### Reusable Validators
+
+```ts
+requiredTrimmed(...)
+requiredDefined(...)
+```
+
+Validation logic is encapsulated into reusable building blocks.
+
+### Conditional Schemas
+
+```ts
+applyIf(...)
+valueEquals(...)
+valueIn(...)
+```
+
+Different schema fragments become active depending on form state.
+
+### Schema Composition
+
+```ts
+append(...)
+```
+
+The final schema is assembled from smaller pieces.
+
+## Summary
+
+This example demonstrates the intended workflow of `ngx-signal-schema`.
+
+1. Model stable form structures.
+2. Encapsulate validation logic into reusable validators.
+3. Use conditions to activate and deactivate schema branches.
+4. Compose everything into the final schema.
+
+Each concept has a single responsibility.
+
+Together they allow large forms to remain understandable, modular and maintainable over time.

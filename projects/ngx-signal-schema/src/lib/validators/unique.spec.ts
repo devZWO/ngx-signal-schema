@@ -259,16 +259,16 @@ describe('unique validator', () => {
 
         it('should handle null/undefined path gracefully (if passed via cast)', () => {
             TestBed.runInInjectionContext(() => {
-                // @ts-ignore
+                // @ts-expect-error - testing invalid path
                 expect(() => unique(null)).not.toThrow();
-                // @ts-ignore
+                // @ts-expect-error - testing invalid path
                 expect(() => unique(undefined)).not.toThrow();
             });
         });
 
         it('should hit line 76 if path is a plain object without items', () => {
             TestBed.runInInjectionContext(() => {
-                // @ts-ignore
+                // @ts-expect-error - testing invalid path
                 unique({}, {});
             });
         });

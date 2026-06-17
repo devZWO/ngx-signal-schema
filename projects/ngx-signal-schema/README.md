@@ -248,6 +248,25 @@ const UserSchema = compose(
 );
 ```
 
+### Array Validation with `unique`
+
+Standard Signal Forms do not support validation on raw arrays. By using `ArrayBlock`, you can use the `unique` validator to ensure all elements in a collection are distinct. By default, it marks the individual duplicate items as invalid.
+
+```typescript
+import {unique} from '@devzwo/ngx-signal-schema';
+
+// Basic usage: checks for duplicates in the array
+// For strings: case-insensitive and trimmed by default
+unique(path.tags);
+
+// Advanced usage: custom equality and error placement
+unique(path.employees, {
+    equalFn: (a, b) => a.email === b.email,
+    destination: 'both', // Mark both the ArrayBlock and the duplicates
+    error: { message: 'Duplicate email addresses found' }
+});
+```
+
 ---
 
 ## 📚 API
@@ -289,6 +308,7 @@ Specialized validators for Signal Forms.
 - `decimal(path, options)`: Validates that a value matches a decimal format. **Error keys:** `decimal.isNumber`, `decimal.intCount`, `decimal.fractCount`
 - `integer(path, options)`: Validates that a value is a whole number. **Error keys:** `integer.isInteger`, `integer.digitCount`
 - `mimeType(path, allowedTypes)`: Validation of file types. Supports wildcards (`image/*`) and reactive arrays. **Error key:** `mimeType`
+- `unique(path, options)`: Ensures all items in an `ArrayBlock` are unique. Supports custom equality logic and can attach errors to the container, the duplicate items, or both. **Error key:** `unique`
 - `oneOfPattern(values, options)`: Helper that generates a `RegExp` matching any of the provided values. Useful with the built-in `pattern` validator.
 - `year(path)`: Specialized validator for years (`YYYY`) in text form. **Error key:** `year`
 

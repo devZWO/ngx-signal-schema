@@ -1,4 +1,4 @@
-import {describe, it, expect} from 'vitest';
+import {describe, expect, it} from 'vitest';
 import {TestBed} from '@angular/core/testing';
 import {form, schema} from '@angular/forms/signals';
 import {signal} from '@angular/core';
@@ -280,6 +280,44 @@ describe('unique validator', () => {
             });
             const f = TestBed.runInInjectionContext(() => form(val, mySchema));
             expect(f().errorSummary()).toEqual([]);
+        });
+    });
+
+    describe('T[] (raw array validation support)', () => {
+        it('should support unique validation on raw arrays', () => {
+            const val = signal<string[]>(['a', 'a']);
+            const mySchema = schema<string[]>((path) => {
+                unique(path);
+            });
+            const f = TestBed.runInInjectionContext(() => form(val, mySchema));
+
+            expect(f().errorSummary().some(e => e.kind === 'unique')).toBe(true);
+
+            val.set(['a', 'b']);
+            expect(f().errorSummary().some(e => e.kind === 'unique')).toBe(false);
+        });
+
+        it('should report leaf errors correctly on raw arrays', () => {
+            const val = signal<string[]>(['a', 'a', 'b']);
+            const mySchema = schema<string[]>((path) => {
+                unique(path, { destination: 'leaf' });
+            });
+            const f = TestBed.runInInjectionContext(() => form(val, mySchema));
+
+            const errors = f().errorSummary();
+            expect(errors.length).toBe(2);
+            // Verify errors are attached to the items
+            expect(errors[0].fieldTree).toBeDefined();
+        });
+
+        it('should work with custom equality function on raw arrays', () => {
+            const val = signal<number[]>([1, 1.0, 2]);
+            const mySchema = schema<number[]>((path) => {
+                unique(path, { equalFn: (a: number, b: number) => Math.floor(a) === Math.floor(b) });
+            });
+            const f = TestBed.runInInjectionContext(() => form(val, mySchema));
+
+            expect(f().errorSummary().some(e => e.kind === 'unique')).toBe(true);
         });
     });
 });

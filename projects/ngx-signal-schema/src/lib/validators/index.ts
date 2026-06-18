@@ -6,6 +6,7 @@ export * from './mime-type';
 export * from './required-if-other-filled';
 export * from './required-defined';
 export * from './required-trimmed';
+export * from './unique';
 export * from './error-options';
 
 // @deprecated it was exported by mistake and will become internal in the next major release (v2).

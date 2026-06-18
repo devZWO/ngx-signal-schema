@@ -5,7 +5,7 @@ prev: false
 title: "ErrorOption"
 ---
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/error-options.ts:14
+Defined in: projects/ngx-signal-schema/src/lib/validators/error-options.ts:15
 
 Represents an error option containing error details.
 
@@ -27,7 +27,7 @@ and categorization are required.
 
 > `optional` **error?**: `object`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/error-options.ts:19
+Defined in: projects/ngx-signal-schema/src/lib/validators/error-options.ts:20
 
 Optional object containing error details.
 

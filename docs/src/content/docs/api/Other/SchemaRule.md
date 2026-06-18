@@ -7,7 +7,7 @@ title: "SchemaRule"
 
 > **SchemaRule** = (`ctx`) => `boolean`
 
-Defined in: projects/ngx-signal-schema/src/lib/conditions/schema-rule.ts:32
+Defined in: projects/ngx-signal-schema/src/lib/conditions/schema-rule.ts:35
 
 A rule that evaluates a condition based on the schema context.
 Used for conditional logic like visibility or enablement.

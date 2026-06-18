@@ -147,7 +147,7 @@
  *
  * ---
  *
- * @category Structure
+ * @category deprecated
  */
 export interface ArrayBlock<T> {
     items: T[];
@@ -157,7 +157,9 @@ export interface ArrayBlock<T> {
  * Helper function to convert an array into an ArrayBlock.
  * @param items The array of items to be wrapped.
  *
- * @category Structure
+ * @Deprecated since Angular v22. most use cases can be solved by using plain raw arrays.
+ *
+ * @category deprecated
  */
 export function toArrayBlock<T>(items: T[] | null): ArrayBlock<T> {
     return {items: items ?? []};
@@ -167,7 +169,9 @@ export function toArrayBlock<T>(items: T[] | null): ArrayBlock<T> {
  * Helper function to convert an ArrayBlock back to an array.
  * @param arrayBlock The ArrayBlock to extract the items from.
  *
- * @category Structure
+ * @Deprecated since Angular v22. most use cases can be solved by using plain raw arrays.
+ *
+ * @category deprecated
  */
 export function fromArrayBlock<T>(arrayBlock: ArrayBlock<T>): T[] {
     return arrayBlock.items;

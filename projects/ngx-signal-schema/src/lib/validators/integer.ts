@@ -6,6 +6,7 @@ import {stripLeadingZeros, toPlainDecimalString} from './decimal-parser';
 /**
  * Configuration options for the integer validator.
  *
+ * @category Other
  */
 export interface IntegerOptions extends ErrorOption {
     /**

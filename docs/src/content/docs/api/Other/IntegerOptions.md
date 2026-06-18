@@ -5,7 +5,7 @@ prev: false
 title: "IntegerOptions"
 ---
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:10
+Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:11
 
 Configuration options for the integer validator.
 
@@ -19,7 +19,7 @@ Configuration options for the integer validator.
 
 > `optional` **error?**: `object`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/error-options.ts:19
+Defined in: projects/ngx-signal-schema/src/lib/validators/error-options.ts:20
 
 Optional object containing error details.
 
@@ -45,7 +45,7 @@ A message describing the error.
 
 > `optional` **locale?**: `string`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:23
+Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:24
 
 Optional locale for parsing localized strings (defaults to 'de-DE').
 
@@ -55,7 +55,7 @@ Optional locale for parsing localized strings (defaults to 'de-DE').
 
 > **maxDigits**: `number`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:14
+Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:15
 
 Maximum number of digits allowed in the integer part.
 
@@ -65,7 +65,7 @@ Maximum number of digits allowed in the integer part.
 
 > `optional` **message?**: `string`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:19
+Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:20
 
 Optional custom error message.
 

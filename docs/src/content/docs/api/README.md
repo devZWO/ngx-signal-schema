@@ -12,7 +12,10 @@ title: "@devzwo/ngx-signal-schema"
 
 ## Conditions
 
+- [and](/ngx-signal-schema/api/conditions/and/)
+- [includes](/ngx-signal-schema/api/conditions/includes/)
 - [not](/ngx-signal-schema/api/conditions/not/)
+- [or](/ngx-signal-schema/api/conditions/or/)
 - [valueEquals](/ngx-signal-schema/api/conditions/valueequals/)
 - [valueIn](/ngx-signal-schema/api/conditions/valuein/)
 
@@ -23,24 +26,21 @@ title: "@devzwo/ngx-signal-schema"
 - [IntegerOptions](/ngx-signal-schema/api/other/integeroptions/)
 - [ValidationErrorWith](/ngx-signal-schema/api/other/validationerrorwith/)
 - [SchemaRule](/ngx-signal-schema/api/other/schemarule/)
+- [ValidationDestination](/ngx-signal-schema/api/other/validationdestination/)
 
 ## Rules
 
-- [~~disabledHidden~~](/ngx-signal-schema/api/rules/disabledhidden/)
 - [inactive](/ngx-signal-schema/api/rules/inactive/)
 
 ## Structure
 
 - [ApplyOptionalOptions](/ngx-signal-schema/api/structure/applyoptionaloptions/)
-- [ArrayBlock](/ngx-signal-schema/api/structure/arrayblock/)
 - [OptionalBlock](/ngx-signal-schema/api/structure/optionalblock/)
 - [applyOptional](/ngx-signal-schema/api/structure/applyoptional/)
-- [fromArrayBlock](/ngx-signal-schema/api/structure/fromarrayblock/)
 - [isOptionalBlock](/ngx-signal-schema/api/structure/isoptionalblock/)
 - [mapFromOptionalBlock](/ngx-signal-schema/api/structure/mapfromoptionalblock/)
 - [mapToOptionalBlock](/ngx-signal-schema/api/structure/maptooptionalblock/)
 - [optionalBlock](/ngx-signal-schema/api/structure/optionalblock-1/)
-- [toArrayBlock](/ngx-signal-schema/api/structure/toarrayblock/)
 
 ## Validators
 
@@ -51,14 +51,19 @@ title: "@devzwo/ngx-signal-schema"
 - [requiredDefined](/ngx-signal-schema/api/validators/requireddefined/)
 - [requiredIfOtherFilled](/ngx-signal-schema/api/validators/requiredifotherfilled/)
 - [requiredTrimmed](/ngx-signal-schema/api/validators/requiredtrimmed/)
+- [unique](/ngx-signal-schema/api/validators/unique/)
 - [year](/ngx-signal-schema/api/validators/year/)
 
 ## deprecated
 
+- [ArrayBlock](/ngx-signal-schema/api/deprecated/arrayblock/)
 - [~~ParseFloatResult~~](/ngx-signal-schema/api/deprecated/parsefloatresult/)
 - [~~ParseIntegerResult~~](/ngx-signal-schema/api/deprecated/parseintegerresult/)
+- [~~disabledHidden~~](/ngx-signal-schema/api/deprecated/disabledhidden/)
+- [fromArrayBlock](/ngx-signal-schema/api/deprecated/fromarrayblock/)
 - [~~mimeTypePattern~~](/ngx-signal-schema/api/deprecated/mimetypepattern/)
 - [~~parseLocalizedFloat~~](/ngx-signal-schema/api/deprecated/parselocalizedfloat/)
 - [~~parseLocalizedInteger~~](/ngx-signal-schema/api/deprecated/parselocalizedinteger/)
 - [~~stripLeadingZeros~~](/ngx-signal-schema/api/deprecated/stripleadingzeros/)
+- [toArrayBlock](/ngx-signal-schema/api/deprecated/toarrayblock/)
 - [~~toPlainDecimalString~~](/ngx-signal-schema/api/deprecated/toplaindecimalstring/)

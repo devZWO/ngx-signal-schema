@@ -3,6 +3,11 @@ import {ErrorOption} from './error-options';
 import {SchemaPath, SchemaPathTree, validateTree, ValidationError, ReadonlyFieldTree} from '@angular/forms/signals';
 import {isSignal, Signal} from '@angular/core';
 
+/**
+ * Options for where to attach validation errors.
+ *
+ * @category Other
+ */
 export type ValidationDestination = 'container' | 'items' | 'both';
 
 /**

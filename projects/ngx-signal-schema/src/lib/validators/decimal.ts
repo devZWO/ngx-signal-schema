@@ -5,6 +5,7 @@ import {parseLocalizedFloat, stripLeadingZeros, toPlainDecimalString} from './de
 /**
  * Configuration options for the decimal validator.
  *
+ * @category Other
  */
 export interface DecimalOptions extends ErrorOption {
     /**

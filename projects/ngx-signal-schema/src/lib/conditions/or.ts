@@ -15,6 +15,7 @@ import {SchemaRule} from '@devzwo/ngx-signal-schema';
  *       inactive // hides the complete fieldPath and subpath
  *     )
  *
+ * @category Conditions
  */
 export function or(...rules: SchemaRule[]): SchemaRule {
     return (ctx) => rules.some(rule => rule(ctx));

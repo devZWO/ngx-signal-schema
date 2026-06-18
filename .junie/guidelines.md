@@ -15,7 +15,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Implement lazy loading for feature routes
 - Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
 - Use `NgOptimizedImage` for all static images.
-  - `NgOptimizedImage` does not work for inline base64 images.
+    - `NgOptimizedImage` does not work for inline base64 images.
 
 ## Accessibility Requirements
 
@@ -27,9 +27,9 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Keep components small and focused on a single responsibility
 - Use `input()` and `output()` functions instead of decorators
 - Use `computed()` for derived state
-- Set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator
 - Prefer inline templates for small components
-- Prefer Reactive forms instead of Template-driven ones
+- Prefer reactive signal forms instead of Template-driven ones
+- Do NOT set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator, for it is default
 - Do NOT use `ngClass`, use `class` bindings instead
 - Do NOT use `ngStyle`, use `style` bindings instead
 - When using external templates/styles, use paths relative to the component TS file.
@@ -51,5 +51,14 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 ## Services
 
 - Design services around a single responsibility
-- Use the `providedIn: 'root'` option for singleton services
+- Use the `@Service()` decorator for singleton services instead of `@Injectable({ providedIn: 'root' })`
 - Use the `inject()` function instead of constructor injection
+
+## Unit Tests
+- Use vitest
+- Test edge cases and error handling
+- Use mock data and dependencies where necessary
+- Keep tests fast and isolated
+- Do NOT use `NoopAnimationsModule` for it is deprecated
+- Use typechecks instead of casting `any` or `as any`
+- Use create full mock data instead of partials with type `any`.

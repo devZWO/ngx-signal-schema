@@ -1,6 +1,9 @@
-import {ArrayBlock} from '../structure/array-block';
+import {ArrayBlock} from '../structure';
 import {ErrorOption} from './error-options';
 import {SchemaPath, SchemaPathTree, validateTree, ValidationError, ReadonlyFieldTree} from '@angular/forms/signals';
+import {isSignal, Signal} from '@angular/core';
+
+export type ValidationDestination = 'container' | 'items' | 'both';
 
 /**
  * The `unique` validator checks if all items within an {@link ArrayBlock} or a raw array are unique.
@@ -22,9 +25,11 @@ import {SchemaPath, SchemaPathTree, validateTree, ValidationError, ReadonlyField
  * @param options.error - Custom error configuration (kind and message). Defaults to `{ kind: 'unique' }`.
  * @param options.equalFn - A custom function to determine equality between two items.
  * @param options.destination - Determines where the validation errors should be attached.
- *   - `'leaf'`: (Default) The error is attached only to the individual items that are duplicated. Useful for highlighting the specific problematic fields.
- *   - `'node'`: The error is attached only to the {@link ArrayBlock} or array itself. Useful for showing a single summary error.
+ *   - `'items'`: (Default) The error is attached only to the individual items that are duplicated. Useful for highlighting the specific problematic fields.
+ *   - `'container'`: The error is attached only to the {@link ArrayBlock} or array itself. Useful for showing a single summary error.
  *   - `'both'`: The error is attached to both the {@link ArrayBlock}/array and the duplicated items.
+ *   - `() => 'container' | 'items' | 'both'`: A function that returns the destination.
+ *   - `Signal<'container' | 'items' | 'both'>`: A signal that provides the destination.
  *
  * @example
  * ```ts
@@ -56,9 +61,18 @@ import {SchemaPath, SchemaPathTree, validateTree, ValidationError, ReadonlyField
  *
  * @example
  * ```ts
- * // Attach errors only to items node (leaf nodes)
+ * // Attach errors only to items container (items containers)
  * schema<ArrayBlock<string>>(path => {
- *   unique(path, { destination: 'node' });
+ *   unique(path, { destination: 'container' });
+ * });
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Using a signal for dynamic destination
+ * const dest = signal<'container' | 'items'>('items');
+ * schema<ArrayBlock<string>>(path => {
+ *   unique(path, { destination: dest });
  * });
  * ```
  *
@@ -66,7 +80,9 @@ import {SchemaPath, SchemaPathTree, validateTree, ValidationError, ReadonlyField
  */
 export function unique<S extends ArrayBlock<T> | T[] | null | undefined, T>(
     fieldPath: SchemaPath<S>,
-    options?: ErrorOption & { equalFn?: (a: T, b: T) => boolean } & { destination?: 'node' | 'leaf' | 'both' }
+    options?: ErrorOption
+        & { equalFn?: (a: T, b: T) => boolean }
+        & { destination?: ValidationDestination | (() => ValidationDestination) | Signal<ValidationDestination> }
 ): void {
     const eqFn = options?.equalFn ?? ((a: unknown, b: unknown) => {
         if (typeof a === 'string' && typeof b === 'string') {
@@ -114,12 +130,15 @@ export function unique<S extends ArrayBlock<T> | T[] | null | undefined, T>(
 
         const kind = options?.error?.kind ?? 'unique';
         const message = options?.error?.message;
-        const destination = options?.destination ?? 'leaf';
+
+        const destination = (isSignal(options?.destination) || (typeof options?.destination === 'function'))
+            ? options.destination()
+            : options?.destination ?? 'items';
 
         const errors: (ValidationError & { fieldTree?: ReadonlyFieldTree<unknown> })[] = [];
 
         // Add error to each duplicate item if destination is 'leaf' or 'both'
-        if (destination === 'leaf' || destination === 'both') {
+        if (destination === 'items' || destination === 'both') {
             for (const index of duplicateIndices) {
                 // eslint-disable-next-line
                 const itemPath = isActuallyBlock ? (fieldPath as any).items[index] : (fieldPath as any)[index];
@@ -132,7 +151,7 @@ export function unique<S extends ArrayBlock<T> | T[] | null | undefined, T>(
         }
 
         // Add error to the ArrayBlock itself if destination is 'node' or 'both'
-        if (destination === 'node' || destination === 'both') {
+        if (destination === 'container' || destination === 'both') {
             errors.push({
                 kind,
                 message,

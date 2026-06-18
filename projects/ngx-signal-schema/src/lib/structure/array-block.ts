@@ -3,15 +3,17 @@
  *
  * ### Why this exists
  *
- * `ArrayBlock<T>` is a lightweight wrapper around a plain array that enables **full compatibility with Angular Signal Forms**, especially when working with array-level form state such as `readonly`, `disabled`, **validation**, or conditional schema logic.
+ * @Deprecated since Angular v22. most use cases can be solved by using plain raw arrays.
  *
- * In Angular Signal Forms, many APIs (e.g. `readonly`, `applyWhen`, `disabled`, `validate`) are designed to operate on **addressable field nodes**. While this works well for objects and primitive fields, arrays are a special case:
+ * `ArrayBlock<T>` is a lightweight wrapper around a plain array that enables **type-safe and explicit control** over array-level form state in Angular Signal Forms.
  *
- * * Applying `readonly(ctx)` or `validate(ctx, ...)` directly to a `SchemaPath<T[]>` (i.e. a raw array) does **not reliably propagate** to the form state. In fact, **validations on raw arrays are ignored.**
- * * Arrays lack a natural “container control” in the same way objects do.
- * * As a result, array-level concerns (like locking the entire collection) cannot be expressed cleanly.
+ * While Angular Signal Forms natively support raw arrays (e.g. `T[]`), `ArrayBlock<T>` provides several advantages for developer experience and structural clarity:
  *
- * `ArrayBlock<T>` solves this by introducing a **dedicated container node** that Signal Forms can attach state to.
+ * * **Type-safe addressability**: Items within a raw array are not natively exposed with numeric index signatures in the `FieldTree` or `SchemaPath` types. `ArrayBlock<T>` provides a named `items` property that is fully typed, allowing you to access `form.items[0]` or `path.items[0]` without type casting.
+ * * **Explicit Container Node**: It introduces a dedicated container node for the collection itself. This is especially useful for attaching collection-level validation errors (e.g., "minimum 3 items") to a stable, addressable path (`items`) rather than the array root.
+ * * **Consistent API Surface**: By using an object wrapper, you ensure that the collection behaves exactly like other object-based form nodes, making state propagation and conditional logic more predictable in complex schemas.
+ *
+ * `ArrayBlock<T>` solves this by introducing a **dedicated container node** with a named `items` property.
  *
  * ---
  *
@@ -20,26 +22,31 @@
  * Without `ArrayBlock<T>`:
  *
  * ```ts
- * schema<Datei[]>(ctx => {
- *   readonly(ctx); // ❌ Has no effect on array-level state
- *   validate(ctx, items => items.length > 0 ? null : { minLength: true }); // ❌ Ignored
+ * schema<string[]>(ctx => {
+ *   readonly(ctx); // ✅ Marks the array as readonly and propagates to items
+ *   // ⚠️ But index access is not type-safe: (myForm as any)[0]
+ *
+ *   validate(ctx, items => items.length > 0 ? null : { minLength: true });
+ *   // ✅ Validation runs and error exists in summary
+ *   // ⚠️ But attaching errors to a stable path for the UI is more manual
  * });
  * ```
  *
  * With `ArrayBlock<T>`:
  *
  * ```ts
- * schema<ArrayBlock<Datei>>(ctx => {
- *   readonly(ctx); // ✅ Works as expected
+ * schema<ArrayBlock<string>>(ctx => {
+ *   readonly(ctx); // ✅ Works perfectly
+ *   // ✅ Item fields are fully addressable: myForm.items[0]
  * });
  * ```
  *
  * This allows you to:
  *
- * * Mark the **entire array as readonly**
- * * Apply **validation logic** at the array level (e.g. min/max length)
- * * Apply **conditional logic** at the array level
- * * Use Signal Forms APIs consistently without special-casing arrays
+ * * **Type-safe access** to items via `items[0]` on both the form and schema path
+ * * **Explicit collection state** (readonly, disabled) with clear structural intent
+ * * **Easier UI binding** for collection-level errors via the stable `items` path
+ * * **Predictable behavior** for complex nested forms
  *
  * ---
  *
@@ -107,14 +114,15 @@
  *
  * Use `ArrayBlock<T>` when:
  *
- * * You need **array-level form state** (readonly, disabled, conditional logic)
- * * You want to stay fully within **Signal Forms APIs**
- * * You want to avoid introducing **external UI state** (like separate `locked` flags)
+ * * You want **type-safe access** to individual items (e.g. `form.items[0]`) without `as any`
+ * * You need to apply **schema rules to specific indices** in a typed way
+ * * You have **complex collection-level validation** that should be bound to a named UI path
+ * * You want to maintain a **strict, object-oriented form structure**
  *
  * Do **not** use it if:
  *
- * * You only need to display or edit array items individually
- * * You don’t require any array-level behavior
+ * * You are working with a simple list of values and don't need typed index access
+ * * You prefer the **cleanest possible JSON model** and handle item-level logic via iteration (e.g. `@for`)
  *
  * ---
  *
@@ -135,7 +143,7 @@
  * { items: T[] }
  * ```
  *
- * so that the array becomes a **first-class form node** with its own state.
+ * so that the array becomes a **first-class form node** with its own stable, addressable path.
  *
  * ---
  *

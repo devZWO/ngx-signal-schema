@@ -1,5 +1,7 @@
 import {apply, schema} from '@angular/forms/signals';
 import {decimal, integer, requiredAtLeastOne, requiredIfOtherFilled, requiredTrimmed, year} from '@devzwo/ngx-signal-schema';
+import {SelectOption} from '../shared/components/select-form-field';
+import {ButtonToggleOption} from '../shared/components/button-toggle-form-field';
 
 // --- Interfaces ---
 
@@ -29,6 +31,19 @@ export interface LegalPerson {
     employeeCount: string;
     revenue: string;
 }
+
+export const LEGAL_FORM_OPTIONS: SelectOption[] = [
+    {label: 'GmbH', value: 'GmbH'},
+    {label: 'AG', value: 'AG'},
+    {label: 'UG', value: 'UG'},
+    {label: 'OHG', value: 'OHG'},
+    {label: 'GbR', value: 'GbR'},
+];
+
+export const PERSON_TYPE_OPTIONS: ButtonToggleOption[] = [
+    {label: 'Natural Person', value: 'natural'},
+    {label: 'Legal Person', value: 'legal'},
+];
 
 
 // --- Schema Definition ---

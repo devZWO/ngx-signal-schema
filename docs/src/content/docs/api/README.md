@@ -24,7 +24,9 @@ title: "@devzwo/ngx-signal-schema"
 - [DecimalOptions](/ngx-signal-schema/api/other/decimaloptions/)
 - [ErrorOption](/ngx-signal-schema/api/other/erroroption/)
 - [IntegerOptions](/ngx-signal-schema/api/other/integeroptions/)
+- [RequiredAtLeastOneOptions](/ngx-signal-schema/api/other/requiredatleastoneoptions/)
 - [ValidationErrorWith](/ngx-signal-schema/api/other/validationerrorwith/)
+- [RequiredAtLeastOneSelector](/ngx-signal-schema/api/other/requiredatleastoneselector/)
 - [SchemaRule](/ngx-signal-schema/api/other/schemarule/)
 - [ValidationDestination](/ngx-signal-schema/api/other/validationdestination/)
 

@@ -14,6 +14,10 @@ export const routes: Routes = [
         loadComponent: () => import('./examples/array-example').then(m => m.ArrayExample)
     },
     {
+        path: 'search-at-least-one-criteria-example',
+        loadComponent: () => import('./examples/require-on-of-example/search-at-least-one-criteria-example').then(m => m.SearchAtLeastOneCriteriaExampleComponent)
+    },
+    {
         path: '',
         redirectTo: 'flat-model-example',
         pathMatch: 'full'

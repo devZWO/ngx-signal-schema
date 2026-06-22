@@ -394,4 +394,82 @@ describe('requiredAtLeastOne validator', () => {
     // Now it should be invalid because 'type' is excluded, so only 'firstname' (empty) is checked.
     expect(f().invalid()).toBe(true);
   });
+
+  it('should cover branch where a selector points directly to an excluded path', () => {
+    interface Model { a: string; b: string }
+    const valueSignal = signal<Model>({ a: '1', b: '2' });
+    const mySchema = schema<Model>((path) => {
+      requiredAtLeastOne(path, [p => p.a, p => p.b], { exclude: [p => p.a] });
+    });
+    const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));
+    // Since p.a is excluded, only p.b is checked.
+    expect(f().valid()).toBe(true);
+  });
+
+  it('should cover branch where a subtree is excluded', () => {
+    interface Model { group: { a: string }; b: string }
+    const valueSignal = signal<Model>({ group: { a: '1' }, b: '' });
+    const mySchema = schema<Model>((path) => {
+      requiredAtLeastOne(path, [p => p.group, p => p.b], { recursive: true, exclude: [p => p.group] });
+    });
+    const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));
+    // group is excluded, so its children are not collected.
+    // only b is checked, and it is empty.
+    expect(f().invalid()).toBe(true);
+  });
+
+  it('should use custom error kind and message from error option', () => {
+    interface Model { a: string; b: string }
+    const valueSignal = signal<Model>({ a: '', b: '' });
+    const mySchema = schema<Model>((path) => {
+      requiredAtLeastOne(path, [p => p.a, p => p.b], {
+        error: { kind: 'customKind', message: 'customMessage' }
+      });
+    });
+    const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));
+    const errors = f().errorSummary();
+    expect(errors[0].kind).toBe('customKind');
+    expect(errors[0].message).toBe('customMessage');
+  });
+
+  it('should use custom isFilled logic', () => {
+    interface Model { a: string; b: string }
+    const valueSignal = signal<Model>({ a: 'empty', b: '' });
+    const mySchema = schema<Model>((path) => {
+      requiredAtLeastOne(path, [p => p.a, p => p.b], {
+        isFilled: (val) => val !== 'empty' && val !== ''
+      });
+    });
+    const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));
+    // 'empty' is NOT filled according to custom logic.
+    // '' is also NOT filled.
+    expect(f().invalid()).toBe(true);
+
+    valueSignal.set({ a: 'something', b: '' });
+    expect(f().valid()).toBe(true);
+  });
+
+  it('should ignore disabled child field in recursive mode', () => {
+    interface Model { group: { a: string; b: string } }
+    const valueSignal = signal<Model>({ group: { a: '1', b: '' } });
+    const mySchema = schema<Model>((path) => {
+      disabled(path.group.a);
+      requiredAtLeastOne(path, { recursive: true });
+    });
+    const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));
+    // group.a is '1' but disabled. group.b is empty.
+    expect(f().invalid()).toBe(true);
+  });
+
+  it('should ignore hidden child field in recursive mode', () => {
+    interface Model { group: { a: string; b: string } }
+    const valueSignal = signal<Model>({ group: { a: '1', b: '' } });
+    const mySchema = schema<Model>((path) => {
+      hidden(path.group.a, {when: () => true});
+      requiredAtLeastOne(path, { recursive: true });
+    });
+    const f = TestBed.runInInjectionContext(() => form(valueSignal, mySchema));
+    // group.a is '1' but hidden. group.b is empty.
+    expect(f().invalid()).toBe(true);
+  });
 });

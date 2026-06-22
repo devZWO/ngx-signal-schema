@@ -1,4 +1,5 @@
-import {SchemaRule} from '@devzwo/ngx-signal-schema';
+import {SchemaRule} from './schema-rule';
+
 
 /**
  * Combines multiple schema rules with OR logic.
@@ -15,6 +16,7 @@ import {SchemaRule} from '@devzwo/ngx-signal-schema';
  *       inactive // hides the complete fieldPath and subpath
  *     )
  *
+ * @category Conditions
  */
 export function or(...rules: SchemaRule[]): SchemaRule {
     return (ctx) => rules.some(rule => rule(ctx));

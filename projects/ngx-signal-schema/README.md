@@ -205,16 +205,15 @@ validate(path.agreedToTerms, (ctx) => {
 });
 ```
 
-### Stable Form Structures with `OptionalBlock` & `ArrayBlock`
+### Stable Form Structures with `OptionalBlock`
 
 Angular Signal Forms require a **stable object structure** to correctly track signals. You cannot use subtrees that are `null` or `undefined` if you want to apply rules or validation to their nested fields.
 
-`OptionalBlock` and `ArrayBlock` provide stable containers for optional data and collections, ensuring the signal tree remains intact even when parts of the form are logically absent or empty.
+`OptionalBlock` provides stable containers for optional data and collections, ensuring the signal tree remains intact even when parts of the form are logically absent or empty.
 
-**Note on Array Validation:** Angular Signal Forms ignore validations applied directly to raw arrays (`T[]`). `ArrayBlock` encapsulates the array, making it an addressable node where validators and rules (like `readonly` or `disabled`) can be applied reliably.
 
 ```typescript
-import {OptionalBlock, ArrayBlock, toArrayBlock, mapToOptionalBlock} from '@devzwo/ngx-signal-schema';
+import {OptionalBlock, mapToOptionalBlock} from '@devzwo/ngx-signal-schema';
 
 interface UserProfile {
     // ❌ BAD: Signal Form cannot track fields inside null/undefined
@@ -222,13 +221,11 @@ interface UserProfile {
 
     // ✅ GOOD: Stable structure even if "disabled"
     address: OptionalBlock<{ street: string; city: string }>;
-    hobbies: ArrayBlock<string>;
 }
 
 // Initializing the form
 const initialValue: UserProfile = {
     address: mapToOptionalBlock({street: '', city: ''}, false), // disabled by default
-    hobbies: toArrayBlock(['coding', 'climbing'])
 };
 ```
 
@@ -250,7 +247,7 @@ const UserSchema = compose(
 
 ### Array Validation with `unique`
 
-Standard Signal Forms do not support validation on raw arrays. By using `ArrayBlock`, you can use the `unique` validator to ensure all elements in a collection are distinct. By default, it marks the individual duplicate items as invalid.
+Standard Signal Forms does not have any validation arrays. You can use the `unique` validator to ensure all elements in a collection are distinct. By default, it marks the individual duplicate items as invalid.
 
 ```typescript
 import {unique} from '@devzwo/ngx-signal-schema';
@@ -262,7 +259,7 @@ unique(path.tags);
 // Advanced usage: custom equality and error placement
 unique(path.employees, {
     equalFn: (a, b) => a.email === b.email,
-    destination: 'both', // Mark both the ArrayBlock and the duplicates
+    destination: 'both', // Mark both the Array itself and the duplicate items in the array
     error: { message: 'Duplicate email addresses found' }
 });
 ```
@@ -308,21 +305,19 @@ Specialized validators for Signal Forms.
 - `decimal(path, options)`: Validates that a value matches a decimal format. **Error keys:** `decimal.isNumber`, `decimal.intCount`, `decimal.fractCount`
 - `integer(path, options)`: Validates that a value is a whole number. **Error keys:** `integer.isInteger`, `integer.digitCount`
 - `mimeType(path, allowedTypes)`: Validation of file types. Supports wildcards (`image/*`) and reactive arrays. **Error key:** `mimeType`
-- `unique(path, options)`: Ensures all items in an `ArrayBlock` are unique. Supports custom equality logic and can attach errors to the container, the duplicate items, or both. **Error key:** `unique`
+- `unique(path, options)`: Ensures all items in an array are unique. Supports custom equality logic and can attach errors to the container, the duplicate items, or both. **Error key:** `unique`
 - `oneOfPattern(values, options)`: Helper that generates a `RegExp` matching any of the provided values. Useful with the built-in `pattern` validator.
 - `year(path)`: Specialized validator for years (`YYYY`) in text form. **Error key:** `year`
 
 ### 5. Structures
 
-Utilities for modeling complex data structures and managing array-level or optional state.
+Utilities for modeling complex data structures managing optional state.
 
 - `optionalBlock(options)`: Creates a reusable schema for `OptionalBlock<T>`, allowing rules to be applied conditionally based on the block's enabled state.
 - `applyOptional(path, options)`: Applies rules or schemas directly to the `data` node of an `OptionalBlock` field.
 - `mapToOptionalBlock(data, enabled)`: Utility to wrap domain data into an `OptionalBlock` structure.
 - `mapFromOptionalBlock(block)`: Utility to extract data from an `OptionalBlock` if it is enabled.
 - `isOptionalBlock(obj)`: Type guard for `OptionalBlock`.
-- `toArrayBlock(items)`: Wraps a plain array into an `ArrayBlock`. This turns the array into a first-class form node, enabling array-level state (like `readonly`, `disabled`, or **validation**).
-- `fromArrayBlock(block)`: Unwraps an `ArrayBlock` back into a plain array.
 
 ## Maintainer
 

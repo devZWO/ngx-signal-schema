@@ -69,8 +69,8 @@
                       ],
                       "styles": [
                           "@angular/material/prebuilt-themes/cyan-orange.css",
-                          "projects/demo-form/src/tailwind.css",
-                          "projects/demo-form/src/styles.scss"
+                          "projects/demo-form/src/styles.scss",
+                          "projects/demo-form/src/tailwind.css"
                       ]
                   },
                   "configurations": {

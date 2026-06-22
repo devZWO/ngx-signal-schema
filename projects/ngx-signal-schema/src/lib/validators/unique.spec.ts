@@ -1,8 +1,8 @@
-import {describe, it, expect} from 'vitest';
+import {describe, expect, it} from 'vitest';
 import {TestBed} from '@angular/core/testing';
 import {form, schema} from '@angular/forms/signals';
 import {signal} from '@angular/core';
-import {unique} from './unique';
+import {unique, ValidationDestination} from './unique';
 import {ArrayBlock, toArrayBlock} from '../structure/array-block';
 
 describe('unique validator', () => {
@@ -198,7 +198,7 @@ describe('unique validator', () => {
     });
 
     describe('destination option', () => {
-        it('should attach error to leaf by default', () => {
+        it('should attach error to items by default', () => {
             const val = signal(toArrayBlock(['a', 'a', 'b', 'c']));
             const mySchema = schema<ArrayBlock<string>>((path) => {
                 unique(path);
@@ -209,10 +209,10 @@ describe('unique validator', () => {
             expect(errors.filter(e => e.kind === 'unique').length).toBe(2);
         });
 
-        it('should attach error only to node when destination is "node"', () => {
+        it('should attach error only to container when destination is "container"', () => {
             const val = signal(toArrayBlock(['a', 'a', 'b', 'c']));
             const mySchema = schema<ArrayBlock<string>>((path) => {
-                unique(path, {destination: 'node'});
+                unique(path, {destination: 'container'});
             });
             const f = TestBed.runInInjectionContext(() => form(val, mySchema));
             const errors = f().errorSummary();
@@ -220,10 +220,10 @@ describe('unique validator', () => {
             expect(errors.filter(e => e.kind === 'unique').length).toBe(1);
         });
 
-        it('should attach error only to leaf when destination is "leaf"', () => {
+        it('should attach error only to items when destination is "items"', () => {
             const val = signal(toArrayBlock(['a', 'a', 'b', 'c']));
             const mySchema = schema<ArrayBlock<string>>((path) => {
-                unique(path, {destination: 'leaf'});
+                unique(path, {destination: 'items'});
             });
             const f = TestBed.runInInjectionContext(() => form(val, mySchema));
             const errors = f().errorSummary();
@@ -240,6 +240,45 @@ describe('unique validator', () => {
             const errors = f().errorSummary();
             // 2 items + 1 container = 3 errors
             expect(errors.filter(e => e.kind === 'unique').length).toBe(3);
+        });
+
+        it('should support signal as destination', () => {
+            const val = signal(toArrayBlock(['a', 'a', 'b', 'c']));
+            const dest = signal<ValidationDestination>('items');
+            const mySchema = schema<ArrayBlock<string>>((path) => {
+                unique(path, {destination: dest});
+            });
+            const f = TestBed.runInInjectionContext(() => form(val, mySchema));
+
+            // Initially 'items' -> 2 errors
+            expect(f().errorSummary().filter(e => e.kind === 'unique').length).toBe(2);
+
+            // Change to 'container' -> 1 error
+            dest.set('container');
+            expect(f().errorSummary().filter(e => e.kind === 'unique').length).toBe(1);
+
+            // Change to 'both' -> 3 errors
+            dest.set('both');
+            expect(f().errorSummary().filter(e => e.kind === 'unique').length).toBe(3);
+        });
+
+        it('should support function as destination', () => {
+            const val = signal(toArrayBlock(['a', 'a', 'b', 'c']));
+            let currentDest: ValidationDestination = 'items';
+            const destFn = () => currentDest;
+
+            const mySchema = schema<ArrayBlock<string>>((path) => {
+                unique(path, {destination: destFn});
+            });
+            const f = TestBed.runInInjectionContext(() => form(val, mySchema));
+
+            // Initially 'items' -> 2 errors
+            expect(f().errorSummary().filter(e => e.kind === 'unique').length).toBe(2);
+
+            // Change to 'container'
+            currentDest = 'container';
+            val.update(v => ({...v})); // Trigger re-evaluation
+            expect(f().errorSummary().filter(e => e.kind === 'unique').length).toBe(1);
         });
     });
 
@@ -280,6 +319,44 @@ describe('unique validator', () => {
             });
             const f = TestBed.runInInjectionContext(() => form(val, mySchema));
             expect(f().errorSummary()).toEqual([]);
+        });
+    });
+
+    describe('T[] (raw array validation support)', () => {
+        it('should support unique validation on raw arrays', () => {
+            const val = signal<string[]>(['a', 'a']);
+            const mySchema = schema<string[]>((path) => {
+                unique(path);
+            });
+            const f = TestBed.runInInjectionContext(() => form(val, mySchema));
+
+            expect(f().errorSummary().some(e => e.kind === 'unique')).toBe(true);
+
+            val.set(['a', 'b']);
+            expect(f().errorSummary().some(e => e.kind === 'unique')).toBe(false);
+        });
+
+        it('should report items errors correctly on raw arrays', () => {
+            const val = signal<string[]>(['a', 'a', 'b']);
+            const mySchema = schema<string[]>((path) => {
+                unique(path, { destination: 'items' });
+            });
+            const f = TestBed.runInInjectionContext(() => form(val, mySchema));
+
+            const errors = f().errorSummary();
+            expect(errors.length).toBe(2);
+            // Verify errors are attached to the items
+            expect(errors[0].fieldTree).toBeDefined();
+        });
+
+        it('should work with custom equality function on raw arrays', () => {
+            const val = signal<number[]>([1, 1.0, 2]);
+            const mySchema = schema<number[]>((path) => {
+                unique(path, { equalFn: (a: number, b: number) => Math.floor(a) === Math.floor(b) });
+            });
+            const f = TestBed.runInInjectionContext(() => form(val, mySchema));
+
+            expect(f().errorSummary().some(e => e.kind === 'unique')).toBe(true);
         });
     });
 });

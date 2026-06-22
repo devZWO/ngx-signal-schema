@@ -1,5 +1,5 @@
 import {apply, schema} from '@angular/forms/signals';
-import {decimal, inactive, integer, requiredAtLeastOne, requiredIfOtherFilled, requiredTrimmed, year} from '@devzwo/ngx-signal-schema';
+import {decimal, integer, requiredAtLeastOne, requiredIfOtherFilled, requiredTrimmed, year} from '@devzwo/ngx-signal-schema';
 
 // --- Interfaces ---
 
@@ -23,13 +23,6 @@ export interface NaturalPerson {
     birthYear: string;
 }
 
-export const naturalPersonHiddenSchema = schema<LegalPerson & NaturalPerson>(p => {
-    inactive(p.birthYear)
-    inactive(p.firstname)
-    inactive(p.lastname)
-    }
-);
-
 export interface LegalPerson {
     companyName: string;
     legalForm: string;
@@ -37,25 +30,6 @@ export interface LegalPerson {
     revenue: string;
 }
 
-export const legalPersonHiddenSchema = schema<LegalPerson & NaturalPerson>(p => {
-    inactive(p.companyName)
-    inactive(p.legalForm)
-    inactive(p.employeeCount)
-    inactive(p.revenue)
-    }
-);
-
-/**
- * The main interface for the form.
- * We combine the person properties into a flat person object
- * or keep them directly in the main interface, depending on preference.
- * Here we use a split into type, person and contact.
- */
-export interface AppFormModel {
-    type: PersonType;
-    person: NaturalPerson & LegalPerson;
-    contact: ContactData;
-}
 
 // --- Schema Definition ---
 

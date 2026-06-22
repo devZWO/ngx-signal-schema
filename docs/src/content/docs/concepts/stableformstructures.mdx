@@ -124,77 +124,13 @@ invoiceRecipient.meta.enabled = false;
 
 The form section still exists structurally, but can be treated as absent when mapped back to the domain model.
 
-## ArrayBlock
-
-Collections introduce a similar challenge.
-
-A plain array:
-
-```ts
-attachments: File[];
-```
-
-has no dedicated container node.
-
-Sometimes the collection itself should have rules or metadata.
-
-For example:
-
-* maximum number of items
-* readonly state
-* visibility
-* validation messages
-* collection-level configuration
-
-`ArrayBlock<T>` introduces an explicit container.
-
-Instead of:
-
-```ts
-attachments: File[];
-```
-
-the form model becomes:
-
-```ts
-attachments: ArrayBlock<File>;
-```
-
-This creates a stable node representing the collection itself rather than only its items.
-
-The collection can now participate in form behavior independently of the contained values.
-
-## Domain Model vs Form Model
-
-Structure wrappers intentionally separate two concerns.
-
-The domain model represents business data:
-
-```ts
-Order
-InvoiceRecipient
-Address
-File
-```
-
-The form model represents how that data behaves inside a form:
-
-```ts
-OptionalBlock<T>
-ArrayBlock<T>
-```
-
-The goal is not to replace the domain model.
-
-The goal is to provide Angular Signal Forms with a structure that is easier to manage and reason about.
 
 ## When to Use Structure Wrappers
 
 Structure wrappers are useful when:
 
-* object trees are optional
+* object trees are optional (`OptionalBlock`)
 * form sections appear and disappear dynamically
-* collections need their own state
 * metadata must exist alongside domain data
 * stable form structures are preferred over constantly changing trees
 

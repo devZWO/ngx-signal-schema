@@ -5,7 +5,7 @@ prev: false
 title: "DecimalOptions"
 ---
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:9
+Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:10
 
 Configuration options for the decimal validator.
 
@@ -19,7 +19,7 @@ Configuration options for the decimal validator.
 
 > `optional` **error?**: `object`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/error-options.ts:19
+Defined in: projects/ngx-signal-schema/src/lib/validators/error-options.ts:20
 
 Optional object containing error details.
 
@@ -45,7 +45,7 @@ A message describing the error.
 
 > `optional` **locale?**: `string`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:32
+Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:33
 
 Optional locale for parsing strings.
 Default is 'de-DE'
@@ -56,7 +56,7 @@ Default is 'de-DE'
 
 > **maxFractionDigits**: `number`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:20
+Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:21
 
 Maximum number of digits after the decimal separator.
 Example: maxFractionDigits = 2 allows 12.34 but rejects 12.345
@@ -67,7 +67,7 @@ Example: maxFractionDigits = 2 allows 12.34 but rejects 12.345
 
 > **maxIntegerDigits**: `number`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:14
+Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:15
 
 Maximum number of digits before the decimal separator.
 Example: maxIntegerDigits = 3 allows 999.99 but rejects 1000.00
@@ -78,7 +78,7 @@ Example: maxIntegerDigits = 3 allows 999.99 but rejects 1000.00
 
 > `optional` **message?**: `string`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:26
+Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:27
 
 Optional custom error message. or message key
 

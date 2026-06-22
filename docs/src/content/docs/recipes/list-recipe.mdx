@@ -1,0 +1,184 @@
+---
+title: "Managing Lists and Arrays"
+description: "Learn how to handle dynamic lists, array validation, and unique items using ngx-signal-schema."
+---
+
+Handling arrays in forms often comes with specific challenges like dynamic addition/removal of items, reordering, and cross-item validation (e.g., uniqueness).
+
+This recipe demonstrates how to manage a dynamic list of items with `ngx-signal-schema`.
+
+Along the way we will use:
+
+* Array Schemas
+* The `unique` Validator
+* Error Destinations
+* Signal-based Array Updates
+
+## The Requirements
+
+We want to build a "Super Hero Skills" form where:
+
+* Users can add multiple skills.
+* Each skill must be unique.
+* Users can remove or reorder skills.
+* Validation errors can be shown on the individual duplicate items, the list as a whole, or both.
+
+## Step 1: Model the Form Structure
+
+First, we define our form model. For a list, we use a standard TypeScript array.
+
+```ts
+export interface SuperHeroForm {
+  skills: string[];
+}
+```
+
+## Step 2: Define the Schema with Array Validation
+
+We use the `schema` function to define our validation rules. To ensure all skills are unique, we use the `unique` validator.
+
+### Default Behavior for Strings
+By default, when validating an array of strings, `unique()` is **case-insensitive** and **ignores surrounding whitespace**.
+
+```ts
+import { schema } from '@angular/forms/signals';
+import { unique } from '@devzwo/ngx-signal-schema';
+
+const SuperHeroSchema = schema<SuperHeroForm>((path) => {
+  unique(path.skills, {
+    error: { message: 'Superhero skills must be unique' }
+  });
+});
+```
+
+### Custom Equality for Objects
+If you are working with an array of objects, you can provide a custom `equalFn` to determine what counts as a duplicate.
+
+```ts
+unique(path.users, {
+  equalFn: (a, b) => a.id === b.id,
+  error: { message: 'User IDs must be unique' }
+});
+```
+
+## Step 3: Configure Error Destinations
+
+When an array has duplicate items, you can decide where the error should be displayed using the `destination` property:
+
+* `'items'`: Errors are attached to each duplicate item (leaf nodes).
+* `'container'`: A single error is attached to the array itself (parent node).
+* `'both'`: Errors are attached to both the array and the duplicate items.
+
+```ts
+unique(path.skills, {
+  error: { message: 'Skills must be unique' },
+  // Show error on the list AND the duplicates
+  destination: 'both' 
+});
+```
+
+## Step 4: Creating a Reusable List Component
+
+To render the list, we create a component that accepts a `FieldTree` of an array. The `FieldTree` allows us to iterate over the items while still accessing the array's state.
+
+```ts
+import { Component, input } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
+
+@Component({
+  selector: 'app-skill-list',
+  template: `
+    <div class="list-container">
+      <!-- 1. Iterate over the FieldTree of the array -->
+      @for (item of fieldTree(); track $index; let i = $index) {
+        <div class="item">
+          {{ item().value() }}
+          
+          <!-- 2. Access individual item validation state -->
+          @if (item().invalid()) {
+            <span class="error-icon">⚠️</span>
+          }
+          
+          <button (click)="removeItem(i)">Remove</button>
+        </div>
+      }
+      
+      <button (click)="addItem('New Skill')">Add Skill</button>
+    </div>
+    
+    <!-- 3. Show container-level errors -->
+    @if (fieldTree()().invalid()) {
+      <p class="error-message">{{ fieldTree()().errors() }}</p>
+    }
+  `
+})
+export class SkillListComponent {
+  public readonly fieldTree = input.required<FieldTree<string[]>>();
+
+  removeItem(index: number) {
+    // 4. Update the array value via the signal
+    this.fieldTree()().value.update(items => 
+      items.filter((_, i) => i !== index)
+    );
+  }
+
+  addItem(value: string) {
+    this.fieldTree()().value.update(items => [...items, value]);
+  }
+}
+```
+
+## Step 5: Initialize the Form
+
+Finally, we initialize our form in a parent component using the `form()` function.
+
+```ts
+import { Component, signal } from '@angular/core';
+import { form } from '@angular/forms/signals';
+
+@Component({
+  imports: [SkillListComponent],
+  template: `
+    <app-skill-list [fieldTree]="form.skills" />
+  `
+})
+export class AppComponent {
+  private readonly initialModel: SuperHeroForm = {
+    skills: ['Flying', 'Telepathy']
+  };
+
+  protected readonly form = form(
+    signal(this.initialModel), 
+    SuperHeroSchema
+  );
+}
+```
+
+## Why This Scales Well
+
+* **Metadata Access**: Each item in the `FieldTree` has its own status signals (`invalid`, `touched`, `dirty`, etc.), making it easy to style individual invalid items.
+* **Direct Updates**: You update the array using standard Signal `update()` calls on `fieldTree()().value`. The form and schema react automatically.
+* **Complex Items**: While this example uses `string[]`, the same patterns apply to arrays of objects (e.g., `User[]`). You can apply nested schemas to array items just as you would for any other object property.
+
+## Which Concepts Did We Use?
+
+### Array Iteration
+The `FieldTree` of an array is iterable, allowing you to use `@for` directly on it.
+
+### Unique Validator
+A specialized validator for arrays that ensures all items are unique based on their value.
+
+### Error Destinations
+A flexible way to control where validation errors are reported in a tree structure.
+
+### Signal Updates
+The form state is updated using standard Signal APIs, ensuring a single source of truth and excellent performance.
+
+## Summary
+
+1. **Model**: Define your list as a standard array in your interface.
+2. **Schema**: Use `unique()` to enforce uniqueness across the entire list.
+3. **Template**: Iterate over the `FieldTree` to render items and access their individual validation states.
+4. **Update**: Use the `.value` signal on the array's `FieldTree` to modify the list content.
+
+By combining `FieldTree` and Signal-based updates, `ngx-signal-schema` makes even complex dynamic lists easy to manage and validate.

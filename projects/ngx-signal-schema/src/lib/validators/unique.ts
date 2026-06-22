@@ -1,37 +1,53 @@
-import {ArrayBlock, ErrorOption} from '@devzwo/ngx-signal-schema';
+import {ArrayBlock} from '../structure';
+import {ErrorOption} from './error-options';
 import {SchemaPath, SchemaPathTree, validateTree, ValidationError, ReadonlyFieldTree} from '@angular/forms/signals';
+import {isSignal, Signal} from '@angular/core';
 
 /**
- * The `unique` validator checks if all items within an {@link ArrayBlock} are unique.
- * If duplicates are found, it generates validation errors.
+ * Options for where to attach validation errors.
  *
- * This validator must be used with {@link ArrayBlock} because Angular Signal Forms
- * validators cannot be applied directly to raw arrays.
+ * @category Other
+ */
+export type ValidationDestination = 'container' | 'items' | 'both';
+
+/**
+ * The `unique` validator checks if all items within an {@link ArrayBlock} or a raw array are unique.
+ * If duplicates are found, it generates validation errors.
  *
  * ### Default behavior
  * - **Strings**: Trimmed and compared case-insensitively.
  * - **Other types**: Compared using strict equality (`===`).
  *
  * ### Error reporting
- * By default, errors are attached to both the {@link ArrayBlock} container and each individual
- * item that is part of a duplicate set. This can be configured using the `destination` option.
+ * By default, errors are attached to both the container ({@link ArrayBlock} or the array itself)
+ * and each individual item that is part of a duplicate set. This can be configured using the `destination` option.
  *
- * @typeParam S - The type of the schema path, extending {@link ArrayBlock} or being null/undefined.
+ * @typeParam S - The type of the schema path, extending {@link ArrayBlock}, `T[]`, or being null/undefined.
  * @typeParam T - The type of the elements in the array.
  *
- * @param fieldPath - The {@link SchemaPath} to the {@link ArrayBlock} containing the items to validate.
+ * @param fieldPath - The {@link SchemaPath} to the {@link ArrayBlock} or raw array containing the items to validate.
  * @param options - Configuration options for the validator.
  * @param options.error - Custom error configuration (kind and message). Defaults to `{ kind: 'unique' }`.
  * @param options.equalFn - A custom function to determine equality between two items.
  * @param options.destination - Determines where the validation errors should be attached.
- *   - `'leaf'`: (Default) The error is attached only to the individual items that are duplicated. Useful for highlighting the specific problematic fields.
- *   - `'node'`: The error is attached only to the {@link ArrayBlock} itself. Useful for showing a single summary error.
- *   - `'both'`: The error is attached to both the {@link ArrayBlock} and the duplicated items.
+ *   - `'items'`: (Default) The error is attached only to the individual items that are duplicated. Useful for highlighting the specific problematic fields.
+ *   - `'container'`: The error is attached only to the {@link ArrayBlock} or array itself. Useful for showing a single summary error.
+ *   - `'both'`: The error is attached to both the {@link ArrayBlock}/array and the duplicated items.
+ *   - `() => 'container' | 'items' | 'both'`: A function that returns the destination.
+ *   - `Signal<'container' | 'items' | 'both'>`: A signal that provides the destination.
  *
  * @example
  * ```ts
  * // Basic usage with strings (case-insensitive, trimmed by default)
  * schema<ArrayBlock<string>>(path => {
+ *   unique(path);
+ * });
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Usage with raw arrays
+ * schema<string[]>(path => {
  *   unique(path);
  * });
  * ```
@@ -50,17 +66,28 @@ import {SchemaPath, SchemaPathTree, validateTree, ValidationError, ReadonlyField
  *
  * @example
  * ```ts
- * // Attach errors only to items node (leaf nodes)
+ * // Attach errors only to items container (items containers)
  * schema<ArrayBlock<string>>(path => {
- *   unique(path, { destination: 'node' });
+ *   unique(path, { destination: 'container' });
+ * });
+ * ```
+ *
+ * @example
+ * ```ts
+ * // Using a signal for dynamic destination
+ * const dest = signal<'container' | 'items'>('items');
+ * schema<ArrayBlock<string>>(path => {
+ *   unique(path, { destination: dest });
  * });
  * ```
  *
  * @category Validators
  */
-export function unique<S extends ArrayBlock<T> | null | undefined, T>(
+export function unique<S extends ArrayBlock<T> | T[] | null | undefined, T>(
     fieldPath: SchemaPath<S>,
-    options?: ErrorOption & { equalFn?: (a: T, b: T) => boolean } & { destination?: 'node' | 'leaf' | 'both' }
+    options?: ErrorOption
+        & { equalFn?: (a: T, b: T) => boolean }
+        & { destination?: ValidationDestination | (() => ValidationDestination) | Signal<ValidationDestination> }
 ): void {
     const eqFn = options?.equalFn ?? ((a: unknown, b: unknown) => {
         if (typeof a === 'string' && typeof b === 'string') {
@@ -69,19 +96,27 @@ export function unique<S extends ArrayBlock<T> | null | undefined, T>(
         return a === b;
     });
 
-    if (!isArrayBlockPath<T>(fieldPath)) {
+    if (!fieldPath || (typeof fieldPath !== 'function' && !isArrayBlockPath(fieldPath))) {
         return;
     }
 
     validateTree(fieldPath, (ctx) => {
-        // return without error if there is no value to validate
         const value = ctx.value();
-        if (!value || !value.items) {
+        if (!value) {
             return null;
         }
 
-        // collect duplicate indices
-        const items = value.items;
+        let items: T[];
+        let isActuallyBlock = false;
+
+        if (Array.isArray(value)) {
+            items = value;
+        } else if (value && typeof value === 'object' && Array.isArray((value as ArrayBlock<T>).items)) {
+            items = (value as ArrayBlock<T>).items;
+            isActuallyBlock = true;
+        } else {
+            return null;
+        }
 
         const duplicateIndices = new Set<number>();
         for (let i = 0; i < items.length; i++) {
@@ -100,23 +135,28 @@ export function unique<S extends ArrayBlock<T> | null | undefined, T>(
 
         const kind = options?.error?.kind ?? 'unique';
         const message = options?.error?.message;
-        const destination = options?.destination ?? 'leaf';
+
+        const destination = (isSignal(options?.destination) || (typeof options?.destination === 'function'))
+            ? options.destination()
+            : options?.destination ?? 'items';
 
         const errors: (ValidationError & { fieldTree?: ReadonlyFieldTree<unknown> })[] = [];
 
         // Add error to each duplicate item if destination is 'leaf' or 'both'
-        if (destination === 'leaf' || destination === 'both') {
+        if (destination === 'items' || destination === 'both') {
             for (const index of duplicateIndices) {
+                // eslint-disable-next-line
+                const itemPath = isActuallyBlock ? (fieldPath as any).items[index] : (fieldPath as any)[index];
                 errors.push({
                     kind,
                     message,
-                    fieldTree: ctx.fieldTreeOf(fieldPath.items[index])
+                    fieldTree: ctx.fieldTreeOf(itemPath)
                 });
             }
         }
 
         // Add error to the ArrayBlock itself if destination is 'node' or 'both'
-        if (destination === 'node' || destination === 'both') {
+        if (destination === 'container' || destination === 'both') {
             errors.push({
                 kind,
                 message,
@@ -131,3 +171,4 @@ export function unique<S extends ArrayBlock<T> | null | undefined, T>(
 function isArrayBlockPath<T>(path: unknown): path is SchemaPathTree<ArrayBlock<T>> & { items: Record<number, SchemaPathTree<T>> } {
     return !!path && typeof path === 'object' && (path as { items?: unknown }).items !== undefined;
 }
+

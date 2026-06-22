@@ -1,4 +1,5 @@
-import {SchemaRule} from '@devzwo/ngx-signal-schema';
+import {SchemaRule} from './schema-rule';
+
 
 /**
  * Combines multiple schema rules with AND logic.
@@ -14,6 +15,8 @@ import {SchemaRule} from '@devzwo/ngx-signal-schema';
  *       AllowSchema, // applyes the Allow Schema, when the condition above is true
  *       inactive // hides the complete fieldPath and subpath
  *     )
+ *
+ * @category Conditions
  */
 export function and(...rules: SchemaRule[]): SchemaRule {
     return (ctx) => rules.every(rule => rule(ctx));

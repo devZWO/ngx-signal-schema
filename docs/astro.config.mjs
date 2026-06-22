@@ -44,7 +44,8 @@ export default defineConfig({
                     label: 'Recipes',
                     items: [
                         // Each item here is one entry in the navigation menu.
-                        {label: 'Contact Form', slug: 'recipes/contact-form'}
+                        {label: 'Contact Form', slug: 'recipes/contact-form'},
+                        {label: 'Listings Form', slug: 'recipes/list-recipe'}
                     ],
                 },
                 {

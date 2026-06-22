@@ -10,6 +10,7 @@ import {ValidationError} from '@angular/forms/signals';
  * This type is intended for scenarios where detailed error reporting
  * and categorization are required.
  *
+ * @category Other
  */
 export interface ErrorOption {
 
@@ -32,6 +33,7 @@ export interface ErrorOption {
  * This type is used to add the options to the error,
  * so you can use the option configuration in the error message.
  *
+ * @category Other
  */
 export interface ValidationErrorWith<T> extends ValidationError {
     options: T;

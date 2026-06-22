@@ -7,7 +7,7 @@ title: "integer"
 
 > **integer**(`path`, `options`): `void`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:52
+Defined in: projects/ngx-signal-schema/src/lib/validators/integer.ts:53
 
 Schema helper for integer numbers stored as number | null.
 

@@ -25,8 +25,8 @@ Those concerns should be handled by separate validators.
 
 The validator returns two separated error-kinds
 - decimal.isNumber: if the value is not a (finite) number
-- decimal.intCount: if the number of digits is not within the allowed range
-- decimal.fractCount: if the number of digits is not within the allowed range
+- decimal.maxIntegerDigits: if the number of digits is not within the allowed range
+- decimal.maxFractionDigits: if the number of digits is not within the allowed range
 
 ## Parameters
 

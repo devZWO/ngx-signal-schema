@@ -17,6 +17,8 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
                 <a routerLink="/hierarchic-model-example" routerLinkActive="text-orange-500 font-bold" class="text-cyan-700 hover:text-cyan-900 transition-colors">Hierarchic Model Example</a>
 
                 <a routerLink="/array-example" routerLinkActive="text-orange-500 font-bold" class="text-cyan-700 hover:text-cyan-900 transition-colors">Array Example</a>
+
+                <a routerLink="/search-at-least-one-criteria-example" routerLinkActive="text-orange-500 font-bold" class="text-cyan-700 hover:text-cyan-900 transition-colors">AtLeastOne Validator</a>
             </nav>
 
             <router-outlet/>

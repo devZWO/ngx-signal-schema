@@ -64,7 +64,7 @@ describe('integer validator', () => {
 
   it('should be invalid if integer is too long', () => {
     const f = createIntegerForm(1234, { maxDigits: 3 });
-    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'integer.digitCount' }]);
+    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'integer.maxDigits' }]);
   });
 
   it('should be invalid if not an integer (decimal number)', () => {
@@ -82,7 +82,7 @@ describe('integer validator', () => {
     expect(f().errorSummary()).toEqual([]);
 
     const fInvalid = createIntegerForm(-1234, { maxDigits: 3 });
-    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'integer.digitCount' }]);
+    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'integer.maxDigits' }]);
   });
 
   it('should handle scientific notation for integers correctly', () => {
@@ -91,14 +91,14 @@ describe('integer validator', () => {
     expect(f().errorSummary()).toEqual([]);
 
     const fInvalid = createIntegerForm(1.2e3, { maxDigits: 3 });
-    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'integer.digitCount' }]);
+    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'integer.maxDigits' }]);
   });
 
   it('should use custom error message if provided', () => {
     const customMsg = 'Invalid integer';
     const f = createIntegerForm(1234, { maxDigits: 3, message: customMsg });
 
-    expect(f().errorSummary().map(e => ({ kind: e.kind, message: e.message }))).toEqual([{ kind: 'integer.digitCount', message: customMsg }]);
+    expect(f().errorSummary().map(e => ({ kind: e.kind, message: e.message }))).toEqual([{ kind: 'integer.maxDigits', message: customMsg }]);
   });
 
   it('should be valid for empty strings', () => {

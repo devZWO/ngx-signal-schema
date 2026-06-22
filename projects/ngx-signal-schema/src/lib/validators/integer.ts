@@ -40,7 +40,7 @@ export interface IntegerOptions extends ErrorOption {
  *
  * The validator returns two separated error-kinds:
  * - integer.isInteger: if the value is not a (finite) integer
- * - integer.digitCount: if the number of digits is not within the allowed range
+ * - integer.maxDigits: if the number of digits is not within the allowed range
  *
  * @example
  * integer(path.count, { maxDigits: 3 });
@@ -86,7 +86,7 @@ export function integer(
 
                 if (integerPart.length > maxDigits) {
                     return {
-                        kind: options.error?.kind ?? 'integer.digitCount',
+                        kind: options.error?.kind ?? 'integer.maxDigits',
                         message: options.error?.message ?? message,
                         options,
                     };

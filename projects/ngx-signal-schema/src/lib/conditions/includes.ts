@@ -1,5 +1,5 @@
-import {SchemaRule} from '@devzwo/ngx-signal-schema';
 import {SchemaPath} from '@angular/forms/signals';
+import {SchemaRule} from './schema-rule';
 
 /**
  * Checks if a list field contains a specific value.

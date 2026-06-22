@@ -1,4 +1,5 @@
-import {SchemaRule} from '@devzwo/ngx-signal-schema';
+import {SchemaRule} from './schema-rule';
+
 
 /**
  * Combines multiple schema rules with AND logic.

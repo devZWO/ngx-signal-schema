@@ -24,7 +24,7 @@ Those concerns should be handled by separate validators.
 
 The validator returns two separated error-kinds:
 - integer.isInteger: if the value is not a (finite) integer
-- integer.digitCount: if the number of digits is not within the allowed range
+- integer.maxDigits: if the number of digits is not within the allowed range
 
 ## Parameters
 

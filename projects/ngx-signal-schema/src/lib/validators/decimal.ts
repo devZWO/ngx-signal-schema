@@ -50,8 +50,8 @@ export interface DecimalOptions extends ErrorOption {
  *
  * The validator returns two separated error-kinds
  * - decimal.isNumber: if the value is not a (finite) number
- * - decimal.intCount: if the number of digits is not within the allowed range
- * - decimal.fractCount: if the number of digits is not within the allowed range
+ * - decimal.maxIntegerDigits: if the number of digits is not within the allowed range
+ * - decimal.maxFractionDigits: if the number of digits is not within the allowed range
  *
  * @example
  * decimal(path.amount, { maxIntegerDigits: 5, maxFractionDigits: 2 });
@@ -95,7 +95,7 @@ export function decimal(
 
                 if (integerDigits > maxIntegerDigits) {
                     return {
-                        kind: options.error?.kind ?? 'decimal.intCount',
+                        kind: options.error?.kind ?? 'decimal.maxIntegerDigits',
                         message: options.error?.message ?? message,
                         options: options
                     };
@@ -103,7 +103,7 @@ export function decimal(
 
                 if (fractionDigits > maxFractionDigits) {
                     return {
-                        kind: options.error?.kind ?? 'decimal.fractCount',
+                        kind: options.error?.kind ?? 'decimal.maxFractionDigits',
                         message: options.error?.message ?? message,
                         options: options
                     };

@@ -55,12 +55,12 @@ describe('decimal validator', () => {
 
   it('should be invalid if integer part in string is too long', () => {
     const f = createDecimalForm("1234,56", { maxIntegerDigits: 3, maxFractionDigits: 2 });
-    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.intCount' }]);
+    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.maxIntegerDigits' }]);
   });
 
   it('should be invalid if fractional part in string is too long', () => {
     const f = createDecimalForm("123,456", { maxIntegerDigits: 3, maxFractionDigits: 2 });
-    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.fractCount' }]);
+    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.maxFractionDigits' }]);
   });
 
   it('should be valid for integers within range', () => {
@@ -75,12 +75,12 @@ describe('decimal validator', () => {
 
   it('should be invalid if integer part is too long', () => {
     const f = createDecimalForm(1234.56, { maxIntegerDigits: 3, maxFractionDigits: 2 });
-    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.intCount' }]);
+    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.maxIntegerDigits' }]);
   });
 
   it('should be invalid if fractional part is too long', () => {
     const f = createDecimalForm(123.456, { maxIntegerDigits: 3, maxFractionDigits: 2 });
-    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.fractCount' }]);
+    expect(f().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.maxFractionDigits' }]);
   });
 
   it('should be invalid if not a finite number (NaN)', () => {
@@ -98,7 +98,7 @@ describe('decimal validator', () => {
     expect(f().errorSummary()).toEqual([]);
 
     const fInvalid = createDecimalForm(-1234.5, { maxIntegerDigits: 3, maxFractionDigits: 2 });
-    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.intCount' }]);
+    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.maxIntegerDigits' }]);
   });
 
   it('should handle scientific notation correctly (small numbers)', () => {
@@ -107,7 +107,7 @@ describe('decimal validator', () => {
     expect(f().errorSummary()).toEqual([]);
 
     const fInvalid = createDecimalForm(1e-7, { maxIntegerDigits: 1, maxFractionDigits: 6 });
-    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.fractCount' }]);
+    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.maxFractionDigits' }]);
   });
 
   it('should handle scientific notation correctly (large numbers)', () => {
@@ -116,14 +116,14 @@ describe('decimal validator', () => {
     expect(f().errorSummary()).toEqual([]);
 
     const fInvalid = createDecimalForm(1.2e3, { maxIntegerDigits: 3, maxFractionDigits: 0 });
-    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.intCount' }]);
+    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.maxIntegerDigits' }]);
   });
 
   it('should use custom error message if provided', () => {
     const customMsg = 'Invalid format';
     const f = createDecimalForm(1234, { maxIntegerDigits: 3, maxFractionDigits: 2, message: customMsg });
 
-    expect(f().errorSummary().map(e => ({ kind: e.kind, message: e.message }))).toEqual([{ kind: 'decimal.intCount', message: customMsg }]);
+    expect(f().errorSummary().map(e => ({ kind: e.kind, message: e.message }))).toEqual([{ kind: 'decimal.maxIntegerDigits', message: customMsg }]);
   });
 
   it('should be valid for empty strings', () => {
@@ -148,7 +148,7 @@ describe('decimal validator', () => {
     expect(f().errorSummary()).toEqual([]);
 
     const fInvalid = createDecimalForm(1e21, { maxIntegerDigits: 21, maxFractionDigits: 0 });
-    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.intCount' }]);
+    expect(fInvalid().errorSummary().map(e => ({ kind: e.kind }))).toEqual([{ kind: 'decimal.maxIntegerDigits' }]);
   });
 
   it('should support different locales', () => {

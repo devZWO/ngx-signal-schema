@@ -7,7 +7,7 @@ title: "and"
 
 > **and**(...`rules`): [`SchemaRule`](/ngx-signal-schema/api/other/schemarule/)
 
-Defined in: projects/ngx-signal-schema/src/lib/conditions/and.ts:20
+Defined in: projects/ngx-signal-schema/src/lib/conditions/and.ts:21
 
 Combines multiple schema rules with AND logic.
 

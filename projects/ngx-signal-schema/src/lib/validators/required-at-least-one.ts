@@ -179,7 +179,7 @@ export function requiredAtLeastOne<T extends object>(
     const isFilled = options?.isFilled ?? ((value: unknown) => value != null && value !== '');
 
 
-    // Use provided message or fall back to a generic default
+    // Use provided message or hide it when empty
     const message = options?.error?.message
 
     const kind = options?.error?.kind ?? 'requiredAtLeastOne';

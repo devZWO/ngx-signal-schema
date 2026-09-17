@@ -4,6 +4,7 @@ import {unique, ValidationDestination} from '@devzwo/ngx-signal-schema';
 import {ChipListField} from '../../shared/components/chip-list-field';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
+import {MonoFont} from './required-limitations-example/mono-font/mono-font';
 
 export interface ArrayFormModel {
     mySuperHeroSkills: string[];
@@ -15,11 +16,17 @@ export interface ArrayFormModel {
     imports: [
         ChipListField,
         MatCheckboxModule,
-        MatRadioModule
+        MatRadioModule,
+        MonoFont
     ],
     template: `
         <section class="flex flex-col gap-6">
             <h1 class="text-3xl font-bold text-cyan-700">Array Validation (unique item)</h1>
+
+            <p class="text-gray-700">
+                This example demonstrates array validation, specifically how to ensure that items in a list are unique.
+                It shows how to direct validation errors to the array itself, its individual items, or both, and how to dynamically control the state of the array (<mono>hidden</mono>, <mono>readonly</mono>, <mono>disabled</mono>).
+            </p>
 
             <div class="flex flex-col gap-4 p-4 border rounded-lg bg-gray-50 shadow-sm">
                 <h2 class="text-lg font-semibold text-cyan-800">Validation Configuration</h2>

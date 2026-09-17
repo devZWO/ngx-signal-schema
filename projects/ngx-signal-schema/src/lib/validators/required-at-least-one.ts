@@ -134,8 +134,8 @@ export type RequiredAtLeastOneSelector<T extends object> =
  * @example
  * **Excluding fields:**
  * ```ts
- * // Validates that at least one field is filled, but ignores the 'type' discriminator.
- * // which probably only decides if eg. a contact form should validate the
+ * // Validates that at least one field is filled but ignores the 'type' discriminator.
+ * // which probably only decides if e.g. a contact form should validate the
  * // `naturalPerson.firstname` field or the `legalPerson.companyName` field.
  * requiredAtLeastOne(path, { exclude: [p => p.type] });
  * ```
@@ -217,7 +217,6 @@ export function requiredAtLeastOne<T extends object>(
         const collected = selectedRoots.map((selectedRoot) =>
             collectLeafPaths(
                 selectedRoot,
-                ctx.valueOf(selectedRoot),
                 recursive,
                 ctx,
                 false,
@@ -284,17 +283,19 @@ export function requiredAtLeastOne<T extends object>(
      */
     function collectLeafPaths(
         path: SchemaPathTree<unknown>,
-        value: unknown,
         recursive: boolean,
         ctx: Parameters<Parameters<typeof validateTree>[1]>[0],
         parentInactive = false,
         excludedPaths: SchemaPathTree<unknown>[] = [],
     ): { active: SchemaPathTree<unknown>[]; total: SchemaPathTree<unknown>[] } {
+
         if (excludedPaths.includes(path)) {
             return { active: [], total: [] };
         }
 
+        const value = ctx.valueOf(path);
         const state = ctx.stateOf(path);
+
         const isCurrentlyInactive = parentInactive || state.disabled() || state.hidden();
 
         // Primitive values already represent a leaf field.
@@ -315,7 +316,7 @@ export function requiredAtLeastOne<T extends object>(
             if (isTraversableObject(childValue)) {
                 // Nested objects only participate recursively when enabled.
                 if (recursive) {
-                    const childResult = collectLeafPaths(childPath, childValue, true, ctx, isCurrentlyInactive, excludedPaths);
+                    const childResult = collectLeafPaths(childPath, true, ctx, isCurrentlyInactive, excludedPaths);
                     active.push(...childResult.active);
                     total.push(...childResult.total);
                 }

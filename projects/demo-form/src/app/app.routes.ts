@@ -18,6 +18,14 @@ export const routes: Routes = [
         loadComponent: () => import('./examples/require-on-of-example/search-at-least-one-criteria-example').then(m => m.SearchAtLeastOneCriteriaExampleComponent)
     },
     {
+        path: 'required-limitations-example',
+        loadComponent: () => import('./examples/required-limitations-example/required-limitations-field').then(m => m.RequiredExtendedExample)
+    },
+    {
+        path: 'required-limitations-example-simplified',
+        loadComponent: () => import('./examples/required-limitations-example/required-limitations-field-simplified').then(m => m.SimplifiedRequiredExtendedExample)
+    },
+    {
         path: '',
         redirectTo: 'flat-model-example',
         pathMatch: 'full'

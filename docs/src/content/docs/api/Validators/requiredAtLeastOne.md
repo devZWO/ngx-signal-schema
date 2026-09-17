@@ -9,7 +9,7 @@ title: "requiredAtLeastOne"
 
 > **requiredAtLeastOne**\<`T`\>(`path`, `selectors`, `options?`): `void`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:150
+Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:144
 
 Adds a cross-field validation rule to the given schema path that requires
 at least one of multiple fields to be filled.
@@ -41,7 +41,7 @@ The Error kind is `requiredAtLeastOne`.
 
 `T` *extends* `object`
 
-The object type represented by the schema path on which the validator is registered.
+The object type is represented by the schema path on which the validator is registered.
 
 ### Parameters
 
@@ -98,8 +98,8 @@ requiredAtLeastOne(path, [p => p.address, p => p.email], { recursive: true });
 
 **Excluding fields:**
 ```ts
-// Validates that at least one field is filled, but ignores the 'type' discriminator.
-// which probably only decides if eg. a contact form should validate the
+// Validates that at least one field is filled but ignores the 'type' discriminator.
+// which probably only decides if e.g. a contact form should validate the
 // `naturalPerson.firstname` field or the `legalPerson.companyName` field.
 requiredAtLeastOne(path, { exclude: [p => p.type] });
 ```
@@ -114,7 +114,7 @@ conditions, especially when more than two fields are involved.
 
 > **requiredAtLeastOne**\<`T`\>(`path`, `options?`): `void`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:160
+Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:154
 
 Adds a cross-field validation rule to the given schema path that requires
 at least one of multiple fields to be filled.
@@ -146,7 +146,7 @@ The Error kind is `requiredAtLeastOne`.
 
 `T` *extends* `object`
 
-The object type represented by the schema path on which the validator is registered.
+The object type is represented by the schema path on which the validator is registered.
 
 ### Parameters
 
@@ -195,8 +195,8 @@ requiredAtLeastOne(path, [p => p.address, p => p.email], { recursive: true });
 
 **Excluding fields:**
 ```ts
-// Validates that at least one field is filled, but ignores the 'type' discriminator.
-// which probably only decides if eg. a contact form should validate the
+// Validates that at least one field is filled but ignores the 'type' discriminator.
+// which probably only decides if e.g. a contact form should validate the
 // `naturalPerson.firstname` field or the `legalPerson.companyName` field.
 requiredAtLeastOne(path, { exclude: [p => p.type] });
 ```

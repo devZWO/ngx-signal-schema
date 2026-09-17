@@ -121,8 +121,8 @@ applyIf(
   PrivatePersonSchema,
 
   // This is the short version of:
-  // (path) => disabledHidden(path)
-  disabledHidden
+  // (path) => inactive(path)
+  inactive
 );
 ```
 
@@ -136,8 +136,8 @@ applyIf(
   CompanySchema,
 
   // This is the short version of:
-  // (path) => disabledHidden(path)
-  disabledHidden
+  // (path) => inactive(path)
+  inactive
 );
 ```
 
@@ -168,7 +168,7 @@ applyIf(
   path.company,
   valueEquals(path.customerType, 'company'),
   CompanySchema,
-  (path) => disabledHidden(path)
+  (path) => inactive(path)
 );
 ```
 
@@ -179,7 +179,7 @@ The complete behavior can be understood from a single statement.
 VAT numbers are only relevant for DACH countries.
 
 ```ts
-disabledHidden(
+inactive(
   path.company.vatNumber,
   not(
     valueIn(path.country, [
@@ -208,17 +208,17 @@ export const ContactSchema = compose(
       path.privatePerson,
       valueEquals(path.customerType, 'private'),
       PrivatePersonSchema,
-      (path) => disabledHidden(path)
+      (path) => inactive(path)
     );
 
     applyIf(
       path.company,
       valueEquals(path.customerType, 'company'),
       CompanySchema,
-      (path) => disabledHidden(path)
+      (path) => inactive(path)
     );
 
-    disabledHidden(
+    inactive(
       path.company.vatNumber,
       not(
         valueIn(path.country, [

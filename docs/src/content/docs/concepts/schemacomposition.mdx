@@ -17,7 +17,7 @@ export const ContactSchema = schema<ContactForm>((path) => {
   requiredTrimmed(path.email);
   requiredTrimmed(path.companyName);
 
-  disabledHidden(
+  inactive(
     path.companyName,
     valueEquals(path.personType, 'private')
   );
@@ -82,7 +82,7 @@ You do not always need to create a separate schema file.
 export const ContactSchema = append(
   BaseContactSchema,
   (path) => {
-    disabledHidden(
+    inactive(
       path.companyName,
       valueEquals(path.personType, 'private')
     );

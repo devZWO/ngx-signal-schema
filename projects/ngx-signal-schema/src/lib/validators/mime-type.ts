@@ -23,13 +23,7 @@ import {ErrorOption} from './error-options';
 export function mimeType<T extends string>(
   fieldPath: SchemaPath<T>,
   mimeType: string | readonly string[] | (() => string | readonly string[]),
-  config?: {
-    /**
-     * Optional custom validation error message.
-     * @deprecated Use `error.message` from `ErrorOption` instead.
-     */
-    message?: string
-  } & ErrorOption
+  config?: ErrorOption
 ): void {
   const patternArg = typeof mimeType === 'function'
     ? () => mimeTypePattern(mimeType())
@@ -38,7 +32,7 @@ export function mimeType<T extends string>(
   pattern(fieldPath as SchemaPath<string>, patternArg, {
     error: {
         kind: config?.error?.kind ?? 'mimeType',
-        message: config?.error?.message ?? config?.message
+        message: config?.error?.message
     }
   })
 }
@@ -55,10 +49,9 @@ export function mimeType<T extends string>(
  * @param mimeTypes - The allowed MIME type(s) or wildcard patterns.
  * @returns A RegExp object for validating MIME types.
  *
- * @deprecated will be become internal in a future version. Use `mimeTypePattern` directly.
- * @category deprecated
+ * @internal
  */
-export function mimeTypePattern(
+function mimeTypePattern(
   mimeTypes: string | readonly string[],
 ): RegExp {
   return oneOfPattern(mimeTypes, {

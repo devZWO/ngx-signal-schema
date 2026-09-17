@@ -1,5 +1,5 @@
 # ngx-signal-schema
-[![Angular](https://img.shields.io/badge/Angular-21+-DD0031?style=flat-square&logo=angular)](https://angular.dev)
+[![Angular](https://img.shields.io/badge/Angular-22+-DD0031?style=flat-square&logo=angular)](https://angular.dev)
 [![CI](https://img.shields.io/github/actions/workflow/status/devZWO/ngx-signal-schema/main.yml?style=flat-square)](https://github.com/devZWO/ngx-signal-schema/actions/workflows/main.yml)
 [![codecov](https://img.shields.io/codecov/c/github/devzwo/ngx-signal-schema?style=flat-square)](https://codecov.io/github/devZWO/ngx-signal-schema)
 [![NPM Version](https://img.shields.io/npm/v/@devzwo/ngx-signal-schema?style=flat-square)](https://npmjs.org/package/@devzwo/ngx-signal-schema)
@@ -9,7 +9,7 @@
 > Composable schema validation operators for
 [Angular Signal Forms](https://angular.dev/essentials/signal-forms).
 >
-> Built for Angular v21+.
+> Built for Angular v22+.
 
 # ngx-signal-schema Workspace
 

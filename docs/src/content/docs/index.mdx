@@ -29,7 +29,7 @@ const ContactSchema = append(
   BaseSchema,
 
   (path) => {
-    disabledHidden(
+    inactive(
       path.companyName,
       valueEquals(path.personType, 'private')
     );
@@ -65,8 +65,8 @@ The library does not replace Angular Signal Forms. It builds on top of them and 
 
     <Card title="Stable Form Structures" icon="setting">
         <a href="./concepts/stableformstructures">
-            Model optional objects and collections with predictable form trees using structure
-            wrappers such as `OptionalBlock` and `ArrayBlock`.
+            Model optional objects and sections with predictable form trees using structure
+            wrappers such as `OptionalBlock`.
         </a>
     </Card>
 </CardGrid>
@@ -83,7 +83,7 @@ The library does not replace Angular Signal Forms. It builds on top of them and 
     </Card>
 
     <Card title="Keep UI state and validation aligned" icon="setting">
-        Utilities like `disabledHidden` help ensure irrelevant fields are hidden, disabled and excluded from validation.
+        Utilities like `inactive` help ensure irrelevant fields are hidden, disabled and excluded from validation.
     </Card>
 
     <Card title="Keep the form tree stable" icon="document">

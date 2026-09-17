@@ -1,4 +1,3 @@
-import {ArrayBlock} from '../structure';
 import {ErrorOption} from './error-options';
 import {SchemaPath, SchemaPathTree, validateTree, ValidationError, ReadonlyFieldTree} from '@angular/forms/signals';
 import {isSignal, Signal} from '@angular/core';
@@ -11,7 +10,7 @@ import {isSignal, Signal} from '@angular/core';
 export type ValidationDestination = 'container' | 'items' | 'both';
 
 /**
- * The `unique` validator checks if all items within an {@link ArrayBlock} or a raw array are unique.
+ * The `unique` validator checks if all items within an array are unique.
  * If duplicates are found, it generates validation errors.
  *
  * ### Default behavior
@@ -19,34 +18,26 @@ export type ValidationDestination = 'container' | 'items' | 'both';
  * - **Other types**: Compared using strict equality (`===`).
  *
  * ### Error reporting
- * By default, errors are attached to both the container ({@link ArrayBlock} or the array itself)
- * and each individual item that is part of a duplicate set. This can be configured using the `destination` option.
+ * By default, errors are attached to each individual item that is part of a duplicate set.
+ * This can be configured using the `destination` option.
  *
- * @typeParam S - The type of the schema path, extending {@link ArrayBlock}, `T[]`, or being null/undefined.
+ * @typeParam S - The type of the schema path, extending `T[]`, or being null/undefined.
  * @typeParam T - The type of the elements in the array.
  *
- * @param fieldPath - The {@link SchemaPath} to the {@link ArrayBlock} or raw array containing the items to validate.
+ * @param fieldPath - The {@link SchemaPath} to the raw array containing the items to validate.
  * @param options - Configuration options for the validator.
  * @param options.error - Custom error configuration (kind and message). Defaults to `{ kind: 'unique' }`.
  * @param options.equalFn - A custom function to determine equality between two items.
  * @param options.destination - Determines where the validation errors should be attached.
  *   - `'items'`: (Default) The error is attached only to the individual items that are duplicated. Useful for highlighting the specific problematic fields.
- *   - `'container'`: The error is attached only to the {@link ArrayBlock} or array itself. Useful for showing a single summary error.
- *   - `'both'`: The error is attached to both the {@link ArrayBlock}/array and the duplicated items.
+ *   - `'container'`: The error is attached only to the array itself. Useful for showing a single summary error.
+ *   - `'both'`: The error is attached to both the array and the duplicated items.
  *   - `() => 'container' | 'items' | 'both'`: A function that returns the destination.
  *   - `Signal<'container' | 'items' | 'both'>`: A signal that provides the destination.
  *
  * @example
  * ```ts
  * // Basic usage with strings (case-insensitive, trimmed by default)
- * schema<ArrayBlock<string>>(path => {
- *   unique(path);
- * });
- * ```
- *
- * @example
- * ```ts
- * // Usage with raw arrays
  * schema<string[]>(path => {
  *   unique(path);
  * });
@@ -56,7 +47,7 @@ export type ValidationDestination = 'container' | 'items' | 'both';
  * ```ts
  * // Custom equality function and error message
  * interface User { id: number; name: string; }
- * schema<ArrayBlock<User>>(path => {
+ * schema<User[]>(path => {
  *   unique(path, {
  *     equalFn: (a, b) => a.id === b.id,
  *     error: { message: 'User IDs must be unique' }
@@ -66,8 +57,8 @@ export type ValidationDestination = 'container' | 'items' | 'both';
  *
  * @example
  * ```ts
- * // Attach errors only to items container (items containers)
- * schema<ArrayBlock<string>>(path => {
+ * // Attach errors only to the array container
+ * schema<string[]>(path => {
  *   unique(path, { destination: 'container' });
  * });
  * ```
@@ -76,14 +67,14 @@ export type ValidationDestination = 'container' | 'items' | 'both';
  * ```ts
  * // Using a signal for dynamic destination
  * const dest = signal<'container' | 'items'>('items');
- * schema<ArrayBlock<string>>(path => {
+ * schema<string[]>(path => {
  *   unique(path, { destination: dest });
  * });
  * ```
  *
  * @category Validators
  */
-export function unique<S extends ArrayBlock<T> | T[] | null | undefined, T>(
+export function unique<S extends T[] | null | undefined, T>(
     fieldPath: SchemaPath<S>,
     options?: ErrorOption
         & { equalFn?: (a: T, b: T) => boolean }
@@ -96,28 +87,17 @@ export function unique<S extends ArrayBlock<T> | T[] | null | undefined, T>(
         return a === b;
     });
 
-    if (!fieldPath || (typeof fieldPath !== 'function' && !isArrayBlockPath(fieldPath))) {
+    if (!fieldPath) {
         return;
     }
 
     validateTree(fieldPath, (ctx) => {
         const value = ctx.value();
-        if (!value) {
+        if (!value || !Array.isArray(value)) {
             return null;
         }
 
-        let items: T[];
-        let isActuallyBlock = false;
-
-        if (Array.isArray(value)) {
-            items = value;
-        } else if (value && typeof value === 'object' && Array.isArray((value as ArrayBlock<T>).items)) {
-            items = (value as ArrayBlock<T>).items;
-            isActuallyBlock = true;
-        } else {
-            return null;
-        }
-
+        const items: T[] = value;
         const duplicateIndices = new Set<number>();
         for (let i = 0; i < items.length; i++) {
             for (let j = i + 1; j < items.length; j++) {
@@ -142,11 +122,11 @@ export function unique<S extends ArrayBlock<T> | T[] | null | undefined, T>(
 
         const errors: (ValidationError & { fieldTree?: ReadonlyFieldTree<unknown> })[] = [];
 
-        // Add error to each duplicate item if destination is 'leaf' or 'both'
+        // Add error to each duplicate item if destination is 'items' or 'both'
         if (destination === 'items' || destination === 'both') {
             for (const index of duplicateIndices) {
                 // eslint-disable-next-line
-                const itemPath = isActuallyBlock ? (fieldPath as any).items[index] : (fieldPath as any)[index];
+                const itemPath = (fieldPath as any)[index];
                 errors.push({
                     kind,
                     message,
@@ -155,20 +135,16 @@ export function unique<S extends ArrayBlock<T> | T[] | null | undefined, T>(
             }
         }
 
-        // Add error to the ArrayBlock itself if destination is 'node' or 'both'
+        // Add error to the array itself if destination is 'container' or 'both'
         if (destination === 'container' || destination === 'both') {
             errors.push({
                 kind,
                 message,
-                fieldTree: ctx.fieldTreeOf(fieldPath)
+                fieldTree: ctx.fieldTreeOf(fieldPath as unknown as SchemaPathTree<unknown>)
             });
         }
 
         return errors;
     });
-}
-
-function isArrayBlockPath<T>(path: unknown): path is SchemaPathTree<ArrayBlock<T>> & { items: Record<number, SchemaPathTree<T>> } {
-    return !!path && typeof path === 'object' && (path as { items?: unknown }).items !== undefined;
 }
 

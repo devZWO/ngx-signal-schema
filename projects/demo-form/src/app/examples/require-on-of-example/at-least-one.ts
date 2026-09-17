@@ -19,8 +19,8 @@ import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
  * - ignores currently disabled or hidden fields
  * - treats values as filled when they are neither `null` nor an empty string
  * - attaches the validation error to exactly one explicitly selected target field
- * - uses the fixed error kind `requiredAtLeastOne`
- * - uses the fixed message `At least one field is required`
+ * - uses the default error kind `requiredAtLeastOne` (or custom kind from `options.error.kind`)
+ * - uses the default message `At least one field is required` (or custom message from `options.error.message`)
  *
  * If all selected fields are currently disabled or hidden, the validation passes.
  * Otherwise, the validator returns an error when none of the active selected
@@ -44,6 +44,9 @@ import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
  * Selector for the field that should receive the validation error if none of
  * the active selected fields is filled.
  *
+ * @param options
+ * Optional error options to customize the error `kind` and `message`.
+ *
  * @example
  * ```ts
  * atLeastOne(
@@ -54,6 +57,12 @@ import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
  *     p => p.mobile,
  *   ],
  *   p => p.email,
+ *   {
+ *     error: {
+ *       kind: 'customKind',
+ *       message: 'Custom error message',
+ *     },
+ *   },
  * );
  * ```
  *
@@ -79,7 +88,7 @@ export function atLeastOne<
     const isFilled = ((value: unknown) => value != null && value !== '');
 
 
-    // Use provided message or fall back to a generic default
+    // Use default for simplified example
     const message = 'At least one field is required';
     const kind = 'requiredAtLeastOne';
 

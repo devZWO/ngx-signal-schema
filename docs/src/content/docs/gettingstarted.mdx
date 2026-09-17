@@ -7,7 +7,7 @@ This guide shows how to install `@devzwo/ngx-signal-schema` and create your firs
 
 ## Prerequisites
 
-`ngx-signal-schema` is built for Angular v21 and Angular Signal Forms.
+`ngx-signal-schema` is built for Angular v22 and Angular Signal Forms.
 
 ## Installation
 
@@ -76,7 +76,7 @@ export const ExtendedSchema = append(
 
 ```ts
 import {
-  disabledHidden,
+  inactive,
   requiredTrimmed,
   valueEquals,
 } from '@devzwo/ngx-signal-schema';
@@ -90,7 +90,7 @@ interface ContactForm {
 export const ContactSchema = schema<ContactForm>((path) => {
   requiredTrimmed(path.name);
 
-  disabledHidden(
+  inactive(
     path.companyName,
     valueEquals(path.personType, 'private')
   );

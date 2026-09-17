@@ -40,7 +40,7 @@ If omitted, the error is attached to all participating fields.
 
 > `optional` **exclude?**: (`p`) => `SchemaPath`\<`unknown`\>[]
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:40
+Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:34
 
 Optional list of fields to exclude from the "at least one" check.
 
@@ -79,29 +79,15 @@ By default, a value is considered filled if it is neither `null` nor an empty st
 
 ***
 
-### ~~message?~~
-
-> `optional` **message?**: `string`
-
-Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:23
-
-Optional custom validation error message.
-
-:::caution[Deprecated]
-Use `error.message` from `ErrorOption` instead.
-:::
-
-***
-
 ### recursive?
 
 > `optional` **recursive?**: `boolean`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:33
+Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:27
 
 Optional flag to enable recursive validation of nested objects.
 
 If enabled, the validation will traverse nested objects and validate their properties as well.
-Otherwise, nested objects themselves are ignored and only direct leaf fields participate.
+Otherwise, nested objects themselves are ignored, and only direct leaf fields participate.
 
 Defaults to `true` if no selectors are provided, and `false` otherwise.

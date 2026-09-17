@@ -197,7 +197,7 @@ function mapToOptions<T, K = boolean>(
  *
  * @example
  * schema<MyModel>((fieldPath) => {
- *   applyOptional(fieldPath.someOptionalBlock, SomeSchema, disabledHidden);
+ *   applyOptional(fieldPath.someOptionalBlock, SomeSchema, inactive);
  * });
  *
  * @category Structure
@@ -293,7 +293,7 @@ function applyOptionalImpl<T, K = boolean>(
  * @returns a reusable schema for an `OptionalBlock<T>`.
  *
  * @example
- * form(myOptionalBlockSignal, optionalBlock(SomeSchema, disabledHidden));
+ * form(myOptionalBlockSignal, optionalBlock(SomeSchema, inactive));
  *
  * @category Structure
  */

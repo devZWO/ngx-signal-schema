@@ -1,8 +1,7 @@
 import {parseLocalizedFloat} from './decimal-parser';
 
 /**
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2). Don't use it.
- * @category deprecated
+ * @internal
  */
 export type ParseIntegerResult =
     | { kind: 'empty' }
@@ -20,8 +19,7 @@ export type ParseIntegerResult =
  * @param locale - The locale used for parsing (defaults to 'de-DE').
  * @returns A result object indicating success or failure.
  *
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2). Don't use it.
- * @category deprecated
+ * @internal
  */
 export function parseLocalizedInteger(
     value: string | number | null | undefined,

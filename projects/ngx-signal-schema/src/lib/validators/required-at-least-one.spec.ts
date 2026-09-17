@@ -20,7 +20,7 @@ describe('requiredAtLeastOne validator', () => {
         (p) => p.field2,
         (p) => p.field3
       ], {
-        message: 'At least one required'
+        error: { message: 'At least one required' }
       });
     });
 

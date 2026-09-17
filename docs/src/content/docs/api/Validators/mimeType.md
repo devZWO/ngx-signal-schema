@@ -34,7 +34,7 @@ The allowed MIME type(s). Can be a string, an array, or a function returning eit
 
 ### config?
 
-`object` & [`ErrorOption`](/ngx-signal-schema/api/other/erroroption/)
+[`ErrorOption`](/ngx-signal-schema/api/other/erroroption/)
 
 Optional configuration for the validator, such as a custom error message.
 

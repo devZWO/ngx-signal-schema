@@ -4,8 +4,7 @@
  * @param value - The raw string to be escaped.
  * @returns The escaped string.
  *
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2). Do not use it directly.
- * @category deprecated
+ * @internal
  */
 function escapeRegExp(value: string): string {
   return value.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -25,8 +24,6 @@ function escapeRegExp(value: string): string {
  * @returns A RegExp object representing the combined pattern.
  *
  * @internal
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2). Do not use it directly.
- * @category deprecated
  */
 export function oneOfPattern(
   values: string | readonly string[],

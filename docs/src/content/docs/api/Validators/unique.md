@@ -7,9 +7,9 @@ title: "unique"
 
 > **unique**\<`S`, `T`\>(`fieldPath`, `options?`): `void`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/unique.ts:86
+Defined in: projects/ngx-signal-schema/src/lib/validators/unique.ts:77
 
-The `unique` validator checks if all items within an [ArrayBlock](/ngx-signal-schema/api/deprecated/arrayblock/) or a raw array are unique.
+The `unique` validator checks if all items within an array are unique.
 If duplicates are found, it generates validation errors.
 
 ### Default behavior
@@ -17,16 +17,16 @@ If duplicates are found, it generates validation errors.
 - **Other types**: Compared using strict equality (`===`).
 
 ### Error reporting
-By default, errors are attached to both the container ([ArrayBlock](/ngx-signal-schema/api/deprecated/arrayblock/) or the array itself)
-and each individual item that is part of a duplicate set. This can be configured using the `destination` option.
+By default, errors are attached to each individual item that is part of a duplicate set.
+This can be configured using the `destination` option.
 
 ## Type Parameters
 
 ### S
 
-`S` *extends* [`ArrayBlock`](/ngx-signal-schema/api/deprecated/arrayblock/)\<`T`\> \| `T`[] \| `null` \| `undefined`
+`S` *extends* `T`[] \| `null` \| `undefined`
 
-The type of the schema path, extending [ArrayBlock](/ngx-signal-schema/api/deprecated/arrayblock/), `T[]`, or being null/undefined.
+The type of the schema path, extending `T[]`, or being null/undefined.
 
 ### T
 
@@ -40,7 +40,7 @@ The type of the elements in the array.
 
 `SchemaPath`\<`S`\>
 
-The SchemaPath to the [ArrayBlock](/ngx-signal-schema/api/deprecated/arrayblock/) or raw array containing the items to validate.
+The SchemaPath to the raw array containing the items to validate.
 
 ### options?
 
@@ -56,13 +56,6 @@ Configuration options for the validator.
 
 ```ts
 // Basic usage with strings (case-insensitive, trimmed by default)
-schema<ArrayBlock<string>>(path => {
-  unique(path);
-});
-```
-
-```ts
-// Usage with raw arrays
 schema<string[]>(path => {
   unique(path);
 });
@@ -71,7 +64,7 @@ schema<string[]>(path => {
 ```ts
 // Custom equality function and error message
 interface User { id: number; name: string; }
-schema<ArrayBlock<User>>(path => {
+schema<User[]>(path => {
   unique(path, {
     equalFn: (a, b) => a.id === b.id,
     error: { message: 'User IDs must be unique' }
@@ -80,8 +73,8 @@ schema<ArrayBlock<User>>(path => {
 ```
 
 ```ts
-// Attach errors only to items container (items containers)
-schema<ArrayBlock<string>>(path => {
+// Attach errors only to the array container
+schema<string[]>(path => {
   unique(path, { destination: 'container' });
 });
 ```
@@ -89,7 +82,7 @@ schema<ArrayBlock<string>>(path => {
 ```ts
 // Using a signal for dynamic destination
 const dest = signal<'container' | 'items'>('items');
-schema<ArrayBlock<string>>(path => {
+schema<string[]>(path => {
   unique(path, { destination: dest });
 });
 ```

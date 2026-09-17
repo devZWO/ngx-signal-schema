@@ -45,7 +45,7 @@ A message describing the error.
 
 > `optional` **locale?**: `string`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:33
+Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:27
 
 Optional locale for parsing strings.
 Default is 'de-DE'
@@ -71,17 +71,3 @@ Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:15
 
 Maximum number of digits before the decimal separator.
 Example: maxIntegerDigits = 3 allows 999.99 but rejects 1000.00
-
-***
-
-### ~~message?~~
-
-> `optional` **message?**: `string`
-
-Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:27
-
-Optional custom error message. or message key
-
-:::caution[Deprecated]
-Use `error.message` from `ErrorOption` instead.
-:::

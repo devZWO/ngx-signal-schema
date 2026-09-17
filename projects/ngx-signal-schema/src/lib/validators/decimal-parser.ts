@@ -4,7 +4,7 @@
  * @example
  * toPlainDecimalString(12.34, "."); // returns "12.34"
  * @example
- * toPlainDecimalString(1e-7, ".");  // returns "0.0000001"
+ * toPlainDecimalString(1e-7, "."); // returns "0.0000001"
  *
  * This makes it possible to count integer and fraction digits reliably.
  *
@@ -12,8 +12,7 @@
  * @param fractionSeparator - The decimal separator to use in the output string.
  * @returns A plain string representation of the number.
  *
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2). Don't use it.
- * @category deprecated
+ * @internal
  */
 export function toPlainDecimalString(value: number | string, fractionSeparator: string): string {
     const str = String(value);
@@ -40,7 +39,7 @@ export function toPlainDecimalString(value: number | string, fractionSeparator: 
     } else {
         // For JS numbers, scientific notation only occurs when the decimal point
         // moves outside the significant digits (exponent >= 21 or exponent <= -7).
-        // Thus, newDecimalIndex is always either <= 0 or >= digits.length.
+        // Thus, the newDecimalIndex is always either <= 0 or >= digits.length.
         result = digits + '0'.repeat(newDecimalIndex - digits.length);
     }
 
@@ -58,8 +57,7 @@ export function toPlainDecimalString(value: number | string, fractionSeparator: 
  * @param value - The string to strip leading zeros from.
  * @returns The string without leading zeros.
  *
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2).
- * @category deprecated
+ * @internal
  */
 export function stripLeadingZeros(value: string): string {
     const stripped = value.replace(/^0+(?=\d)/, '');
@@ -67,8 +65,7 @@ export function stripLeadingZeros(value: string): string {
 }
 
 /**
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2).
- * @category deprecated
+ * @internal
  */
 export type ParseFloatResult =
     | { kind: 'empty' }
@@ -85,8 +82,7 @@ export type ParseFloatResult =
  * @param locale - The locale used for parsing (defaults to 'de-DE').
  * @returns A result object indicating success or failure.
  *
- * @deprecated This function was exported by mistake and will become internal in the next major release (v2).
- * @category deprecated
+ * @internal
  */
 export function parseLocalizedFloat(
     value: string | number | null | undefined,

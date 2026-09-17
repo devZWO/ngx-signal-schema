@@ -7,6 +7,8 @@ import {atLeastOne} from './at-least-one';
 import {MatButton} from '@angular/material/button';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {ConfigBox} from '../../../shared/components/config-box';
+import {MonoFont} from '../required-limitations-example/mono-font/mono-font';
 
 
 export interface HierarchicFormModel {
@@ -24,22 +26,26 @@ export interface HierarchicFormModel {
         MatButton,
         MatCheckbox,
         MatRadioButton,
-        MatRadioGroup
+        MatRadioGroup,
+        ConfigBox,
+        MonoFont
     ],
     template: `
         <section class="flex flex-col gap-6">
             <h1 class="text-3xl font-bold text-cyan-700">Search Form</h1>
-            <h2 class="text-xl font-bold text-cyan-800">Optional fields but at least one is requried</h2>
+            <p class="text-gray-700">
+                This example focuses on search forms where individual fields are optional, but at least one criterion must be provided.
+                It demonstrates various techniques to solve this, from simple conditional requirements to advanced recursive tree validation using <mono>validateTree</mono> and reusable custom validators.
+            </p>
+            <h2 class="text-xl font-bold text-cyan-800">Optional fields but at least one is required</h2>
 
-            <div class="flex flex-col gap-4 p-4 border rounded-lg bg-gray-50 shadow-sm">
-                <h2 class="text-lg font-semibold text-cyan-800">Validation Configuration</h2>
-
+            <app-config-box>
                 <mat-checkbox
                     [checked]="isValidationEnabled()"
                     (change)="isValidationEnabled.set($event.checked)"
                     color="primary"
                 >
-                    Enable Unique Validation
+                    Enable <span class="font-mono">AtLeastOne</span> Validation
                 </mat-checkbox>
 
 
@@ -50,7 +56,8 @@ export interface HierarchicFormModel {
                         (change)="schemaDefinition.set($event.value)"
                         class="grid grid-cols-2 gap-4"
                     >
-                        <mat-radio-button value="WAY1">Way 1 - Simple required(&#123;when: true&#125;)</mat-radio-button>
+                        <mat-radio-button value="WAY1">Way 1 - Simple required(&#123;when: true&#125;)
+                        </mat-radio-button>
                         <mat-radio-button value="WAY2">Way 2 - Complex logic knowing the context</mat-radio-button>
                         <mat-radio-button value="WAY3">Way 3 - Usage of validateTree</mat-radio-button>
                         <mat-radio-button value="WAY4">Way 4 - Extracted Validator</mat-radio-button>
@@ -79,7 +86,7 @@ export interface HierarchicFormModel {
                         }
                     </p>
                 </div>
-            </div>
+            </app-config-box>
 
             <app-hierarchic-form-example-base [contactForm]="contactForm"/>
 
@@ -248,29 +255,29 @@ export class SearchAtLeastOneCriteriaExampleComponent {
         /**
          * Way 1: based on `required`. simple, but works with two or three fields
          */
-        applyWhen(path, () => this.schemaDefinition() === 'WAY1', this.needPhoneWhenNoOtherFieldIsFilled)
+        applyWhen(path, () => this.schemaDefinition() === 'WAY1' && this.isValidationEnabled(), this.needPhoneWhenNoOtherFieldIsFilled)
 
         /**
          * Way 2: more complex but still based on `required`, but works with any number of fields
          * This attempt will add `*` (required) mark on all form fields => but only on is really required ?!?.
          */
-        applyWhen(path, () => this.schemaDefinition() === 'WAY2', this.atLeastOneCriteriaSchema)
+        applyWhen(path, () => this.schemaDefinition() === 'WAY2' && this.isValidationEnabled(), this.atLeastOneCriteriaSchema)
 
         /**
          * Way 3: based on validateTree, less complex extendable in a more expressive way.
          * It won't add `*` (required) mark on all form fields.
          */
-        applyWhen(path, () => this.schemaDefinition() === 'WAY3', this.atLeastOneWithValidateTreeSchema)
+        applyWhen(path, () => this.schemaDefinition() === 'WAY3' && this.isValidationEnabled(), this.atLeastOneWithValidateTreeSchema)
 
         /**
          * Way 4: base on validateTree. Extracted as a validator, it can be reused.
          */
-        applyWhen(path, () => this.schemaDefinition() === 'WAY4', this.atLeastOneWithValidatorSchema)
+        applyWhen(path, () => this.schemaDefinition() === 'WAY4' && this.isValidationEnabled(), this.atLeastOneWithValidatorSchema)
 
         /**
          * Way 5: Extracted validator, recursively inspecting all fields.
          */
-        applyWhen(path, () => this.schemaDefinition() === 'WAY5', (p) => requiredAtLeastOne(p, { exclude: [p => p.type] }))
+        applyWhen(path, () => this.schemaDefinition() === 'WAY5' && this.isValidationEnabled(), (p) => requiredAtLeastOne(p, { exclude: [p => p.type] }))
     });
 
     /**

@@ -5,6 +5,7 @@ import {InputFormField} from '../../shared/components/input-form-field';
 import {SelectFormField, SelectOption} from '../../shared/components/select-form-field';
 import {ButtonToggleFormField, ButtonToggleOption} from '../../shared/components/button-toggle-form-field';
 import {applyIf, compose, inactive, requiredDefined, valueEquals} from '@devzwo/ngx-signal-schema';
+import {MonoFont} from './required-limitations-example/mono-font/mono-font';
 
 
 /**
@@ -39,11 +40,17 @@ export const legalPersonHiddenSchema = schema<LegalPerson & NaturalPerson>(p => 
     imports: [
         InputFormField,
         SelectFormField,
-        ButtonToggleFormField
+        ButtonToggleFormField,
+        MonoFont
     ],
     template: `
         <section class="flex flex-col gap-6">
             <h1 class="text-3xl font-bold text-cyan-700">Registration (Flat Model)</h1>
+
+            <p class="text-gray-700">
+                This example addresses conditional form validation in a flat data model.
+                It shows how to use <mono>applyIf</mono> and <mono>compose</mono> to dynamically switch between different validation schemas (e.g., Natural vs. Legal Person) based on a selected type, while properly inactivating fields that are not relevant to the current selection.
+            </p>
 
             <app-button-toggle-form-field
                 label="Person Type"

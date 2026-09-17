@@ -19,6 +19,10 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
                 <a routerLink="/array-example" routerLinkActive="text-orange-500 font-bold" class="text-cyan-700 hover:text-cyan-900 transition-colors">Array Example</a>
 
                 <a routerLink="/search-at-least-one-criteria-example" routerLinkActive="text-orange-500 font-bold" class="text-cyan-700 hover:text-cyan-900 transition-colors">AtLeastOne Validator</a>
+
+                <a routerLink="/required-limitations-example" routerLinkActive="text-orange-500 font-bold" class="text-cyan-700 hover:text-cyan-900 transition-colors">Required Limitations</a>
+
+                <a routerLink="/required-limitations-example-simplified" routerLinkActive="text-orange-500 font-bold" class="text-cyan-700 hover:text-cyan-900 transition-colors">Simplified Required Limitations</a>
             </nav>
 
             <router-outlet/>

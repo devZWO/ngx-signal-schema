@@ -1,74 +1,67 @@
 import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
 
 /**
- * Adds a cross-field validation rule to the given schema path that requires
- * at least one of multiple selected fields to be filled.
+ * Demonstrates a minimal cross-field validator that requires at least one of the
+ * explicitly selected fields to be filled.
  *
- * This helper is useful for cases where several alternative inputs are allowed,
- * but at least one of them must contain a value.
+ * This helper is intentionally kept small for demo purposes. It shows how an
+ * "at least one field is required" rule can be implemented with `validateTree`,
+ * without exposing the full configuration surface of the reusable
+ * `requiredAtLeastOne` validator from `@devzwo/ngx-signal-schema`.
  *
- * Typical examples:
- * - at least one of several contact channels must be filled
- * - either email or phone number must be provided
+ * Use `requiredAtLeastOne` for production-style validation rules. Compared to
+ * this demo helper, `requiredAtLeastOne` supports additional options such as
+ * recursive field discovery, excluded fields, custom fill logic, configurable
+ * error attachment, and error options.
  *
- * **Disabled and Hidden fields:**
- * Fields that are currently disabled or hidden do not participate in the
- * validation. If all selected fields are disabled or hidden, the validation
- * passes (returns `null`).
+ * This simplified variant only:
+ * - checks the fields returned by the provided selectors
+ * - ignores currently disabled or hidden fields
+ * - treats values as filled when they are neither `null` nor an empty string
+ * - attaches the validation error to exactly one explicitly selected target field
+ * - uses the fixed error kind `requiredAtLeastOne`
+ * - uses the fixed message `At least one field is required`
  *
- * The Validator returns an error if none of the active participating fields is filled.
- * The Error kind is `requiredAtLeastOne`.
+ * If all selected fields are currently disabled or hidden, the validation passes.
+ * Otherwise, the validator returns an error when none of the active selected
+ * fields is filled.
  *
  * @typeParam T
- * The object type represented by the schema path on which the validator is registered.
- *
- * @typeParam V
- * The value type of the selected fields. This defaults to `unknown`, but can
- * be narrowed implicitly by the selectors you pass in.
+ * The object type represented by the schema path on which the validator is
+ * registered.
  *
  * @param path
- * The schema path of the object on which the cross-field validation should be applied.
- * Usually this is the root object or a nested object containing all relevant fields.
+ * The object schema path on which the cross-field validation should be applied.
+ * Usually this is the root object or a nested object containing all selected
+ * fields.
  *
  * @param selectors
- * A readonly tuple of at least two selector functions.
- * Each selector receives the current `SchemaPathTree<T>` and must return the
- * path of a field that should participate in the "at least one required" check.
+ * A readonly tuple of at least two selector functions. Each selector receives
+ * the current `SchemaPathTree<T>` and returns one field path that participates
+ * in the check.
  *
  * @param attachTo
- * Optional configuration for the validator.
+ * Selector for the field that should receive the validation error if none of
+ * the active selected fields is filled.
  *
  * @example
  * ```ts
- * requiredAtLeastOne(
+ * atLeastOne(
  *   path,
  *   [
  *     p => p.email,
- *     p => p.telefonnummer,
- *     p => p.mobilnummer,
+ *     p => p.phone,
+ *     p => p.mobile,
  *   ],
- *   {
- *     message: 'Mindestens ein Kontaktweg muss angegeben werden.',
- *     attachTo: p => p.email,
- *     isFilled: (value) =>
- *       typeof value === 'string' ? value.trim() !== '' : value != null,
- *   },
+ *   p => p.email,
  * );
  * ```
  *
- * @example
- * Using the rercusive flag, the validator will also check nested objects.
- *
- * ```ts
- * requiredAtLeastOne(path, {recursive: true});
- * ```
- *
  * @remarks
- * This helper models a real cross-field rule. That makes it preferable to
- * expressing the same behavior through multiple mirrored `required(..., { when })`
- * conditions, especially when more than two fields are involved.
+ * This function is meant to make the core idea behind a cross-field validator
+ * easy to understand. Prefer `requiredAtLeastOne` when you need a reusable,
+ * configurable validator.
  *
- * @category Validators
  */
 export function atLeastOne<
     T extends object

@@ -26,7 +26,7 @@ so you can use the option configuration in the error message.
 
 > `readonly` **kind**: `string`
 
-Defined in: node\_modules/@angular/forms/types/\_structure-chunk.d.ts:1396
+Defined in: node\_modules/@angular/forms/types/\_structure-chunk.d.ts:734
 
 Identifies the kind of error.
 
@@ -40,7 +40,7 @@ Identifies the kind of error.
 
 > `readonly` `optional` **message?**: `string`
 
-Defined in: node\_modules/@angular/forms/types/\_structure-chunk.d.ts:1398
+Defined in: node\_modules/@angular/forms/types/\_structure-chunk.d.ts:736
 
 Human readable error message.
 

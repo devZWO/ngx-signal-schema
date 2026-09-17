@@ -23,11 +23,11 @@ interface NamePublishingOptions {
               <h2>NAME - requiredTrimmed</h2>
               <div class="validator-switch">
                   <label>
-                      <input type="radio" [checked]="nameValidatorType() === 'required'" (change)="nameValidatorType.set('required')"/>
+                      <input type="radio" name="name-validator" [checked]="nameValidatorType() === 'required'" (change)="nameValidatorType.set('required')"/>
                       Default (required)
                   </label>
                   <label>
-                      <input type="radio" [checked]="nameValidatorType() === 'requiredTrimmed'" (change)="nameValidatorType.set('requiredTrimmed')"/>
+                      <input type="radio" name="name-validator" [checked]="nameValidatorType() === 'requiredTrimmed'" (change)="nameValidatorType.set('requiredTrimmed')"/>
                       requiredTrimmed
                   </label>
               </div>
@@ -47,11 +47,11 @@ interface NamePublishingOptions {
               <h2>Publish - requiredDefined</h2>
               <div class="validator-switch">
                   <label>
-                      <input type="radio" [checked]="publishValidatorType() === 'required'" (change)="publishValidatorType.set('required')"/>
+                      <input type="radio" name="publish-validator" [checked]="publishValidatorType() === 'required'" (change)="publishValidatorType.set('required')"/>
                       Default (required)
                   </label>
                   <label>
-                      <input type="radio" [checked]="publishValidatorType() === 'requiredDefined'" (change)="publishValidatorType.set('requiredDefined')"/>
+                      <input type="radio" name="publish-validator" [checked]="publishValidatorType() === 'requiredDefined'" (change)="publishValidatorType.set('requiredDefined')"/>
                       requiredDefined
                   </label>
               </div>

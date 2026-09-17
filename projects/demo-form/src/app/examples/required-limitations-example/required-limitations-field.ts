@@ -26,7 +26,7 @@ interface NamePublishingOptions {
             </p>
 
             <div class="grid grid-cols-1 gap-2">
-                <h2 class="heading-2">NAME -
+                <h2 id="name-validator-label" class="heading-2">NAME -
                     <mono>requiredTrimmed</mono>
                 </h2>
                 <app-config-box>
@@ -83,7 +83,7 @@ interface NamePublishingOptions {
                         <div class="grid grid-cols-3 gap-4">
                             <mat-radio-button [value]="true">Public (<mono>true</mono>)</mat-radio-button>
                             <mat-radio-button [value]="false">Private (<mono>false</mono>)</mat-radio-button>
-                            <mat-radio-button [value]="null">dont know (<mono>null</mono>)</mat-radio-button>
+                            <mat-radio-button [value]="null">don't know (<mono>null</mono>)</mat-radio-button>
                         </div>
 
                     </mat-radio-group>

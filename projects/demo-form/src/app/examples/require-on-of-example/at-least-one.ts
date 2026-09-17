@@ -1,5 +1,4 @@
 import {SchemaPath, SchemaPathTree, validateTree} from "@angular/forms/signals";
-import {ErrorOption} from "@devzwo/ngx-signal-schema";
 
 /**
  * Demonstrates a minimal cross-field validator that requires at least one of the

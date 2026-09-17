@@ -14,11 +14,6 @@ export interface IntegerOptions extends ErrorOption {
      */
     maxDigits: number;
     /**
-     * Optional custom error message.
-     * @deprecated Use `error.message` from `ErrorOption` instead.
-     */
-    message?: string;
-    /**
      * Optional locale for parsing localized strings (defaults to 'de-DE').
      */
     locale?: string;
@@ -54,7 +49,7 @@ export function integer(
     path: SchemaPath<number | string | null>,
     options: IntegerOptions,
 ): void {
-    const {maxDigits, message, locale = 'de-DE'} = options;
+    const {maxDigits, locale = 'de-DE'} = options;
 
     validate(path, ({value}): ValidationErrorWith<IntegerOptions> | null => {
 
@@ -70,7 +65,7 @@ export function integer(
             case 'not-an-integer':
                 return {
                     kind: options.error?.kind ?? 'integer.isInteger',
-                    message: options.error?.message ?? message,
+                    message: options.error?.message,
                     options,
                 };
 
@@ -87,7 +82,7 @@ export function integer(
                 if (integerPart.length > maxDigits) {
                     return {
                         kind: options.error?.kind ?? 'integer.maxDigits',
-                        message: options.error?.message ?? message,
+                        message: options.error?.message,
                         options,
                     };
                 }

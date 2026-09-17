@@ -7,7 +7,7 @@ title: "RequiredAtLeastOneSelector"
 
 > **RequiredAtLeastOneSelector**\<`T`\> = (`p`) => `SchemaPathTree`\<`unknown`\>
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:47
+Defined in: projects/ngx-signal-schema/src/lib/validators/required-at-least-one.ts:41
 
 Each selector receives the current `SchemaPathTree<T>` and must return the
 path of a field that should participate in the "at least one required" check.

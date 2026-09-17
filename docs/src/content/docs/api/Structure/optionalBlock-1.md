@@ -55,7 +55,7 @@ a reusable schema for an `OptionalBlock<T>`.
 ### Example
 
 ```ts
-form(myOptionalBlockSignal, optionalBlock(SomeSchema, disabledHidden));
+form(myOptionalBlockSignal, optionalBlock(SomeSchema, inactive));
 ```
 
 ## Call Signature

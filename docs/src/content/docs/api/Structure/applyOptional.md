@@ -56,7 +56,7 @@ inline rules or schema applied when `meta.enabled` evaluates to `false`.
 
 ```ts
 schema<MyModel>((fieldPath) => {
-  applyOptional(fieldPath.someOptionalBlock, SomeSchema, disabledHidden);
+  applyOptional(fieldPath.someOptionalBlock, SomeSchema, inactive);
 });
 ```
 

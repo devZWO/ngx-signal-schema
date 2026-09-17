@@ -121,7 +121,7 @@ describe('decimal validator', () => {
 
   it('should use custom error message if provided', () => {
     const customMsg = 'Invalid format';
-    const f = createDecimalForm(1234, { maxIntegerDigits: 3, maxFractionDigits: 2, message: customMsg });
+    const f = createDecimalForm(1234, { maxIntegerDigits: 3, maxFractionDigits: 2, error: { message: customMsg } });
 
     expect(f().errorSummary().map(e => ({ kind: e.kind, message: e.message }))).toEqual([{ kind: 'decimal.maxIntegerDigits', message: customMsg }]);
   });

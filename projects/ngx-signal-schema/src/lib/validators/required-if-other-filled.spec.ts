@@ -14,7 +14,7 @@ describe('requiredIfOtherFilled validator', () => {
   function createForm(initialValue: MyModel) {
     const valueSignal = signal(initialValue);
     const mySchema = schema<MyModel>((path) => {
-      requiredIfOtherFilled(path, p => p.source, p => p.target, { message: 'Required if source filled' });
+      requiredIfOtherFilled(path, p => p.source, p => p.target, { error: { message: 'Required if source filled' } });
     });
 
     return TestBed.runInInjectionContext(() => {

@@ -7,7 +7,7 @@ title: "decimal"
 
 > **decimal**(`path`, `options`): `void`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:64
+Defined in: projects/ngx-signal-schema/src/lib/validators/decimal.ts:58
 
 Schema helper for decimal numbers stored as number | null.
 

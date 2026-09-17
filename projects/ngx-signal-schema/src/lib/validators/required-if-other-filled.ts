@@ -31,22 +31,12 @@ export function requiredIfOtherFilled<T>(
      * Optional function to determine if a value is considered "filled".
      */
     isFilled?: (value: unknown) => boolean;
-    /**
-     * Optional custom error message.
-     * @deprecated Use `error.message` from `ErrorOption` instead.
-     */
-    message?: string,
-    /**
-     * Optional error kind (defaults to 'required').
-     * @deprecated Use `error.kind` from `ErrorOption` instead.
-     */
-    kind?: string,
   } & ErrorOption
 ): void {
   validateTree(path, (ctx) => {
     const isFilled = options?.isFilled ?? ((value: unknown) => value != null && value !== '');
-      const kind = options?.error?.kind ?? options?.kind ?? 'required';
-      const message = options?.error?.message ?? options?.message ?? undefined;
+      const kind = options?.error?.kind ?? 'required';
+      const message = options?.error?.message ?? undefined;
 
     const pathTree = path as SchemaPathTree<T>;
 

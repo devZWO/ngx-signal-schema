@@ -96,7 +96,7 @@ describe('integer validator', () => {
 
   it('should use custom error message if provided', () => {
     const customMsg = 'Invalid integer';
-    const f = createIntegerForm(1234, { maxDigits: 3, message: customMsg });
+    const f = createIntegerForm(1234, { maxDigits: 3, error: { message: customMsg } });
 
     expect(f().errorSummary().map(e => ({ kind: e.kind, message: e.message }))).toEqual([{ kind: 'integer.maxDigits', message: customMsg }]);
   });

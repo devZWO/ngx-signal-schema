@@ -8,8 +8,3 @@ export * from './required-defined';
 export * from './required-trimmed';
 export * from './unique';
 export * from './error-options';
-
-// @deprecated it was exported by mistake and will become internal in the next major release (v2).
-export * from './one-of-pattern';
-export * from './decimal-parser';
-export * from './integer-parser';

@@ -21,12 +21,6 @@ export interface DecimalOptions extends ErrorOption {
     maxFractionDigits: number;
 
     /**
-     * Optional custom error message. or message key
-     * @deprecated Use `error.message` from `ErrorOption` instead.
-     */
-    message?: string;
-
-    /**
      * Optional locale for parsing strings.
      * Default is 'de-DE'
      */
@@ -65,7 +59,7 @@ export function decimal(
     path: SchemaPath<number | string | null>,
     options: DecimalOptions
 ): void {
-    const {maxIntegerDigits, maxFractionDigits, message, locale = 'de-DE'} = options;
+    const {maxIntegerDigits, maxFractionDigits, locale = 'de-DE'} = options;
     const fractionSeparator = "."
 
     validate(path, ({value}): ValidationErrorWith<DecimalOptions> | null => {
@@ -78,7 +72,7 @@ export function decimal(
             case 'not-a-number':
                 return {
                     kind: options.error?.kind ?? 'decimal.isNumber',
-                    message: options.error?.message ?? message,
+                    message: options.error?.message,
                     options: options
                 };
 
@@ -96,7 +90,7 @@ export function decimal(
                 if (integerDigits > maxIntegerDigits) {
                     return {
                         kind: options.error?.kind ?? 'decimal.maxIntegerDigits',
-                        message: options.error?.message ?? message,
+                        message: options.error?.message,
                         options: options
                     };
                 }
@@ -104,7 +98,7 @@ export function decimal(
                 if (fractionDigits > maxFractionDigits) {
                     return {
                         kind: options.error?.kind ?? 'decimal.maxFractionDigits',
-                        message: options.error?.message ?? message,
+                        message: options.error?.message,
                         options: options
                     };
                 }

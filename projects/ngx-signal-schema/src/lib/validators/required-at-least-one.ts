@@ -17,16 +17,10 @@ export interface RequiredAtLeastOneOptions<T extends object> {
     isFilled?: (value: unknown) => boolean;
 
     /**
-     * Optional custom validation error message.
-     * @deprecated Use `error.message` from `ErrorOption` instead.
-     */
-    message?: string;
-
-    /**
      * Optional flag to enable recursive validation of nested objects.
      *
      * If enabled, the validation will traverse nested objects and validate their properties as well.
-     * Otherwise, nested objects themselves are ignored and only direct leaf fields participate.
+     * Otherwise, nested objects themselves are ignored, and only direct leaf fields participate.
      *
      * Defaults to `true` if no selectors are provided, and `false` otherwise.
      */
@@ -73,7 +67,7 @@ export type RequiredAtLeastOneSelector<T extends object> =
  * The Error kind is `requiredAtLeastOne`.
  *
  * @typeParam T
- * The object type represented by the schema path on which the validator is registered.
+ * The object type is represented by the schema path on which the validator is registered.
  *
  * @param path
  * The schema path of the object on which the cross-field validation should be applied.
@@ -186,7 +180,7 @@ export function requiredAtLeastOne<T extends object>(
 
 
     // Use provided message or fall back to a generic default
-    const message = options?.error?.message ?? options?.message ?? undefined;
+    const message = options?.error?.message
 
     const kind = options?.error?.kind ?? 'requiredAtLeastOne';
 

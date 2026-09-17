@@ -32,7 +32,7 @@ export default defineConfig({
                 {
                     label: 'Concepts',
                     items: [
-                        { label: 'Overview', slug: 'concepts' },
+                        {label: 'Overview', slug: 'concepts'},
                         // Each item here is one entry in the navigation menu.
                         {label: 'Schema Composition', slug: 'concepts/schemacomposition'},
                         {label: 'Conditional Schemas', slug: 'concepts/conditionalschemas'},
@@ -52,14 +52,13 @@ export default defineConfig({
                     label: 'API',
                     // items: [{autogenerate: {directory: 'api'}}]
                     items: [
-                        { label: 'readme', slug: 'api/readme' },
+                        {label: 'readme', slug: 'api/readme'},
                         {label: 'Composition', items: [{autogenerate: {directory: 'api/Composition'}}]},
                         {label: 'Validators', items: [{autogenerate: {directory: 'api/Validators'}}]},
                         {label: 'Conditions', items: [{autogenerate: {directory: 'api/Conditions'}}]},
                         {label: 'Rules', items: [{autogenerate: {directory: 'api/Rules'}}]},
                         {label: 'Structure', items: [{autogenerate: {directory: 'api/Structure'}}]},
-                        {label: 'Other', items: [{autogenerate: {directory: 'api/Other'}}]},
-                        {label: 'deprecated', items: [{autogenerate: {directory: 'api/deprecated'}}]},
+                        {label: 'Other', items: [{autogenerate: {directory: 'api/Other'}}]}
                     ],
                 },
                 {

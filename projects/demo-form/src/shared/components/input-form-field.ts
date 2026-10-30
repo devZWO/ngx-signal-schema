@@ -1,7 +1,8 @@
-import {ChangeDetectionStrategy, Component, input} from '@angular/core';
+import {booleanAttribute, Component, input} from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FieldTree, FormField} from '@angular/forms/signals';
+import {TrimDirective} from '@devzwo/ngx-signal-schema';
 import {ErrorIndicator} from './error-indicator';
 
 /**
@@ -20,12 +21,18 @@ import {ErrorIndicator} from './error-indicator';
  */
 @Component({
     selector: 'app-input-form-field',
-    imports: [MatFormFieldModule, MatInputModule, FormField, ErrorIndicator],
+    imports: [MatFormFieldModule, MatInputModule, FormField, ErrorIndicator, TrimDirective],
     template: `
         @if (!fieldTree()().hidden()) {
             <mat-form-field appearance="outline">
                 <mat-label>{{ label() }}</mat-label>
-                <input matInput [formField]="fieldTree()" [placeholder]="placeholder()">
+                <input
+                    matInput
+                    [formField]="fieldTree()"
+                    [placeholder]="placeholder()"
+                    [trim]="trim()"
+                    [trimControlCharacters]="trimControlCharacters()"
+                >
                 <mat-error appErrorIndicator [fieldState]="fieldTree()()"/>
             </mat-form-field>
         }
@@ -35,7 +42,6 @@ import {ErrorIndicator} from './error-indicator';
             display: contents;
         }
     `,
-    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputFormField {
     /** The floating label for the input field. */
@@ -46,4 +52,14 @@ export class InputFormField {
 
     /** Optional placeholder text. Defaults to an empty string. */
     placeholder = input<string>('');
+
+    /** Enables or disables trimming on blur. Defaults to true. */
+    trim = input<boolean, unknown>(true, {
+        transform: booleanAttribute,
+    });
+
+    /** Whether to also trim ASCII and Unicode control characters. Defaults to false. */
+    trimControlCharacters = input<boolean, unknown>(false, {
+        transform: booleanAttribute,
+    });
 }

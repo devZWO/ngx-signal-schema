@@ -20,6 +20,7 @@ and categorization are required.
 
 - [`IntegerOptions`](/ngx-signal-schema/api/other/integeroptions/)
 - [`DecimalOptions`](/ngx-signal-schema/api/other/decimaloptions/)
+- [`NotOnlyBlankOptions`](/ngx-signal-schema/api/other/notonlyblankoptions/)
 
 ## Properties
 

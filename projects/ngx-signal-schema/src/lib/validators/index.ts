@@ -7,4 +7,5 @@ export * from './required-if-other-filled';
 export * from './required-defined';
 export * from './required-trimmed';
 export * from './unique';
+export * from './not-only-blank';
 export * from './error-options';

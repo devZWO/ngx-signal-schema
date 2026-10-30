@@ -25,7 +25,7 @@ As forms grow, validation logic often spreads across large schema functions, rep
 `ngx-signal-schema` adds composable building blocks for structuring form logic in a reusable and maintainable way.
 
 ```ts
-const ContactSchema = append(
+const ContactSchema = compose(
   BaseSchema,
 
   (path) => {

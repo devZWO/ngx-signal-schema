@@ -39,3 +39,14 @@ This document outlines the guidelines and best practices for AI agents working i
 - Test edge cases, error handling, and core logic.
 - Keep tests fast, isolated, and type-safe (avoid casting to `any`).
 - Ensure all CI checks (linting, tests, build) pass before completing tasks.
+
+## Documentation and Tooling
+
+- Use Node.js 24 and `npm ci`; this workspace uses npm.
+- Read `docs/src/content/docs/ai/usage.md` for library integration rules.
+- Edit documentation in `docs/src/content/docs/`; TypeDoc generates the `api/` pages.
+- Mark complete TypeScript examples in recipe and AI pages for `npm run recipes:check`.
+  Use HTML comments in Markdown and JSX comments in MDX (see the maintainers guide).
+- `npm run package:check` validates offline documentation, npm contents and Markdown endpoints.
+- Run `npm run release:check` before completing changes to release or documentation tooling.
+- Reuse `.github/workflows/main.yml` for release validation; publish its checked artifact.

@@ -45,7 +45,11 @@ Only the fields relevant for the selected customer type should be visible, enabl
 
 Instead of placing all fields directly on the root object, we model the two customer types as separate subtrees.
 
+{/* recipe-check: contact-form.ts */}
 ```ts
+import { schema } from '@angular/forms/signals';
+import { applyIf, compose, inactive, not, requiredTrimmed, valueEquals, valueIn } from '@devzwo/ngx-signal-schema';
+
 interface ContactForm {
   customerType: 'private' | 'company';
 
@@ -91,6 +95,7 @@ This is much easier to reason about than constantly creating and removing fields
 
 Each subtree owns its own validation rules.
 
+{/* recipe-check: contact-form.ts */}
 ```ts
 const PrivatePersonSchema = schema<ContactForm['privatePerson']>((path) => {
   requiredTrimmed(path.firstName);
@@ -98,10 +103,11 @@ const PrivatePersonSchema = schema<ContactForm['privatePerson']>((path) => {
 });
 ```
 
+{/* recipe-check: contact-form.ts */}
 ```ts
 const CompanySchema = schema<ContactForm['company']>((path) => {
   requiredTrimmed(path.companyName);
-  requiredDefined(path.legalForm);
+  requiredTrimmed(path.legalForm);
 });
 ```
 
@@ -199,7 +205,15 @@ Conditions remain small and composable.
 
 The final schema is assembled from smaller building blocks.
 
+The base schema validates the fields shared by both customer types.
+
+{/* recipe-check: contact-form.ts */}
 ```ts
+const BaseContactSchema = schema<ContactForm>((path) => {
+  requiredTrimmed(path.email);
+  requiredTrimmed(path.country);
+});
+
 export const ContactSchema = compose(
   BaseContactSchema,
 
@@ -246,7 +260,7 @@ Imagine new requirements appear:
 Instead of modifying one large schema, additional schema fragments can be added.
 
 ```ts
-append(
+compose(
   ContactSchema,
   EnterpriseRules,
   ReviewModeRules,
@@ -289,7 +303,7 @@ Different schema fragments become active depending on form state.
 ### Schema Composition
 
 ```ts
-append(...)
+compose(...)
 ```
 
 The final schema is assembled from smaller pieces.

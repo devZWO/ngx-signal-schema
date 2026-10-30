@@ -49,8 +49,8 @@ pnpm install @devzwo/ngx-signal-schema
 
 Ensure that the following packages are installed in your project:
 
-- `@angular/core`: ^21.2.0
-- `@angular/forms`: ^21.2.0
+- `@angular/core`: >=22.0.0 <23.0.0
+- `@angular/forms`: >=22.0.0 <23.0.0
 
 ---
 
@@ -63,7 +63,7 @@ With `compose`, existing schemas can be easily extended.
 ```typescript
 import {compose, requiredTrimmed} from '@devzwo/ngx-signal-schema';
 
-const MySchema = compose(BaseSchema, required(path.name));
+const MySchema = compose(BaseSchema, (path) => requiredTrimmed(path.name));
 ```
 
 **Standard Signal Forms equivalent:**
@@ -176,7 +176,7 @@ const MySchema = compose(
     //full schema
     BaseSchema,
     // Reusable schema
-    inactive(path.status, isForeign),
+    (path) => inactive(path.status, isForeign),
     // Inline rule instead of a full schema object
     (path) => inactive(path.subfield, valueEquals(path.status, 'inactive'))
 );
@@ -318,6 +318,15 @@ Utilities for modeling complex data structures managing optional state.
 - `mapToOptionalBlock(data, enabled)`: Utility to wrap domain data into an `OptionalBlock` structure.
 - `mapFromOptionalBlock(block)`: Utility to extract data from an `OptionalBlock` if it is enabled.
 - `isOptionalBlock(obj)`: Type guard for `OptionalBlock`.
+
+## AI and offline documentation
+
+The installed package includes `ai/usage.md` and guides under `docs/` for coding
+agents and offline reading. Start with [the agent guide](https://devzwo.github.io/ngx-signal-schema/ai/usage/),
+[getting started](https://devzwo.github.io/ngx-signal-schema/gettingstarted/) or the
+[contact form recipe](https://devzwo.github.io/ngx-signal-schema/recipes/contact-form/).
+The website also provides [llms.txt](https://devzwo.github.io/ngx-signal-schema/llms.txt)
+and Markdown endpoints for all documentation and API pages.
 
 ## Maintainer
 

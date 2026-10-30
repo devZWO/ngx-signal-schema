@@ -27,6 +27,7 @@ We want to build a "Super Hero Skills" form where:
 
 First, we define our form model. For a list, we use a standard TypeScript array.
 
+{/* recipe-check: list-recipe.ts */}
 ```ts
 export interface SuperHeroForm {
   skills: string[];
@@ -40,6 +41,7 @@ We use the `schema` function to define our validation rules. To ensure all skill
 ### Default Behavior for Strings
 By default, when validating an array of strings, `unique()` is **case-insensitive** and **ignores surrounding whitespace**.
 
+{/* recipe-check: list-recipe.ts */}
 ```ts
 import { schema } from '@angular/forms/signals';
 import { unique } from '@devzwo/ngx-signal-schema';
@@ -81,9 +83,10 @@ unique(path.skills, {
 
 To render the list, we create a component that accepts a `FieldTree` of an array. The `FieldTree` allows us to iterate over the items while still accessing the array's state.
 
+{/* recipe-check: list-recipe.ts */}
 ```ts
-import { Component, input } from '@angular/core';
-import { FieldTree } from '@angular/forms/signals';
+import { Component, input, signal } from '@angular/core';
+import { FieldTree, form } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-skill-list',
@@ -132,9 +135,8 @@ export class SkillListComponent {
 
 Finally, we initialize our form in a parent component using the `form()` function.
 
+{/* recipe-check: list-recipe.ts */}
 ```ts
-import { Component, signal } from '@angular/core';
-import { form } from '@angular/forms/signals';
 
 @Component({
   imports: [SkillListComponent],

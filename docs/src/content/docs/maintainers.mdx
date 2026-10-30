@@ -61,3 +61,44 @@ The project follows a few simple principles:
 `ngx-signal-schema` is released under the [MIT License](https://github.com/devZWO/ngx-signal-schema/blob/main/LICENSE).
 
 See the repository for details.
+
+## Build and release checks
+
+Use Node.js 24 and `npm ci` in the repository root.
+
+- `npm run release:check`: lint, Vitest tests (including tooling tests), the complete
+  Pages build, documentation example compilation and npm package validation.
+- `npm run recipes:check`: extract marked TypeScript blocks from recipes and the
+  AI guide, then compile them against `dist/ngx-signal-schema` with strict Angular
+  template checking. This checks types and templates; runtime behavior is covered
+  by the library and demo tests.
+- `npm run package:check`: rebuild the library and docs, inspect `npm pack --dry-run`,
+  and validate packaged documentation links and the published Markdown index.
+- `npm run pages:build`: assemble the docs and hash-routed demo in `docs/dist`.
+
+### Checked documentation examples
+
+In Markdown, put `<!-- recipe-check: example.ts -->` directly before a TypeScript
+fence. In MDX, use a JSX comment instead:
+
+```text
+{/* recipe-check: example.ts */}
+```
+ Every recipe and AI
+guide must have at least one marked block. Blocks with the same filename on a page
+are concatenated in document order, so step-by-step examples can share types and
+imports. Filenames must be unique across pages. Keep illustrative fragments
+unmarked and mark the runnable steps that assemble a complete example.
+
+The temporary sources and compiler configuration are recreated in
+`tmp/recipe-check/`. Edit the documentation source rather than these files.
+
+### GitHub Actions
+
+`main.yml` runs CI and exposes `workflow_call` inputs for release validation.
+`publish.yml` reuses it and publishes the validated artifact via npm trusted
+publishing and provenance: prereleases use `NPM_DIST_TAG=next`, stable releases
+use `NPM_DIST_TAG=latest`. Configure npm's trusted publisher for `publish.yml`.
+
+`static.yml` deploys docs and demo together on a published release or a manual
+workflow run. Set the repository's Pages source to GitHub Actions.

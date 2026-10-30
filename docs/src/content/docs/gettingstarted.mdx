@@ -58,13 +58,13 @@ protected readonly contactForm = form(
 
 ```ts
 import { schema } from '@angular/forms/signals';
-import { append, requiredTrimmed } from '@devzwo/ngx-signal-schema';
+import { compose, requiredTrimmed } from '@devzwo/ngx-signal-schema';
 
 const BaseSchema = schema<ContactForm>((path) => {
   requiredTrimmed(path.name);
 });
 
-export const ExtendedSchema = append(
+export const ExtendedSchema = compose(
   BaseSchema,
   (path) => {
     requiredTrimmed(path.email);

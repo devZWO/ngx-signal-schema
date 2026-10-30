@@ -2,7 +2,28 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
+  workflow_call:
+    inputs:
+      skip-site-builds:
+        description: Skip site builds when validating an npm release
+        type: boolean
+        default: false
+      upload-package:
+        description: Upload the validated package for publishing
+        type: boolean
+        default: false
+    secrets:
+      CODECOV_TOKEN:
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'release' }}
 
 jobs:
   lint:
@@ -41,10 +62,19 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lib:build
-      - run: npm pack --dry-run
-        working-directory: dist/ngx-signal-schema
+      - run: node scripts/check-recipes.mjs
+      - run: node scripts/validate-docs-and-package.mjs --package-only
+
+      - uses: actions/upload-artifact@v4
+        if: inputs.upload-package
+        with:
+          name: npm-package
+          path: dist/ngx-signal-schema/
+          if-no-files-found: error
+          retention-days: 7
 
   build-docs:
+    if: ${{ !inputs.skip-site-builds }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -53,4 +83,5 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run docs:build
+      - run: npm run pages:build
+      - run: node scripts/validate-docs-and-package.mjs

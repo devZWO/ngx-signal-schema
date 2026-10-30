@@ -48,7 +48,7 @@ const CompanyContactSchema = schema<ContactForm>((path) => {
 ```
 
 ```ts
-export const ContactSchema = append(
+export const ContactSchema = compose(
   BaseContactSchema,
   CompanyContactSchema
 );
@@ -65,7 +65,7 @@ A feature schema can add rules for a specific use case.
 A workflow schema can add readonly or disabled states.
 
 ```ts
-export const EnterpriseContactSchema = append(
+export const EnterpriseContactSchema = compose(
   BaseContactSchema,
   CompanyContactSchema,
   EnterpriseRules
@@ -76,10 +76,10 @@ export const EnterpriseContactSchema = append(
 
 You do not always need to create a separate schema file.
 
-`append` also accepts inline schema functions.
+`compose` also accepts inline schema functions.
 
 ```ts
-export const ContactSchema = append(
+export const ContactSchema = compose(
   BaseContactSchema,
   (path) => {
     inactive(
@@ -137,7 +137,7 @@ CountrySpecificSchema
 These fragments can then be combined as needed.
 
 ```ts
-export const FinalContactSchema = append(
+export const FinalContactSchema = compose(
   BaseContactSchema,
   CompanyContactSchema,
   CountrySpecificSchema

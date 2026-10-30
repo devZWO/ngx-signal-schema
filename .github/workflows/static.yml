@@ -1,9 +1,9 @@
 name: Deploy Docs to GitHub Pages
 
 on:
-#    release:
-#        types: [published]
     workflow_dispatch:
+    release:
+        types: [published]
 
 permissions:
     contents: read
@@ -11,11 +11,15 @@ permissions:
     id-token: write
 
 concurrency:
-    group: pages
-    cancel-in-progress: false
+    group: pages-${{ github.event_name }}
+    cancel-in-progress: ${{ github.event_name != 'release' }}
 
 jobs:
     deploy:
+        # Serialize deployments while allowing newer manual runs to replace older ones.
+        concurrency:
+            group: pages-deployment
+            cancel-in-progress: false
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
@@ -35,8 +39,11 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Build docs
-              run: npm run docs:build
+            - name: Build documentation and demo
+              run: npm run pages:build
+
+            - name: Validate documentation and package
+              run: node scripts/validate-docs-and-package.mjs
 
             - name: Setup Pages
               uses: actions/configure-pages@v6

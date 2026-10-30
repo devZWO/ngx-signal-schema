@@ -1,5 +1,4 @@
-# .github/workflows/publish.yml
-name: Publish
+name: Publish npm package
 
 on:
   release:
@@ -7,46 +6,35 @@ on:
 
 permissions:
   contents: read
-  id-token: write
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npm run lint
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npm run test:ci
-      - uses: codecov/codecov-action@v6
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./coverage/ngx-signal-schema
+  validate:
+    uses: ./.github/workflows/main.yml
+    with:
+      skip-site-builds: true
+      upload-package: true
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
-    needs: [lint, test]
+    needs: validate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-          cache: npm
-      - run: npm ci
-      - run: npm run lib:build
-      - run: npm publish --access public --provenance
-        working-directory: dist/ngx-signal-schema
+      - uses: actions/download-artifact@v4
+        with:
+          name: npm-package
+          path: package/
+      - run: npm publish ./package --access public --provenance --tag "$NPM_DIST_TAG"
+        env:
+          NPM_DIST_TAG: ${{ github.event.release.prerelease && 'next' || 'latest' }}

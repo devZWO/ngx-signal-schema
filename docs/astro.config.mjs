@@ -23,11 +23,13 @@ export default defineConfig({
                 }),
             ],
             sidebar: [
+                {label: 'AI Agent Guide', slug: 'ai/usage'},
+                {label: 'Live demo', link: '/demo/'},
                 {
                     label: 'Welcome', slug: 'index',
                 },
                 {
-                    label: 'Getting Started', link: 'gettingstarted'
+                    label: 'Getting Started', slug: 'gettingstarted'
                 },
                 {
                     label: 'Concepts',

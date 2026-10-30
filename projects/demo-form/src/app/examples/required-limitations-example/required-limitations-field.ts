@@ -1,6 +1,6 @@
 import {Component, signal} from '@angular/core';
-import {form, required} from '@angular/forms/signals';
-import {requiredDefined, requiredTrimmed, applyIf} from '@devzwo/ngx-signal-schema';
+import {applyWhen, form, required} from '@angular/forms/signals';
+import {applyIf, notOnlyBlank, requiredDefined, requiredTrimmed} from '@devzwo/ngx-signal-schema';
 import {ErrorIndicator} from '../../../shared/components/error-indicator';
 import {MatError} from '@angular/material/input';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
@@ -22,12 +22,12 @@ interface NamePublishingOptions {
 
             <p class="text-gray-700">
                 The standard <mono>required</mono> validator has limitations: it accepts whitespace-only strings as valid and treats <mono>false</mono> as invalid.
-                This example demonstrates how <mono>requiredTrimmed</mono> ensures strings contain non-whitespace characters, and <mono>requiredDefined</mono> allows <mono>false</mono> while still requiring a value to be present.
+                This example demonstrates how <mono>requiredTrimmed</mono> ensures strings contain non-whitespace characters (mandatory), <mono>notOnlyBlank</mono> rejects whitespace-only strings while keeping empty inputs valid (optional), and <mono>requiredDefined</mono> allows <mono>false</mono> while still requiring a value to be present.
             </p>
 
             <div class="grid grid-cols-1 gap-2">
                 <h2 id="name-validator-label" class="heading-2">NAME -
-                    <mono>requiredTrimmed</mono>
+                    <mono>requiredTrimmed</mono> / <mono>notOnlyBlank</mono>
                 </h2>
                 <app-config-box>
                     <div class="flex flex-col gap-2">
@@ -35,7 +35,7 @@ interface NamePublishingOptions {
                             aria-labelledby="name-validator-label"
                             [value]="nameValidatorType()"
                             (change)="nameValidatorType.set($event.value)"
-                            class="grid grid-cols-2 gap-4"
+                            class="grid grid-cols-3 gap-4"
                         >
                             <mat-radio-button value="required">Default (
                                 <mono>required</mono>
@@ -43,6 +43,9 @@ interface NamePublishingOptions {
                             </mat-radio-button>
                             <mat-radio-button value="requiredTrimmed">
                                 <mono>requiredTrimmed</mono>
+                            </mat-radio-button>
+                            <mat-radio-button value="notOnlyBlank">
+                                <mono>notOnlyBlank</mono>
                             </mat-radio-button>
                         </mat-radio-group>
                     </div>
@@ -97,7 +100,7 @@ interface NamePublishingOptions {
 })
 export class RequiredExtendedExample {
 
-    protected readonly nameValidatorType = signal<'required' | 'requiredTrimmed'>('required');
+    protected readonly nameValidatorType = signal<'required' | 'requiredTrimmed' | 'notOnlyBlank'>('required');
     protected readonly publishValidatorType = signal<'required' | 'requiredDefined'>('required');
 
     protected readonly model = signal<NamePublishingOptions>({
@@ -106,11 +109,20 @@ export class RequiredExtendedExample {
     });
 
     protected readonly exampleForm = form(this.model, (fieldPath) => {
-        applyIf(
+        applyWhen(
             fieldPath.name,
             () => this.nameValidatorType() === 'required',
             (path) => required(path, {message: 'Name is required'}),
-            (path) => requiredTrimmed(path, {error: {message: 'Name is required'}})
+        );
+        applyWhen(
+            fieldPath.name,
+            () => this.nameValidatorType() === 'requiredTrimmed',
+            (path) => requiredTrimmed(path, {error: {message: 'Name is required'}}),
+        );
+        applyWhen(
+            fieldPath.name,
+            () => this.nameValidatorType() === 'notOnlyBlank',
+            (path) => notOnlyBlank(path, {error: {message: 'Name cannot consist only of whitespace'}}),
         );
 
         applyIf(

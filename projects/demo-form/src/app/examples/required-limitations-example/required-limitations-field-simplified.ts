@@ -1,6 +1,6 @@
 import {Component, signal} from '@angular/core';
-import {form, required, FormField} from '@angular/forms/signals';
-import {requiredDefined, requiredTrimmed, applyIf} from '@devzwo/ngx-signal-schema';
+import {applyWhen, form, required, FormField} from '@angular/forms/signals';
+import {applyIf, notOnlyBlank, requiredDefined, requiredTrimmed} from '@devzwo/ngx-signal-schema';
 
 interface NamePublishingOptions {
   name: string;
@@ -16,11 +16,11 @@ interface NamePublishingOptions {
 
           <p>
               The standard <code>required</code> validator has limitations: it accepts whitespace-only strings as valid and treats <code>false</code> as invalid.
-              This example demonstrates how <code>requiredTrimmed</code> ensures strings contain non-whitespace characters, and <code>requiredDefined</code> allows <code>false</code> while still requiring a value to be present.
+              This example demonstrates how <code>requiredTrimmed</code> ensures strings contain non-whitespace characters (mandatory), <code>notOnlyBlank</code> rejects whitespace-only strings while keeping empty inputs valid (optional), and <code>requiredDefined</code> allows <code>false</code> while still requiring a value to be present.
           </p>
 
           <div>
-              <h2>NAME - requiredTrimmed</h2>
+              <h2>NAME - requiredTrimmed / notOnlyBlank</h2>
               <div class="validator-switch">
                   <label>
                       <input type="radio" name="name-validator" [checked]="nameValidatorType() === 'required'" (change)="nameValidatorType.set('required')"/>
@@ -29,6 +29,10 @@ interface NamePublishingOptions {
                   <label>
                       <input type="radio" name="name-validator" [checked]="nameValidatorType() === 'requiredTrimmed'" (change)="nameValidatorType.set('requiredTrimmed')"/>
                       requiredTrimmed
+                  </label>
+                  <label>
+                      <input type="radio" name="name-validator" [checked]="nameValidatorType() === 'notOnlyBlank'" (change)="nameValidatorType.set('notOnlyBlank')"/>
+                      notOnlyBlank
                   </label>
               </div>
 
@@ -91,7 +95,7 @@ interface NamePublishingOptions {
 })
 export class SimplifiedRequiredExtendedExample {
 
-  protected readonly nameValidatorType = signal<'required' | 'requiredTrimmed'>('required');
+  protected readonly nameValidatorType = signal<'required' | 'requiredTrimmed' | 'notOnlyBlank'>('required');
   protected readonly publishValidatorType = signal<'required' | 'requiredDefined'>('required');
 
   protected readonly model = signal<NamePublishingOptions>({
@@ -100,11 +104,20 @@ export class SimplifiedRequiredExtendedExample {
   });
 
   protected readonly exampleForm = form(this.model, (fieldPath) => {
-    applyIf(
+    applyWhen(
         fieldPath.name,
         () => this.nameValidatorType() === 'required',
         (path) => required(path, {message: 'Name is required'}),
-        (path) => requiredTrimmed(path, {error: {message: 'Name is required'}})
+    );
+    applyWhen(
+        fieldPath.name,
+        () => this.nameValidatorType() === 'requiredTrimmed',
+        (path) => requiredTrimmed(path, {error: {message: 'Name is required'}}),
+    );
+    applyWhen(
+        fieldPath.name,
+        () => this.nameValidatorType() === 'notOnlyBlank',
+        (path) => notOnlyBlank(path, {error: {message: 'Name cannot consist only of whitespace'}}),
     );
 
     applyIf(

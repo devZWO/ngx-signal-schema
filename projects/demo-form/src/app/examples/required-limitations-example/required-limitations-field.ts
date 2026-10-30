@@ -4,6 +4,7 @@ import {applyIf, notOnlyBlank, requiredDefined, requiredTrimmed} from '@devzwo/n
 import {ErrorIndicator} from '../../../shared/components/error-indicator';
 import {MatError} from '@angular/material/input';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MatCheckbox} from '@angular/material/checkbox';
 import {InputFormField} from '../../../shared/components/input-form-field';
 import {ConfigBox} from '../../../shared/components/config-box';
 import {MonoFont} from './mono-font/mono-font';
@@ -15,14 +16,14 @@ interface NamePublishingOptions {
 
 @Component({
     selector: 'app-required-limitations-example',
-    imports: [ErrorIndicator, MatError, MatRadioGroup, MatRadioButton, InputFormField, ConfigBox, MonoFont],
+    imports: [ErrorIndicator, MatError, MatRadioGroup, MatRadioButton, MatCheckbox, InputFormField, ConfigBox, MonoFont],
     template: `
         <section class="grid grid-cols-1 gap-6">
             <h1 class="heading-1">Limitations of default <mono>required</mono> validator </h1>
 
             <p class="text-gray-700">
                 The standard <mono>required</mono> validator has limitations: it accepts whitespace-only strings as valid and treats <mono>false</mono> as invalid.
-                This example demonstrates how <mono>requiredTrimmed</mono> ensures strings contain non-whitespace characters (mandatory), <mono>notOnlyBlank</mono> rejects whitespace-only strings while keeping empty inputs valid (optional), and <mono>requiredDefined</mono> allows <mono>false</mono> while still requiring a value to be present.
+                This example demonstrates how <mono>requiredTrimmed</mono> ensures strings contain non-whitespace characters (mandatory), <mono>notOnlyBlank</mono> rejects whitespace-only strings while keeping empty inputs valid (optional), <mono>requiredDefined</mono> allows <mono>false</mono> while still requiring a value to be present, and the <mono>trim</mono> directive automatically sanitizes whitespace on blur.
             </p>
 
             <div class="grid grid-cols-1 gap-2">
@@ -48,6 +49,26 @@ interface NamePublishingOptions {
                                 <mono>notOnlyBlank</mono>
                             </mat-radio-button>
                         </mat-radio-group>
+
+                        <div class="flex flex-col gap-2 pt-2 border-t border-gray-200">
+                            <mat-checkbox
+                                [checked]="trimEnabled()"
+                                (change)="trimEnabled.set($event.checked)"
+                                color="primary"
+                            >
+                                Enable <mono>trim</mono> on blur
+                            </mat-checkbox>
+                            @if (trimEnabled()) {
+                                <mat-checkbox
+                                    [checked]="trimControlCharacters()"
+                                    (change)="trimControlCharacters.set($event.checked)"
+                                    color="primary"
+                                    class="ml-4"
+                                >
+                                    Trim control characters (<mono>trimControlCharacters</mono>)
+                                </mat-checkbox>
+                            }
+                        </div>
                     </div>
                 </app-config-box>
 
@@ -55,6 +76,8 @@ interface NamePublishingOptions {
                     label="Name"
                     [fieldTree]="exampleForm.name"
                     placeholder="<First Name> <Last Name>"
+                    [trim]="trimEnabled()"
+                    [trimControlCharacters]="trimControlCharacters()"
                 />
             </div>
 
@@ -102,6 +125,8 @@ export class RequiredExtendedExample {
 
     protected readonly nameValidatorType = signal<'required' | 'requiredTrimmed' | 'notOnlyBlank'>('required');
     protected readonly publishValidatorType = signal<'required' | 'requiredDefined'>('required');
+    protected readonly trimEnabled = signal<boolean>(false);
+    protected readonly trimControlCharacters = signal<boolean>(false);
 
     protected readonly model = signal<NamePublishingOptions>({
         name: '',

@@ -58,6 +58,7 @@ export default defineConfig({
                         {label: 'Conditions', items: [{autogenerate: {directory: 'api/Conditions'}}]},
                         {label: 'Rules', items: [{autogenerate: {directory: 'api/Rules'}}]},
                         {label: 'Structure', items: [{autogenerate: {directory: 'api/Structure'}}]},
+                        {label: 'Directives', items: [{autogenerate: {directory: 'api/Directives'}}]},
                         {label: 'Other', items: [{autogenerate: {directory: 'api/Other'}}]}
                     ],
                 },

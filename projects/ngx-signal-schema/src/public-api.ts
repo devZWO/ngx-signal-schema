@@ -2,6 +2,9 @@
  * Public API Surface of ngx-signal-schema
  */
 
+// Directives
+export * from './lib/directives';
+
 // Rules
 export * from './lib/rules';
 

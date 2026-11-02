@@ -57,6 +57,8 @@ export interface NotOnlyBlankOptions extends ErrorOption {
  *   });
  * });
  * ```
+ *
+ * @category Validators
  */
 export function notOnlyBlank(
   path: SchemaPath<string | null | undefined>,

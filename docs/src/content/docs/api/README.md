@@ -35,7 +35,6 @@ title: "@devzwo/ngx-signal-schema"
 - [RequiredAtLeastOneSelector](/ngx-signal-schema/api/other/requiredatleastoneselector/)
 - [SchemaRule](/ngx-signal-schema/api/other/schemarule/)
 - [ValidationDestination](/ngx-signal-schema/api/other/validationdestination/)
-- [notOnlyBlank](/ngx-signal-schema/api/other/notonlyblank/)
 
 ## Rules
 
@@ -56,6 +55,7 @@ title: "@devzwo/ngx-signal-schema"
 - [decimal](/ngx-signal-schema/api/validators/decimal/)
 - [integer](/ngx-signal-schema/api/validators/integer/)
 - [mimeType](/ngx-signal-schema/api/validators/mimetype/)
+- [notOnlyBlank](/ngx-signal-schema/api/validators/notonlyblank/)
 - [requiredAtLeastOne](/ngx-signal-schema/api/validators/requiredatleastone/)
 - [requiredDefined](/ngx-signal-schema/api/validators/requireddefined/)
 - [requiredIfOtherFilled](/ngx-signal-schema/api/validators/requiredifotherfilled/)

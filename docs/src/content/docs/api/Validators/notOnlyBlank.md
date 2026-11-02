@@ -7,7 +7,7 @@ title: "notOnlyBlank"
 
 > **notOnlyBlank**(`path`, `options?`): `void`
 
-Defined in: projects/ngx-signal-schema/src/lib/validators/not-only-blank.ts:61
+Defined in: projects/ngx-signal-schema/src/lib/validators/not-only-blank.ts:63
 
 Validates that a string field does not consist exclusively of whitespaces (or control characters),
 and optionally requires a minimum number of consecutive valid characters.
